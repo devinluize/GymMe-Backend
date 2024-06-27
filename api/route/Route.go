@@ -1,6 +1,9 @@
 package route
 
 import (
+	auth3 "GymMe-Backend/api/controller/auth/authImpl"
+	"GymMe-Backend/api/repositories/auth"
+	auth2 "GymMe-Backend/api/service/auth"
 	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 	"net/http"
@@ -8,8 +11,13 @@ import (
 
 func StartRouting(db *gorm.DB) {
 	r := chi.NewRouter()
+	r.Mount("/api", versionedRouterV1(db))
+	http.ListenAndServe(":3000", r)
+}
+func versionedRouterV1(db *gorm.DB) chi.Router {
+	router := chi.NewRouter()
 
-	r.Get("/dev", func(writer http.ResponseWriter, request *http.Request) {
+	router.Get("/dev", func(writer http.ResponseWriter, request *http.Request) {
 		//writer.Write(byte[])
 		html := `
 	<!DOCTYPE html>
@@ -45,5 +53,12 @@ func StartRouting(db *gorm.DB) {
 			return
 		}
 	})
-	http.ListenAndServe(":3000", r)
+
+	authRepository := auth.NewAuthRepoImpl()
+	authService := auth2.NewAuthServiceImpl(db, authRepository)
+	authController := auth3.NewAuthController(authService)
+	AuthRouter := AuthRouter(authController)
+	router.Mount("/auth", AuthRouter)
+
+	return router
 }

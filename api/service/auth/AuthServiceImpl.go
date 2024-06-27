@@ -4,6 +4,7 @@ import (
 	entities "GymMe-Backend/api/entities/auth"
 	"GymMe-Backend/api/helper"
 	payloads "GymMe-Backend/api/payloads/auth"
+	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/repositories/auth"
 	"gorm.io/gorm"
 )
@@ -27,9 +28,9 @@ func ConverToEntities(payloads payloads.RegisterPayloads) entities.RegisterPaylo
 		IsVIP:       payloads.IsVIP,
 	}
 }
-func (a *AuthServiceImpl) Register(payloads payloads.RegisterPayloads) (string, error) {
+func (a *AuthServiceImpl) Register(payloads payloads.RegisterPayloads) responses.ErrorResponses {
 	tx := a.DB.Begin()
-	str, err := a.Repo.Register(ConverToEntities(payloads), tx)
+	str := a.Repo.Register(ConverToEntities(payloads), tx)
 	defer helper.CommitOrRollback(tx)
-	return str, err
+	return str
 }
