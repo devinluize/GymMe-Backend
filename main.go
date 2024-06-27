@@ -2,7 +2,9 @@ package main
 
 import (
 	configenv "GymMe-Backend/api/config"
+	"GymMe-Backend/api/route"
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -16,7 +18,20 @@ func main() {
 	}
 	configenv.InitEnvConfigs(false, env)
 	db := configenv.InitDB()
-	ds := configenv.EnvConfigs.Hostname
+	//ds := configenv.EnvConfigs.Hostname
+	route.StartRouting(db)
+}
+func handleServerError(err error) {
+	fmt.Printf("Error starting the server: %s\n", err)
 
-	fmt.Println(db, ds)
+	statusCode := http.StatusInternalServerError
+	if isTemporaryError(err) {
+		statusCode = http.StatusServiceUnavailable
+	}
+
+	os.Exit(statusCode)
+}
+
+func isTemporaryError(err error) bool {
+	return false
 }
