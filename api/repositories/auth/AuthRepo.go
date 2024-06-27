@@ -5,6 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type authRepo interface {
+type AuthRepo interface {
 	Register(requestData entities.RegisterPayloads, DB *gorm.DB) (string, error)
 }

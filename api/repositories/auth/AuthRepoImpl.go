@@ -8,14 +8,13 @@ import (
 
 type AuthRepoImpl struct{}
 
-func NewAuthRepoImpl() authRepo {
+func NewAuthRepoImpl() AuthRepo {
 	return &AuthRepoImpl{}
 }
 
 func (a *AuthRepoImpl) Register(requestData entities.RegisterPayloads, DB *gorm.DB) (string, error) {
 	//TODO implement me
-	tx := DB.Begin()
-	err := tx.Create(&requestData)
+	err := DB.Create(&requestData)
 	helper.Paniciferror(err.Error)
 	panic("implement me")
 }
