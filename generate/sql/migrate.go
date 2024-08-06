@@ -3,6 +3,7 @@ package migration
 import (
 	configenv "GymMe-Backend/api/config"
 	entities "GymMe-Backend/api/entities/auth"
+	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -15,7 +16,10 @@ func Migrate() {
 	configenv.InitEnvConfigs(false, "")
 	logEntry := "Auto Migrating to database"
 
-	dsn := "sqlserver://localhost:1433?database=assignmentDB&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient"
+	dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+		configenv.EnvConfigs.Hostname,
+		configenv.EnvConfigs.DBPort,
+		configenv.EnvConfigs.DBName)
 	newLogger := logger.New(
 		log.New(log.Writer(), "\r\n", log.LstdFlags),
 		logger.Config{

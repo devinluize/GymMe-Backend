@@ -34,13 +34,15 @@ func main() {
 	if len(args) > 1 {
 		env = args[1]
 	}
+	configenv.InitEnvConfigs(false, env)
+
 	if env == "migrate" {
 		migration.Migrate()
 		fmt.Println("dasdsa")
 		return
 
 	}
-	configenv.InitEnvConfigs(false, env)
+	//configenv.InitEnvConfigs(false, env)
 	db := configenv.InitDB()
 	//ds := configenv.EnvConfigs.Hostname
 	route.StartRouting(db)

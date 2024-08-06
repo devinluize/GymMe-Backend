@@ -28,7 +28,12 @@ func InitDB() *gorm.DB {
 	val := url.Values{}
 	val.Add("parseTime", "True")
 	val.Add("loc", "Asia/Jakarta")
-	dsn := "sqlserver://localhost:1433?database=assignmentDB&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient"
+	//	dsn := fmt.Sprintf("sqlserver://localhost:1433?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient", EnvConfigs.DBName)
+	dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+		EnvConfigs.Hostname,
+		EnvConfigs.DBPort,
+		EnvConfigs.DBName)
+	//dsn := "sqlserver://localhost:1433?database=assignmentDB&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient"
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		NamingStrategy: schema.NamingStrategy{
@@ -39,7 +44,6 @@ func InitDB() *gorm.DB {
 		log.Fatal("Cannot connected database ", err)
 		return nil
 	}
-	//db.Exec("INSERT INTO students ([FirstName],[LastName],[DateOfBirth],[Gender],[RegistrationDate])values('desv','sas','20231212','M','20231212')")
 	sqlDB, _ := db.DB()
 
 	err = sqlDB.Ping()

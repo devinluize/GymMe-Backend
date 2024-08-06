@@ -8,5 +8,5 @@ type RegisterPayloads struct {
 }
 
 func (RegisterPayloads) TableName() string {
-	return "Users"
+	return "UsersTemp"
 }
