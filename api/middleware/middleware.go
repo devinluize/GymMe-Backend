@@ -48,11 +48,11 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 		//}
 		if claims.IsVIP {
 			helper.ReturnAPIResponses(writer, Responses.StandarAPIResponses{
-				Message: "note devin",
+				Message: "not devin",
 				Success: false,
 				Data:    claims.IsVIP,
 			})
-			return
+			//return
 		}
 		//if claims.UserRole != 1 {
 		//	exceptions.NewAuthorizationException(writer, request, &exceptions.BaseErrorResponse{
