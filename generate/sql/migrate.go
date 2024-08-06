@@ -13,7 +13,7 @@ import (
 
 func Migrate() {
 	configenv.InitEnvConfigs(false, "")
-	logEntry := "Auto Migrating..."
+	logEntry := "Auto Migrating to database"
 
 	dsn := "sqlserver://localhost:1433?database=assignmentDB&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient"
 	newLogger := logger.New(
