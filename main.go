@@ -3,6 +3,7 @@ package main
 import (
 	configenv "GymMe-Backend/api/config"
 	"GymMe-Backend/api/route"
+	migration "GymMe-Backend/generate/sql"
 	"fmt"
 	"net/http"
 	"os"
@@ -32,6 +33,12 @@ func main() {
 
 	if len(args) > 1 {
 		env = args[1]
+	}
+	if env == "migrate" {
+		migration.Migrate()
+		fmt.Println("dasdsa")
+		return
+
 	}
 	configenv.InitEnvConfigs(false, env)
 	db := configenv.InitDB()
