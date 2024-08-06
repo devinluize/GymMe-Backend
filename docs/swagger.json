@@ -1,0 +1,147 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "DMS User Service Architecture",
+        "title": "DMS User Service",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "dasdasdas",
+            "url": "asdasdas",
+            "email": "tes@gmail.com"
+        },
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "paths": {
+        "/api/auth/login2": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Login by header",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login by header",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payloads.LoginPaylods"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "register by heade",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register by heade",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payloads.RegisterPayloads"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "payloads.LoginPaylods": {
+            "type": "object",
+            "properties": {
+                "useremail": {
+                    "type": "string"
+                },
+                "userpasword": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.RegisterPayloads": {
+            "type": "object",
+            "properties": {
+                "isVIP": {
+                    "type": "boolean"
+                },
+                "useremail": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "userpasword": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ErrorResponses": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

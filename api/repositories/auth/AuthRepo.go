@@ -8,4 +8,6 @@ import (
 
 type AuthRepo interface {
 	Register(requestData entities.RegisterPayloads, DB *gorm.DB) responses.ErrorResponses
+
+	Login(requestData entities.RegisterPayloads, DB *gorm.DB) (responses.ErrorResponses, entities.RegisterPayloads)
 }

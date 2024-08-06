@@ -2,7 +2,6 @@ package auth
 
 import (
 	entities "GymMe-Backend/api/entities/auth"
-	"GymMe-Backend/api/helper"
 	"GymMe-Backend/api/payloads/responses"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
@@ -36,6 +35,34 @@ func (a *AuthRepoImpl) Register(requestData entities.RegisterPayloads, DB *gorm.
 		Message: "Register Success",
 		Data:    requestData,
 	}
-	helper.Paniciferror(err.Error)
-	panic("implement me")
+
+}
+
+func (a *AuthRepoImpl) Login(requestData entities.RegisterPayloads, DB *gorm.DB) (responses.ErrorResponses, entities.RegisterPayloads) {
+	var user entities.RegisterPayloads
+	//err := DB.Where("UserName = ?", requestData.Username).First(&user).Error
+	////err := DB.Debug().Where("UserEmail = ?", requestData.Useremail).
+	//Offset(0).
+	//	Limit(1).First(&user).Error
+	data := DB.Raw("SELECT TOP 1 * FROM users A WHERE A.UserEmail = ?", requestData.Useremail).Scan(&user).Error
+	if data != nil {
+		return responses.ErrorResponses{
+			Success: false,
+			Message: data.Error(),
+			Data:    nil,
+		}, user
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(user.Userpasword), []byte(requestData.Userpasword))
+	if err != nil {
+		return responses.ErrorResponses{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		}, user
+	}
+	return responses.ErrorResponses{
+		Success: true,
+		Message: "success Login",
+		Data:    user,
+	}, user
 }

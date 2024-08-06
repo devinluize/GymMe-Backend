@@ -8,6 +8,23 @@ import (
 	"os"
 )
 
+//	@title			DMS User Service
+//	@version		1.0
+//	@description	DMS User Service Architecture
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	dasdasdas
+//	@contact.url	asdasdas
+//	@contact.email	tes@gmail.com
+
+//	@license.name	MIT
+
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+
+// @host		localhost:3000
+// @BasePath
 func main() {
 	args := os.Args
 

@@ -4,7 +4,9 @@ import (
 	auth3 "GymMe-Backend/api/controller/auth/authImpl"
 	"GymMe-Backend/api/repositories/auth"
 	auth2 "GymMe-Backend/api/service/auth"
+	_ "GymMe-Backend/docs"
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -12,7 +14,12 @@ import (
 func StartRouting(db *gorm.DB) {
 	r := chi.NewRouter()
 	r.Mount("/api", versionedRouterV1(db))
+	swaggerURL := "http://localhost:3000/swagger/doc.json"
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL(swaggerURL),
+	))
 	http.ListenAndServe(":3000", r)
+
 }
 func versionedRouterV1(db *gorm.DB) chi.Router {
 	router := chi.NewRouter()

@@ -1,0 +1,94 @@
+definitions:
+  payloads.LoginPaylods:
+    properties:
+      useremail:
+        type: string
+      userpasword:
+        type: string
+    type: object
+  payloads.RegisterPayloads:
+    properties:
+      isVIP:
+        type: boolean
+      useremail:
+        type: string
+      username:
+        type: string
+      userpasword:
+        type: string
+    type: object
+  responses.ErrorResponses:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: tes@gmail.com
+    name: dasdasdas
+    url: asdasdas
+  description: DMS User Service Architecture
+  license:
+    name: MIT
+  termsOfService: http://swagger.io/terms/
+  title: DMS User Service
+  version: "1.0"
+paths:
+  /api/auth/login2:
+    post:
+      consumes:
+      - application/json
+      description: Login by header
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.LoginPaylods'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Login by header
+      tags:
+      - Auth
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: register by heade
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.RegisterPayloads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: register by heade
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

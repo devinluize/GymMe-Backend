@@ -28,9 +28,24 @@ func ConverToEntities(payloads payloads.RegisterPayloads) entities.RegisterPaylo
 		IsVIP:       payloads.IsVIP,
 	}
 }
+
+func ConverToEntitiesLogin(payloads payloads.LoginPaylods) entities.RegisterPayloads {
+	return entities.RegisterPayloads{
+		//Username:    payloads.Username,
+		Useremail:   payloads.Useremail,
+		Userpasword: payloads.Userpasword,
+		//IsVIP:       payloads.IsVIP,
+	}
+}
 func (a *AuthServiceImpl) Register(payloads payloads.RegisterPayloads) responses.ErrorResponses {
 	tx := a.DB.Begin()
 	str := a.Repo.Register(ConverToEntities(payloads), tx)
 	defer helper.CommitOrRollback(tx)
 	return str
+}
+func (a *AuthServiceImpl) LoginAuth(payloads payloads.LoginPaylods) (responses.ErrorResponses, entities.RegisterPayloads) {
+	tx := a.DB.Begin()
+	str, data := a.Repo.Login(ConverToEntitiesLogin(payloads), tx)
+	defer helper.CommitOrRollback(tx)
+	return str, data
 }
