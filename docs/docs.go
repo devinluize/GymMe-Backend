@@ -160,7 +160,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "DMS User Service",
-	Description:      "DMS User Service Architecture",
+	Description:      "Gym Me BackEnd Thesis",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

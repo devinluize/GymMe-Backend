@@ -10,7 +10,7 @@ import (
 
 //	@title			DMS User Service
 //	@version		1.0
-//	@description	DMS User Service Architecture
+//	@description	Gym Me BackEnd Thesis
 //	@termsOfService	http://swagger.io/terms/
 
 //	@contact.name	dasdasdas

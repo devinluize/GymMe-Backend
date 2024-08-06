@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "DMS User Service Architecture",
+        "description": "Gym Me BackEnd Thesis",
         "title": "DMS User Service",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
