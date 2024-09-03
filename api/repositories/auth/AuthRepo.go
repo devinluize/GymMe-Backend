@@ -1,13 +1,13 @@
 package auth
 
 import (
-	entities "GymMe-Backend/api/entities/auth"
+	"GymMe-Backend/api/entities"
 	"GymMe-Backend/api/payloads/responses"
 	"gorm.io/gorm"
 )
 
 type AuthRepo interface {
-	Register(requestData entities.RegisterPayloads, DB *gorm.DB) responses.ErrorResponses
+	Register(requestData entities.Users, DB *gorm.DB) responses.ErrorResponses
 
-	Login(requestData entities.RegisterPayloads, DB *gorm.DB) (responses.ErrorResponses, entities.RegisterPayloads)
+	Login(requestData entities.Users, DB *gorm.DB) (responses.ErrorResponses, entities.Users)
 }

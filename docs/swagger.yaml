@@ -33,9 +33,9 @@ info:
     url: asdasdas
   description: Gym Me BackEnd Thesis
   license:
-    name: MIT
+    name: Gymme
   termsOfService: http://swagger.io/terms/
-  title: DMS User Service
+  title: Gym Me Backend Thesis
   version: "1.0"
 paths:
   /api/auth/login2:

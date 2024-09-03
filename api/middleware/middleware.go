@@ -2,8 +2,8 @@ package middleware
 
 import (
 	configenv "GymMe-Backend/api/config"
-	"GymMe-Backend/api/entities/Responses"
 	"GymMe-Backend/api/helper"
+	"GymMe-Backend/api/payloads/responses"
 	"context"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
@@ -32,7 +32,7 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 			return configenv.JWT_KEY, nil
 		})
 		if err != nil {
-			helper.ReturnAPIResponses(writer, Responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
 				Message: "token invalid or expired",
 				Success: false,
 				Data:    nil,
@@ -47,7 +47,7 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 		//	})
 		//}
 		if claims.IsVIP {
-			helper.ReturnAPIResponses(writer, Responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
 				Message: "not devin",
 				Success: false,
 				Data:    claims.IsVIP,
@@ -64,7 +64,7 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 		//	return
 		//}
 		if !myToken.Valid {
-			helper.ReturnAPIResponses(writer, Responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
 				Message: "Token invalid",
 				Success: false,
 				Data:    nil,

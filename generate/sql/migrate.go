@@ -2,7 +2,7 @@ package migration
 
 import (
 	configenv "GymMe-Backend/api/config"
-	entities "GymMe-Backend/api/entities/auth"
+	"GymMe-Backend/api/entities"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -41,7 +41,12 @@ func Migrate() {
 		panic(err)
 	}
 	err = db.AutoMigrate(
-		&entities.RegisterPayloads{},
+		&entities.Users{},
+		&entities.PaymentMethod{},
+		&entities.InformationType{},
+		&entities.Information{},
+		&entities.BookmarkType{},
+		&entities.Bookmark{},
 	)
 
 	if err != nil {

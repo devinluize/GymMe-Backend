@@ -1,4 +1,4 @@
-package Responses
+package responses
 
 type StandarAPIResponses struct {
 	Message string      `json:"message"`

@@ -3,9 +3,9 @@ package auth
 import (
 	configenv "GymMe-Backend/api/config"
 	"GymMe-Backend/api/controller/auth"
-	"GymMe-Backend/api/entities/Responses"
 	"GymMe-Backend/api/helper"
 	payloads "GymMe-Backend/api/payloads/auth"
+	"GymMe-Backend/api/payloads/responses"
 	auth2 "GymMe-Backend/api/service/auth"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
@@ -66,7 +66,7 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	expTime := time.Now().Add(time.Hour * 1000)
 
 	claims := configenv.JWTClaim{
-		UserName: data.Useremail,
+		UserName: data.UserEmail,
 		IsVIP:    data.IsVIP,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "devin",
@@ -76,15 +76,15 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, erronToken := tokenAlgo.SignedString(configenv.JWT_KEY)
 	if erronToken != nil {
-		helper.WriteToResponseBody(writer, Responses.StandarAPIResponses{
+		helper.WriteToResponseBody(writer, responses.StandarAPIResponses{
 			Message: "parse failed",
 			Success: false,
 			Data:    nil,
 		})
 	}
 	helper.WriteToResponseBody(writer, payloads.LoginRespons{
-		UserName:  data.Username,
-		UserEmail: data.Useremail,
+		UserName:  data.UserName,
+		UserEmail: data.UserEmail,
 		IsVIP:     data.IsVIP,
 		Token:     token,
 	})

@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-//	@title			DMS User Service
+//	@title			Gym Me Backend Thesis
 //	@version		1.0
 //	@description	Gym Me BackEnd Thesis
 //	@termsOfService	http://swagger.io/terms/
@@ -18,7 +18,7 @@ import (
 //	@contact.url	asdasdas
 //	@contact.email	tes@gmail.com
 
-//	@license.name	MIT
+//	@license.name	Gymme
 
 //	@securityDefinitions.apikey	BearerAuth
 //	@in							header
@@ -35,9 +35,9 @@ func main() {
 		env = args[1]
 	}
 	configenv.InitEnvConfigs(false, env)
+	migration.Migrate()
 
 	if env == "migrate" {
-		migration.Migrate()
 		fmt.Println("dasdsa")
 		return
 

@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"GymMe-Backend/api/entities/Responses"
+	"GymMe-Backend/api/payloads/responses"
 	"encoding/json"
 	"net/http"
 )
@@ -26,7 +26,7 @@ func WriteToResponseBody(writer http.ResponseWriter, response interface{}) error
 func ReturnStandarResponses(writer http.ResponseWriter, status bool, message string, data interface{}) {
 	writer.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(writer)
-	response := Responses.StandarAPIResponses{
+	response := responses.StandarAPIResponses{
 		Message: message,
 		Success: status,
 		Data:    data,
@@ -36,7 +36,7 @@ func ReturnStandarResponses(writer http.ResponseWriter, status bool, message str
 
 }
 
-func ReturnAPIResponses(writer http.ResponseWriter, responses Responses.StandarAPIResponses) {
+func ReturnAPIResponses(writer http.ResponseWriter, responses responses.StandarAPIResponses) {
 	writer.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(writer)
 	err := encoder.Encode(responses)

@@ -16,7 +16,7 @@ const docTemplate = `{
             "email": "tes@gmail.com"
         },
         "license": {
-            "name": "MIT"
+            "name": "Gymme"
         },
         "version": "{{.Version}}"
     },
@@ -159,7 +159,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:3000",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "DMS User Service",
+	Title:            "Gym Me Backend Thesis",
 	Description:      "Gym Me BackEnd Thesis",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
