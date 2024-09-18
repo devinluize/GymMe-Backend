@@ -11,10 +11,11 @@ type Information struct {
 	InformationBodyParagraph1    string `gorm:"column:information_body_paragraph_1" json:"information_body_paragraph_1"`
 	InformationBodyParagraph2    string `gorm:"column:information_body_paragraph_2" json:"information_body_paragraph_2"`
 	InformationBodyParagraph3    string `gorm:"column:information_body_paragraph_3" json:"information_body_paragraph_3"`
+	InformationBodyParagraph4    string `gorm:"column:information_body_paragraph_4" json:"information_body_paragraph_4"`
 	InformationTypeId            int    `gorm:"column:information_type_id" json:"information_type_id"`
 	InformationType              InformationType
 }
 
 func (*Information) TableName() string {
-	return "information"
+	return "mtr_information"
 }

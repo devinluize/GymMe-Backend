@@ -9,3 +9,7 @@ type Bookmark struct {
 	UserId         int `gorm:"column:user_id" json:"user_id"`
 	User           Users
 }
+
+func (*Bookmark) TableName() string {
+	return "mtr_bookmark"
+}

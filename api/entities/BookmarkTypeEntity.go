@@ -6,5 +6,5 @@ type BookmarkType struct {
 }
 
 func (*BookmarkType) TableName() string {
-	return "bookmark_type"
+	return "mtr_bookmark_type"
 }

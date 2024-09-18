@@ -6,5 +6,5 @@ type InformationType struct {
 }
 
 func (*InformationType) TableName() string {
-	return "information_type"
+	return "mtr_information_type"
 }

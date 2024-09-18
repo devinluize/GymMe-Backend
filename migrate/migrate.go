@@ -1,4 +1,4 @@
-package migration
+package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
@@ -40,6 +40,19 @@ func Migrate() {
 		log.Printf("%s Failed to connect to database with error: %s", logEntry, err)
 		panic(err)
 	}
+	// Get the list of all tables
+	//var tableNames []string
+	//db.Raw("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
+	//
+	//// Drop each table
+	//for _, tableName := range tableNames {
+	//	err := db.Migrator().DropTable(tableName)
+	//	if err != nil {
+	//		log.Printf("Failed to drop table %s: %v", tableName, err)
+	//	} else {
+	//		log.Printf("Successfully dropped table %s", tableName)
+	//	}
+	//}
 	err = db.AutoMigrate(
 		&entities.Users{},
 		&entities.PaymentMethod{},

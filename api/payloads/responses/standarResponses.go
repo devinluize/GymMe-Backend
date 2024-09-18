@@ -1,7 +1,8 @@
 package responses
 
 type StandarAPIResponses struct {
-	Message string      `json:"message"`
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data"`
+	StatusCode int         `json:"statusCode"`
+	Message    string      `json:"message"`
+	Success    bool        `json:"success"`
+	Data       interface{} `json:"data"`
 }

@@ -1,7 +1,9 @@
 package responses
 
 type ErrorResponses struct {
-	Success bool        `json:"success"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	StatusCode int         `json:"status_code"`
+	Message    string      `json:"message"`
+	Err        error       `json:"-"`
+	Success    bool        `json:"success"`
+	Data       interface{} `json:"data"`
 }

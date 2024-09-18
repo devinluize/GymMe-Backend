@@ -6,5 +6,5 @@ type PaymentMethod struct {
 }
 
 func (*PaymentMethod) TableName() string {
-	return "payment_method"
+	return "mtr_method_entity"
 }
