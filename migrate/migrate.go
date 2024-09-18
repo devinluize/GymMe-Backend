@@ -55,11 +55,11 @@ func Migrate() {
 	//}
 	err = db.AutoMigrate(
 		&entities.Users{},
-		&entities.PaymentMethod{},
-		&entities.InformationType{},
-		&entities.Information{},
-		&entities.BookmarkType{},
-		&entities.Bookmark{},
+		//&entities.PaymentMethod{},
+		//&entities.InformationType{},
+		//&entities.Information{},
+		//&entities.BookmarkType{},
+		//&entities.Bookmark{},
 	)
 
 	if err != nil {
