@@ -53,13 +53,24 @@ func Migrate() {
 	//		log.Printf("Successfully dropped table %s", tableName)
 	//	}
 	//}
+	//migrate all table if neccesay
+	//err = database.DropAllDatabase(db)
+	//if err != nil {
+	//	log.Printf("%s Failed to drop all tables with error: %s", logEntry, err)
+	//	panic(err)
+	//}
+	//log.Printf("%s Successfully dropped all tables", logEntry)
+
+	//end off drop all table
 	err = db.AutoMigrate(
 		&entities.Users{},
-		//&entities.PaymentMethod{},
-		//&entities.InformationType{},
-		//&entities.Information{},
-		//&entities.BookmarkType{},
-		//&entities.Bookmark{},
+		&entities.UserDetail{},
+		&entities.Users{},
+		&entities.PaymentMethod{},
+		&entities.InformationType{},
+		&entities.Information{},
+		&entities.BookmarkType{},
+		&entities.Bookmark{},
 	)
 
 	if err != nil {
