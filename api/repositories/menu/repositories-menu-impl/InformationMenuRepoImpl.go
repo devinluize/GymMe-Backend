@@ -13,6 +13,10 @@ import (
 type InformationMenu struct {
 }
 
+func NewInformationMenu() menuRepository.InformationMenu {
+	return &InformationMenu{}
+}
+
 func (i *InformationMenu) UpdateInformation(tx *gorm.DB, payloads MenuPayloads.InformationUpdatePayloads) (entities.Information, *responses.ErrorResponses) {
 	var InformationEntities entities.Information
 
@@ -99,7 +103,33 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	}
 	return Entities, nil
 }
-
-func NewInformationMenu() menuRepository.InformationMenu {
-	return &InformationMenu{}
+func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.InformationSelectPayloads, *responses.ErrorResponses) {
+	EntitiesInfo := entities.Information{}
+	err := db.Model(&entities.Information{}).Where(entities.Information{InformationId: id}).First(&EntitiesInfo).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return MenuPayloads.InformationSelectPayloads{}, &responses.ErrorResponses{
+				StatusCode: http.StatusBadRequest,
+				Message:    "Delete Failed Id Not Found",
+			}
+		}
+	}
+	result := MenuPayloads.InformationSelectPayloads{
+		InformationHeader:            EntitiesInfo.InformationHeader,
+		InformationImageContentPath1: EntitiesInfo.InformationImageContentPath1,
+		InformationImageContentPath2: EntitiesInfo.InformationImageContentPath2,
+		InformationImageContentPath3: EntitiesInfo.InformationImageContentPath3,
+		InformationImageContentPath4: EntitiesInfo.InformationImageContentPath4,
+		InformationImageContentPath5: EntitiesInfo.InformationImageContentPath5,
+		InformationBodyParagraph1:    EntitiesInfo.InformationBodyParagraph1,
+		InformationBodyParagraph2:    EntitiesInfo.InformationBodyParagraph2,
+		InformationBodyParagraph3:    EntitiesInfo.InformationBodyParagraph3,
+		InformationBodyParagraph4:    EntitiesInfo.InformationBodyParagraph4,
+		InformationTypeId:            EntitiesInfo.InformationTypeId,
+	}
+	return result, nil
+}
+func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB) ([]entities.Information, *responses.ErrorResponses) {
+	//TODO implement me
+	panic("implement me")
 }

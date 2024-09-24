@@ -49,6 +49,23 @@ definitions:
       information_image_content_path_5:
         type: string
     type: object
+  MenuPayloads.ProfilePayloadRequest:
+    properties:
+      user_detail_id:
+        type: integer
+      user_gender:
+        type: string
+      user_height:
+        type: number
+      user_id:
+        type: integer
+      user_profile_description:
+        type: string
+      user_profile_image:
+        type: string
+      user_weight:
+        type: number
+    type: object
   payloads.LoginPaylods:
     properties:
       useremail:
@@ -90,54 +107,6 @@ info:
   title: Gym Me Backend Thesis
   version: "1.0"
 paths:
-  /api/auth/login2:
-    post:
-      consumes:
-      - application/json
-      description: Login by header
-      parameters:
-      - description: Insert Header Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/payloads.LoginPaylods'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.ErrorResponses'
-      security:
-      - BearerAuth: []
-      summary: Login by header
-      tags:
-      - Auth
-  /api/auth/register:
-    post:
-      consumes:
-      - application/json
-      description: register by heade
-      parameters:
-      - description: Insert Header Request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/payloads.RegisterPayloads'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.ErrorResponses'
-      security:
-      - BearerAuth: []
-      summary: register by heade
-      tags:
-      - Auth
   /api/information:
     patch:
       consumes:
@@ -208,6 +177,124 @@ paths:
       summary: Delete Information
       tags:
       - Information
+  /api/profile:
+    patch:
+      consumes:
+      - application/json
+      description: Get Profile Detail
+      parameters:
+      - description: user detail Headers
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.ProfilePayloadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Detail
+      tags:
+      - Profile
+    post:
+      consumes:
+      - application/json
+      description: Get Profile Detail
+      parameters:
+      - description: user detail Headers
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.ProfilePayloadRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Detail
+      tags:
+      - Profile
+  /api/profile/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Profile Detail
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Detail
+      tags:
+      - Profile
+  /api/user/login2:
+    post:
+      consumes:
+      - application/json
+      description: Login by header
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.LoginPaylods'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Login by header
+      tags:
+      - Auth
+  /api/user/register:
+    post:
+      consumes:
+      - application/json
+      description: register by heade
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.RegisterPayloads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: register by heade
+      tags:
+      - Auth
 securityDefinitions:
   BearerAuth:
     in: header

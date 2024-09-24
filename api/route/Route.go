@@ -3,8 +3,8 @@ package route
 import (
 	auth3 "GymMe-Backend/api/controller/auth/authImpl"
 	menucontroller "GymMe-Backend/api/controller/menu"
-	"GymMe-Backend/api/repositories/auth/AuthRepositoryImpl"
 	MenuImplRepositories "GymMe-Backend/api/repositories/menu/repositories-menu-impl"
+	"GymMe-Backend/api/repositories/user/UserRepositoryImpl"
 	auth2 "GymMe-Backend/api/service/auth"
 	menu_service_impl "GymMe-Backend/api/service/menu/menu-service-impl"
 	_ "GymMe-Backend/docs"

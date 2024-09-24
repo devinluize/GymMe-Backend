@@ -1,4 +1,4 @@
-package menu_service_impl
+package menuserviceimpl
 
 import (
 	"GymMe-Backend/api/entities"
