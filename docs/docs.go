@@ -100,9 +100,198 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/information": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create New Information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Information"
+                ],
+                "summary": "Create New Information",
+                "parameters": [
+                    {
+                        "description": "Insert Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.InformationInsertPayloads"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update Information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Information"
+                ],
+                "summary": "Update Information",
+                "parameters": [
+                    {
+                        "description": "Update Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.InformationUpdatePayloads"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/information/delete/{information_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete Information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Information"
+                ],
+                "summary": "Delete Information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "information_id",
+                        "name": "information_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "MenuPayloads.InformationInsertPayloads": {
+            "type": "object",
+            "properties": {
+                "information_body_paragraph_1": {
+                    "type": "string"
+                },
+                "information_body_paragraph_2": {
+                    "type": "string"
+                },
+                "information_body_paragraph_3": {
+                    "type": "string"
+                },
+                "information_body_paragraph_4": {
+                    "type": "string"
+                },
+                "information_header": {
+                    "type": "string"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "information_image_content_path_1": {
+                    "type": "string"
+                },
+                "information_image_content_path_2": {
+                    "type": "string"
+                },
+                "information_image_content_path_3": {
+                    "type": "string"
+                },
+                "information_image_content_path_4": {
+                    "type": "string"
+                },
+                "information_image_content_path_5": {
+                    "type": "string"
+                },
+                "information_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "MenuPayloads.InformationUpdatePayloads": {
+            "type": "object",
+            "properties": {
+                "information_body_paragraph_1": {
+                    "type": "string"
+                },
+                "information_body_paragraph_2": {
+                    "type": "string"
+                },
+                "information_body_paragraph_3": {
+                    "type": "string"
+                },
+                "information_body_paragraph_4": {
+                    "type": "string"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "information_image_content_path_1": {
+                    "type": "string"
+                },
+                "information_image_content_path_2": {
+                    "type": "string"
+                },
+                "information_image_content_path_3": {
+                    "type": "string"
+                },
+                "information_image_content_path_4": {
+                    "type": "string"
+                },
+                "information_image_content_path_5": {
+                    "type": "string"
+                }
+            }
+        },
         "payloads.LoginPaylods": {
             "type": "object",
             "properties": {
@@ -137,6 +326,9 @@ const docTemplate = `{
                 "data": {},
                 "message": {
                     "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
                 },
                 "success": {
                     "type": "boolean"

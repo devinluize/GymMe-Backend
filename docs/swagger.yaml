@@ -1,4 +1,54 @@
 definitions:
+  MenuPayloads.InformationInsertPayloads:
+    properties:
+      information_body_paragraph_1:
+        type: string
+      information_body_paragraph_2:
+        type: string
+      information_body_paragraph_3:
+        type: string
+      information_body_paragraph_4:
+        type: string
+      information_header:
+        type: string
+      information_id:
+        type: integer
+      information_image_content_path_1:
+        type: string
+      information_image_content_path_2:
+        type: string
+      information_image_content_path_3:
+        type: string
+      information_image_content_path_4:
+        type: string
+      information_image_content_path_5:
+        type: string
+      information_type_id:
+        type: integer
+    type: object
+  MenuPayloads.InformationUpdatePayloads:
+    properties:
+      information_body_paragraph_1:
+        type: string
+      information_body_paragraph_2:
+        type: string
+      information_body_paragraph_3:
+        type: string
+      information_body_paragraph_4:
+        type: string
+      information_id:
+        type: integer
+      information_image_content_path_1:
+        type: string
+      information_image_content_path_2:
+        type: string
+      information_image_content_path_3:
+        type: string
+      information_image_content_path_4:
+        type: string
+      information_image_content_path_5:
+        type: string
+    type: object
   payloads.LoginPaylods:
     properties:
       useremail:
@@ -22,6 +72,8 @@ definitions:
       data: {}
       message:
         type: string
+      status_code:
+        type: integer
       success:
         type: boolean
     type: object
@@ -86,6 +138,76 @@ paths:
       summary: register by heade
       tags:
       - Auth
+  /api/information:
+    patch:
+      consumes:
+      - application/json
+      description: Update Information
+      parameters:
+      - description: Update Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.InformationUpdatePayloads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Update Information
+      tags:
+      - Information
+    post:
+      consumes:
+      - application/json
+      description: Create New Information
+      parameters:
+      - description: Insert Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.InformationInsertPayloads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Create New Information
+      tags:
+      - Information
+  /api/information/delete/{information_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Information
+      parameters:
+      - description: information_id
+        in: path
+        name: information_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Delete Information
+      tags:
+      - Information
 securityDefinitions:
   BearerAuth:
     in: header

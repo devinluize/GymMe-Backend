@@ -43,19 +43,30 @@ func Migrate() {
 		panic(err)
 	}
 	// Get the list of all tables
-	//var tableNames []string
-	//db.Raw("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
+	var tableNames []string
+	db.Raw("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
 	//
 	//// Drop each table
-	//for _, tableName := range tableNames {
-	//	err := db.Migrator().DropTable(tableName)
-	//	if err != nil {
-	//		log.Printf("Failed to drop table %s: %v", tableName, err)
-	//	} else {
-	//		log.Printf("Successfully dropped table %s", tableName)
-	//	}
+	for _, tableName := range tableNames {
+		err := db.Migrator().DropTable(tableName)
+		if err != nil {
+			log.Printf("Failed to drop table %s: %v", tableName, err)
+		} else {
+			log.Printf("Successfully dropped table %s", tableName)
+		}
+	}
+	//migrate all table if neccesay
+	//err = database.DropAllDatabase(db)
+	//if err != nil {
+	//	log.Printf("%s Failed to drop all tables with error: %s", logEntry, err)
+	//	panic(err)
 	//}
+	//log.Printf("%s Successfully dropped all tables", logEntry)
+
+	//end off drop all table
 	err = db.AutoMigrate(
+		&entities.Users{},
+		&entities.UserDetail{},
 		&entities.Users{},
 		&entities.PaymentMethod{},
 		&entities.InformationType{},
