@@ -3,10 +3,14 @@ module GymMe-Backend
 go 1.22.0
 
 require (
+	github.com/go-chi/chi/v5 v5.0.14
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/redis/go-redis/v9 v9.5.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
+	github.com/swaggo/http-swagger/v2 v2.0.2
+	github.com/swaggo/swag v1.16.3
+	golang.org/x/crypto v0.27.0
 	gorm.io/driver/sqlserver v1.5.3
 	gorm.io/gorm v1.25.12
 )
@@ -16,7 +20,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/go-chi/chi/v5 v5.0.14 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
@@ -40,11 +43,8 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
-	github.com/swaggo/http-swagger/v2 v2.0.2 // indirect
-	github.com/swaggo/swag v1.16.3 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect

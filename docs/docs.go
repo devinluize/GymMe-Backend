@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/auth/login2": {
+        "/api/user/login2": {
             "post": {
                 "security": [
                     {
@@ -62,7 +62,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/register": {
+        "/api/user/register": {
             "post": {
                 "security": [
                     {

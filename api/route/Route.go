@@ -64,7 +64,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 		}
 	})
 
-	authRepository := AuthRepositoryImpl.NewAuthRepoImpl()
+	authRepository := UserRepositoryImpl.NewAuthRepoImpl()
 	authService := auth2.NewAuthServiceImpl(db, authRepository)
 	authController := auth3.NewAuthController(authService)
 

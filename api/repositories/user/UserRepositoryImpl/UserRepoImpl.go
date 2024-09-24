@@ -1,9 +1,9 @@
-package AuthRepositoryImpl
+package UserRepositoryImpl
 
 import (
 	"GymMe-Backend/api/entities"
 	"GymMe-Backend/api/payloads/responses"
-	"GymMe-Backend/api/repositories/auth"
+	"GymMe-Backend/api/repositories/user"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 
 type AuthRepoImpl struct{}
 
-func NewAuthRepoImpl() auth.AuthRepo {
+func NewAuthRepoImpl() userrepositories.UsersRepository {
 	return &AuthRepoImpl{}
 }
 
