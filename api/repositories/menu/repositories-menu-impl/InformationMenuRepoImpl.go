@@ -6,6 +6,7 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -103,18 +104,18 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	}
 	return Entities, nil
 }
-func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.InformationSelectPayloads, *responses.ErrorResponses) {
+func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
 	EntitiesInfo := entities.Information{}
 	err := db.Model(&entities.Information{}).Where(entities.Information{InformationId: id}).First(&EntitiesInfo).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return MenuPayloads.InformationSelectPayloads{}, &responses.ErrorResponses{
+			return MenuPayloads.InformationSelectResponses{}, &responses.ErrorResponses{
 				StatusCode: http.StatusBadRequest,
 				Message:    "Delete Failed Id Not Found",
 			}
 		}
 	}
-	result := MenuPayloads.InformationSelectPayloads{
+	result := MenuPayloads.InformationSelectResponses{
 		InformationHeader:            EntitiesInfo.InformationHeader,
 		InformationImageContentPath1: EntitiesInfo.InformationImageContentPath1,
 		InformationImageContentPath2: EntitiesInfo.InformationImageContentPath2,
@@ -130,6 +131,9 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.
 	return result, nil
 }
 func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB) ([]entities.Information, *responses.ErrorResponses) {
-	//TODO implement me
+	fmt.Println("lljl")
 	panic("implement me")
+	//me := db.Model(&entities.UserDetail{}).Where(entities.UserDetail{UserId: 1})
+	//eads := database.Pagination{}
+	//err := db.Model(&entities.Information{}).Scopes(database.Paginate(entities.UserDetail{}, &eads, me)).Scan(&me).Error
 }
