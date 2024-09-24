@@ -11,10 +11,10 @@ import (
 
 type AuthServiceImpl struct {
 	DB   *gorm.DB
-	Repo user.UsersRepository
+	Repo userrepositories.UsersRepository
 }
 
-func NewAuthServiceImpl(db *gorm.DB, Repo user.UsersRepository) AuthService {
+func NewAuthServiceImpl(db *gorm.DB, Repo userrepositories.UsersRepository) AuthService {
 	return &AuthServiceImpl{
 		DB:   db,
 		Repo: Repo,
