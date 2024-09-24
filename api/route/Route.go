@@ -2,8 +2,11 @@ package route
 
 import (
 	auth3 "GymMe-Backend/api/controller/auth/authImpl"
+	menucontroller "GymMe-Backend/api/controller/menu"
 	"GymMe-Backend/api/repositories/auth/AuthRepositoryImpl"
+	MenuImplRepositories "GymMe-Backend/api/repositories/menu/repositories-menu-impl"
 	auth2 "GymMe-Backend/api/service/auth"
+	menu_service_impl "GymMe-Backend/api/service/menu/menu-service-impl"
 	_ "GymMe-Backend/docs"
 	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -64,8 +67,17 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	authRepository := AuthRepositoryImpl.NewAuthRepoImpl()
 	authService := auth2.NewAuthServiceImpl(db, authRepository)
 	authController := auth3.NewAuthController(authService)
+
+	InformationRepository := MenuImplRepositories.NewInformationMenu()
+	InformationService := menu_service_impl.NewInformationServiceImpl(InformationRepository, db)
+	InformationController := menucontroller.NewInformatioControllerImpl(InformationService)
+
 	AuthRouter := AuthRouter(authController)
+	InformationRouter := InformationRouter(InformationController)
+
+	////////
 	router.Mount("/auth", AuthRouter)
+	router.Mount("/information", InformationRouter)
 
 	return router
 }

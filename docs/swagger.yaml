@@ -138,7 +138,7 @@ paths:
       summary: register by heade
       tags:
       - Auth
-  /api/menu/information:
+  /api/information:
     patch:
       consumes:
       - application/json
@@ -185,7 +185,7 @@ paths:
       summary: Create New Information
       tags:
       - Information
-  /api/menu/information/{information_id}:
+  /api/information/delete/{information_id}:
     delete:
       consumes:
       - application/json

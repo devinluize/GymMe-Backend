@@ -33,7 +33,7 @@ func NewInformatioControllerImpl(InformationService menu.InformationService) Inf
 //	@Produce		json
 //	@Param			request	body		MenuPayloads.InformationInsertPayloads	true	"Insert Request"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/menu/information [post]
+//	@Router			/api/information [post]
 func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter, request *http.Request) {
 	var InformationPayloads MenuPayloads.InformationInsertPayloads
 	helper.ReadFromRequestBody(request, &InformationPayloads)
@@ -55,7 +55,7 @@ func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter
 //	@Produce		json
 //	@Param			information_id	path int	true	"information_id"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/menu/information/{information_id} [delete]
+//	@Router			/api/information/delete/{information_id} [delete]
 func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWriter, request *http.Request) {
 	InformationId := chi.URLParam(request, "information_id")
 	InformationIds, err := strconv.Atoi(InformationId)
@@ -80,7 +80,7 @@ func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWr
 //	@Produce		json
 //	@Param			request	body		MenuPayloads.InformationUpdatePayloads	true	"Update Request"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/menu/information [patch]
+//	@Router			/api/information [patch]
 func (i *InformationControllerImpl) UpdateInformation(writer http.ResponseWriter, request *http.Request) {
 	var InformationPayloads MenuPayloads.InformationUpdatePayloads
 	helper.ReadFromRequestBody(request, &InformationPayloads)

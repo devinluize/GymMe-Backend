@@ -101,7 +101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/menu/information": {
+        "/api/information": {
             "post": {
                 "security": [
                     {
@@ -177,7 +177,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/menu/information/{information_id}": {
+        "/api/information/delete/{information_id}": {
             "delete": {
                 "security": [
                     {

@@ -94,7 +94,7 @@
                 }
             }
         },
-        "/api/menu/information": {
+        "/api/information": {
             "post": {
                 "security": [
                     {
@@ -170,7 +170,7 @@
                 }
             }
         },
-        "/api/menu/information/{information_id}": {
+        "/api/information/delete/{information_id}": {
             "delete": {
                 "security": [
                     {
