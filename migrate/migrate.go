@@ -15,11 +15,13 @@ import (
 func Migrate() {
 	configenv.InitEnvConfigs(false, "")
 	logEntry := "Auto Migrating to database"
-
+	//dsn := "Server=localhost\\MSSQLSERVER01;Database=GymMe;Trusted_Connection=True;"
 	dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
 		configenv.EnvConfigs.Hostname,
 		configenv.EnvConfigs.DBPort,
 		configenv.EnvConfigs.DBName)
+	fmt.Println(dsn)
+
 	newLogger := logger.New(
 		log.New(log.Writer(), "\r\n", log.LstdFlags),
 		logger.Config{

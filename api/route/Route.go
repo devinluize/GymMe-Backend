@@ -2,7 +2,7 @@ package route
 
 import (
 	auth3 "GymMe-Backend/api/controller/auth/authImpl"
-	"GymMe-Backend/api/repositories/auth/AuthRepositoryImpl"
+	"GymMe-Backend/api/repositories/user/UserRepositoryImpl"
 	auth2 "GymMe-Backend/api/service/auth"
 	_ "GymMe-Backend/docs"
 	"github.com/go-chi/chi/v5"
@@ -61,11 +61,11 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 		}
 	})
 
-	authRepository := AuthRepositoryImpl.NewAuthRepoImpl()
+	authRepository := UserRepositoryImpl.NewAuthRepoImpl()
 	authService := auth2.NewAuthServiceImpl(db, authRepository)
 	authController := auth3.NewAuthController(authService)
 	AuthRouter := AuthRouter(authController)
-	router.Mount("/auth", AuthRouter)
+	router.Mount("/user", AuthRouter)
 
 	return router
 }

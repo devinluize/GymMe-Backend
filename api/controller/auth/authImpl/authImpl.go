@@ -30,7 +30,7 @@ func NewAuthController(AuthService auth2.AuthService) auth.AuthController {
 //	@Produce		json
 //	@Param			request	body		payloads.RegisterPayloads	true	"Insert Header Request"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/auth/register [post]
+//	@Router			/api/user/register [post]
 func (controller *AuthControllerImpl) Register(writer http.ResponseWriter, request *http.Request) {
 	payloadsData := payloads.RegisterPayloads{}
 	helper.ReadFromRequestBody(request, &payloadsData)
@@ -52,7 +52,7 @@ func (controller *AuthControllerImpl) Register(writer http.ResponseWriter, reque
 //	@Produce		json
 //	@Param			request	body		payloads.LoginPaylods	true	"Insert Header Request"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/auth/login2 [post]
+//	@Router			/api/user/login2 [post]
 func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, request *http.Request) {
 	//TODO implement me
 	loginPayloads := payloads.LoginPaylods{}

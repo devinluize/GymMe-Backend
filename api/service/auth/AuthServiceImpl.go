@@ -5,16 +5,16 @@ import (
 	"GymMe-Backend/api/helper"
 	payloads "GymMe-Backend/api/payloads/auth"
 	"GymMe-Backend/api/payloads/responses"
-	"GymMe-Backend/api/repositories/auth"
+	"GymMe-Backend/api/repositories/user"
 	"gorm.io/gorm"
 )
 
 type AuthServiceImpl struct {
 	DB   *gorm.DB
-	Repo auth.AuthRepo
+	Repo user.UsersRepository
 }
 
-func NewAuthServiceImpl(db *gorm.DB, Repo auth.AuthRepo) AuthService {
+func NewAuthServiceImpl(db *gorm.DB, Repo user.UsersRepository) AuthService {
 	return &AuthServiceImpl{
 		DB:   db,
 		Repo: Repo,
