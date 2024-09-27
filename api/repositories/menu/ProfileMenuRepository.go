@@ -10,4 +10,5 @@ import (
 type ProfileMenuRepository interface {
 	GetProfileMenu(db *gorm.DB, id int) (entities.UserDetail, *responses.ErrorResponses)
 	UpdateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses)
+	CreateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses)
 }

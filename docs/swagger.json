@@ -16,14 +16,14 @@
     },
     "host": "localhost:3000",
     "paths": {
-        "/api/auth/login2": {
+        "/api/bookmark": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Login by header",
+                "description": "Remove Bookmark",
                 "consumes": [
                     "application/json"
                 ],
@@ -31,62 +31,64 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Auth"
+                    "Bookmark"
                 ],
-                "summary": "Login by header",
+                "summary": "Remove Bookmark",
                 "parameters": [
                     {
-                        "description": "Insert Header Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/payloads.LoginPaylods"
-                        }
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "information_id",
+                        "name": "information_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Bookmark"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponses"
                         }
-                    }
-                }
-            }
-        },
-        "/api/auth/register": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "register by heade",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "register by heade",
-                "parameters": [
-                    {
-                        "description": "Insert Header Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/payloads.RegisterPayloads"
+                            "$ref": "#/definitions/responses.ErrorResponses"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponses"
                         }
@@ -126,6 +128,42 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StandarAPIResponses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponses"
                         }
@@ -195,6 +233,197 @@
                         "name": "information_id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/profile": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Profile Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get Profile Detail",
+                "parameters": [
+                    {
+                        "description": "user detail Headers",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.ProfilePayloadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Profile Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get Profile Detail",
+                "parameters": [
+                    {
+                        "description": "user detail Headers",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.ProfilePayloadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/profile/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Profile Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get Profile Detail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/login2": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Login by header",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login by header",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payloads.LoginPaylods"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "register by heade",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register by heade",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payloads.RegisterPayloads"
+                        }
                     }
                 ],
                 "responses": {
@@ -285,6 +514,173 @@
                 }
             }
         },
+        "MenuPayloads.ProfilePayloadRequest": {
+            "type": "object",
+            "properties": {
+                "user_detail_id": {
+                    "type": "integer"
+                },
+                "user_gender": {
+                    "type": "string"
+                },
+                "user_height": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_profile_description": {
+                    "type": "string"
+                },
+                "user_profile_image": {
+                    "type": "string"
+                },
+                "user_weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "entities.Bookmark": {
+            "type": "object",
+            "properties": {
+                "bookmarkType": {
+                    "$ref": "#/definitions/entities.BookmarkType"
+                },
+                "bookmark_id": {
+                    "type": "integer"
+                },
+                "bookmark_type_id": {
+                    "type": "integer"
+                },
+                "information": {
+                    "$ref": "#/definitions/entities.Information"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/entities.Users"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.BookmarkType": {
+            "type": "object",
+            "properties": {
+                "bookmark_type_id": {
+                    "type": "integer"
+                },
+                "bookmark_type_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Information": {
+            "type": "object",
+            "properties": {
+                "informationType": {
+                    "$ref": "#/definitions/entities.InformationType"
+                },
+                "information_body_paragraph_1": {
+                    "type": "string"
+                },
+                "information_body_paragraph_2": {
+                    "type": "string"
+                },
+                "information_body_paragraph_3": {
+                    "type": "string"
+                },
+                "information_body_paragraph_4": {
+                    "type": "string"
+                },
+                "information_header": {
+                    "type": "string"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "information_image_content_path_1": {
+                    "type": "string"
+                },
+                "information_image_content_path_2": {
+                    "type": "string"
+                },
+                "information_image_content_path_3": {
+                    "type": "string"
+                },
+                "information_image_content_path_4": {
+                    "type": "string"
+                },
+                "information_image_content_path_5": {
+                    "type": "string"
+                },
+                "information_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.InformationType": {
+            "type": "object",
+            "properties": {
+                "information_type_id": {
+                    "type": "integer"
+                },
+                "information_type_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.UserDetail": {
+            "type": "object",
+            "properties": {
+                "user_detail_id": {
+                    "type": "integer"
+                },
+                "user_gender": {
+                    "type": "string"
+                },
+                "user_height": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_profile_description": {
+                    "type": "string"
+                },
+                "user_profile_image": {
+                    "type": "string"
+                },
+                "user_weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "entities.Users": {
+            "type": "object",
+            "properties": {
+                "is_vip": {
+                    "type": "boolean"
+                },
+                "user_detail": {
+                    "$ref": "#/definitions/entities.UserDetail"
+                },
+                "user_email": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
+                },
+                "user_password": {
+                    "type": "string"
+                }
+            }
+        },
         "payloads.LoginPaylods": {
             "type": "object",
             "properties": {
@@ -321,6 +717,21 @@
                     "type": "string"
                 },
                 "status_code": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "responses.StandarAPIResponses": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "statusCode": {
                     "type": "integer"
                 },
                 "success": {
