@@ -16,6 +16,86 @@
     },
     "host": "localhost:3000",
     "paths": {
+        "/api/bookmark": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove Bookmark",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "Remove Bookmark",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "information_id",
+                        "name": "information_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Bookmark"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
         "/api/information": {
             "post": {
                 "security": [
@@ -48,6 +128,42 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StandarAPIResponses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponses"
                         }
@@ -424,6 +540,147 @@
                 }
             }
         },
+        "entities.Bookmark": {
+            "type": "object",
+            "properties": {
+                "bookmarkType": {
+                    "$ref": "#/definitions/entities.BookmarkType"
+                },
+                "bookmark_id": {
+                    "type": "integer"
+                },
+                "bookmark_type_id": {
+                    "type": "integer"
+                },
+                "information": {
+                    "$ref": "#/definitions/entities.Information"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/entities.Users"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.BookmarkType": {
+            "type": "object",
+            "properties": {
+                "bookmark_type_id": {
+                    "type": "integer"
+                },
+                "bookmark_type_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Information": {
+            "type": "object",
+            "properties": {
+                "informationType": {
+                    "$ref": "#/definitions/entities.InformationType"
+                },
+                "information_body_paragraph_1": {
+                    "type": "string"
+                },
+                "information_body_paragraph_2": {
+                    "type": "string"
+                },
+                "information_body_paragraph_3": {
+                    "type": "string"
+                },
+                "information_body_paragraph_4": {
+                    "type": "string"
+                },
+                "information_header": {
+                    "type": "string"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "information_image_content_path_1": {
+                    "type": "string"
+                },
+                "information_image_content_path_2": {
+                    "type": "string"
+                },
+                "information_image_content_path_3": {
+                    "type": "string"
+                },
+                "information_image_content_path_4": {
+                    "type": "string"
+                },
+                "information_image_content_path_5": {
+                    "type": "string"
+                },
+                "information_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.InformationType": {
+            "type": "object",
+            "properties": {
+                "information_type_id": {
+                    "type": "integer"
+                },
+                "information_type_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.UserDetail": {
+            "type": "object",
+            "properties": {
+                "user_detail_id": {
+                    "type": "integer"
+                },
+                "user_gender": {
+                    "type": "string"
+                },
+                "user_height": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_profile_description": {
+                    "type": "string"
+                },
+                "user_profile_image": {
+                    "type": "string"
+                },
+                "user_weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "entities.Users": {
+            "type": "object",
+            "properties": {
+                "is_vip": {
+                    "type": "boolean"
+                },
+                "user_detail": {
+                    "$ref": "#/definitions/entities.UserDetail"
+                },
+                "user_email": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
+                },
+                "user_password": {
+                    "type": "string"
+                }
+            }
+        },
         "payloads.LoginPaylods": {
             "type": "object",
             "properties": {
@@ -460,6 +717,21 @@
                     "type": "string"
                 },
                 "status_code": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "responses.StandarAPIResponses": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "statusCode": {
                     "type": "integer"
                 },
                 "success": {

@@ -66,6 +66,98 @@ definitions:
       user_weight:
         type: number
     type: object
+  entities.Bookmark:
+    properties:
+      bookmark_id:
+        type: integer
+      bookmark_type_id:
+        type: integer
+      bookmarkType:
+        $ref: '#/definitions/entities.BookmarkType'
+      information:
+        $ref: '#/definitions/entities.Information'
+      information_id:
+        type: integer
+      user:
+        $ref: '#/definitions/entities.Users'
+      user_id:
+        type: integer
+    type: object
+  entities.BookmarkType:
+    properties:
+      bookmark_type_id:
+        type: integer
+      bookmark_type_name:
+        type: string
+    type: object
+  entities.Information:
+    properties:
+      information_body_paragraph_1:
+        type: string
+      information_body_paragraph_2:
+        type: string
+      information_body_paragraph_3:
+        type: string
+      information_body_paragraph_4:
+        type: string
+      information_header:
+        type: string
+      information_id:
+        type: integer
+      information_image_content_path_1:
+        type: string
+      information_image_content_path_2:
+        type: string
+      information_image_content_path_3:
+        type: string
+      information_image_content_path_4:
+        type: string
+      information_image_content_path_5:
+        type: string
+      information_type_id:
+        type: integer
+      informationType:
+        $ref: '#/definitions/entities.InformationType'
+    type: object
+  entities.InformationType:
+    properties:
+      information_type_id:
+        type: integer
+      information_type_name:
+        type: string
+    type: object
+  entities.UserDetail:
+    properties:
+      user_detail_id:
+        type: integer
+      user_gender:
+        type: string
+      user_height:
+        type: number
+      user_id:
+        type: integer
+      user_profile_description:
+        type: string
+      user_profile_image:
+        type: string
+      user_weight:
+        type: number
+    type: object
+  entities.Users:
+    properties:
+      is_vip:
+        type: boolean
+      user_detail:
+        $ref: '#/definitions/entities.UserDetail'
+      user_email:
+        type: string
+      user_id:
+        type: integer
+      user_name:
+        type: string
+      user_password:
+        type: string
+    type: object
   payloads.LoginPaylods:
     properties:
       useremail:
@@ -94,6 +186,16 @@ definitions:
       success:
         type: boolean
     type: object
+  responses.StandarAPIResponses:
+    properties:
+      data: {}
+      message:
+        type: string
+      statusCode:
+        type: integer
+      success:
+        type: boolean
+    type: object
 host: localhost:3000
 info:
   contact:
@@ -107,6 +209,58 @@ info:
   title: Gym Me Backend Thesis
   version: "1.0"
 paths:
+  /api/bookmark:
+    post:
+      consumes:
+      - application/json
+      description: Remove Bookmark
+      parameters:
+      - description: user_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: information_id
+        in: query
+        name: information_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Bookmark'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Remove Bookmark
+      tags:
+      - Bookmark
   /api/information:
     patch:
       consumes:
@@ -147,6 +301,30 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/responses.StandarAPIResponses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/responses.ErrorResponses'
       security:

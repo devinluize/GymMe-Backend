@@ -90,7 +90,7 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 		InformationBodyParagraph2:    payloads.InformationBodyParagraph2,
 		InformationBodyParagraph3:    payloads.InformationBodyParagraph3,
 		InformationBodyParagraph4:    payloads.InformationBodyParagraph4,
-		InformationTypeId:            payloads.InformationId,
+		InformationTypeId:            payloads.InformationTypeId,
 	}
 
 	err := tx.Create(&Entities).Error

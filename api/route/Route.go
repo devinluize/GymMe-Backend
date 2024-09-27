@@ -81,7 +81,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	ProfileRouter := ProfileRouter(ProfileController)
 	////////////////////////////////////////////
 
-	router.Mount("/auth", AuthRouter)
+	router.Mount("/user", AuthRouter)
 	router.Mount("/information", InformationRouter)
 	router.Mount("/profile", ProfileRouter)
 

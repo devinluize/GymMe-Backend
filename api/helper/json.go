@@ -88,7 +88,7 @@ func WriteToOutputResponseBody(writer http.ResponseWriter, response interface{},
 	encoder := json.NewEncoder(writer)
 	err := encoder.Encode(response)
 	if err != nil {
-		return errors.New("Please check your json input")
+		return errors.New("please check your json input")
 	}
 	return nil
 }

@@ -17,8 +17,9 @@ func NewBookmarkRepositoryImpl() menuRepository.BookmarkRepository {
 }
 func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, menuId int) (bool, *responses.ErrorResponses) {
 	BookmarkEntities := entities.Bookmark{
-		InformationId: menuId,
-		UserId:        userId,
+		BookmarkTypeId: 1,
+		InformationId:  menuId,
+		UserId:         userId,
 	}
 	err := db.Create(&BookmarkEntities).Error
 	if err != nil {

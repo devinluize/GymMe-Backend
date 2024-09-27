@@ -40,6 +40,8 @@ func (controller *ProfileControllerImpl) GetProfileMenu(writer http.ResponseWrit
 	response, err := controller.service.GetProfileMenu(res)
 	if err != nil {
 		helper.ReturnError(writer, err)
+		return
+
 	}
 	helper.HandleSuccess(writer, response, "Success get data", http.StatusOK)
 }
@@ -62,6 +64,8 @@ func (controller *ProfileControllerImpl) UpdateProfileMenu(writer http.ResponseW
 	res, err := controller.service.UpdateProfileMenu(profile)
 	if err != nil {
 		helper.ReturnError(writer, err)
+		return
+
 	}
 	helper.HandleSuccess(writer, res, "Success update data", http.StatusOK)
 }
@@ -83,6 +87,7 @@ func (controller *ProfileControllerImpl) CreateProfileMenu(writer http.ResponseW
 	res, err := controller.service.CreateProfileMenu(profile)
 	if err != nil {
 		helper.ReturnError(writer, err)
+		return
 	}
 	helper.HandleSuccess(writer, res, "Success create data", http.StatusOK)
 }

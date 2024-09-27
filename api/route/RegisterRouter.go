@@ -21,7 +21,7 @@ func AuthRouter(controller auth.AuthController) chi.Router {
 func InformationRouter(controller menucontroller.InformationController) chi.Router {
 	r := chi.NewRouter()
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
-	r.Use(middleware.RouterMiddleware)
+	//r.Use(middleware.RouterMiddleware)
 
 	r.Post("/", controller.InsertInformation)
 	r.Delete("/delete/{information_id}", controller.DeleteInformationById)
@@ -33,10 +33,10 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r := chi.NewRouter()
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
-	r.Use(middleware.RouterMiddleware)
+	//r.Use(middleware.RouterMiddleware)
 
 	r.Post("/", controller.CreateProfileMenu)
-	r.Delete("/{user_id}", controller.GetProfileMenu)
+	r.Get("/{user_id}", controller.GetProfileMenu)
 	r.Patch("/", controller.UpdateProfileMenu)
 
 	return r

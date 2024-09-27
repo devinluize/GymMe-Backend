@@ -32,7 +32,8 @@ func NewInformatioControllerImpl(InformationService menu.InformationService) Inf
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body		MenuPayloads.InformationInsertPayloads	true	"Insert Request"
-//	@Success		200		{object}	 responses.ErrorResponses
+//	@Success		200		{object}	responses.StandarAPIResponses
+//	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
 //	@Router			/api/information [post]
 func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter, request *http.Request) {
 	var InformationPayloads MenuPayloads.InformationInsertPayloads
@@ -41,6 +42,8 @@ func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter
 	res, err := i.InformationService.InsertInformation(InformationPayloads)
 	if err != nil {
 		helper.ReturnError(writer, err)
+		return
+
 	}
 	helper.HandleSuccess(writer, res, "Insert Successfull", http.StatusCreated)
 }
@@ -65,6 +68,7 @@ func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWr
 	res, errs := i.InformationService.DeleteInformationById(InformationIds)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
+		return
 
 	}
 	helper.HandleSuccess(writer, res, "Delete Successfull", http.StatusOK)
@@ -88,6 +92,7 @@ func (i *InformationControllerImpl) UpdateInformation(writer http.ResponseWriter
 	res, err := i.InformationService.UpdateInformation(InformationPayloads)
 	if err != nil {
 		helper.ReturnError(writer, err)
+		return
 	}
 	helper.HandleSuccess(writer, res, "Update Successfully", http.StatusOK)
 }

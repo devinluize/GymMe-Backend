@@ -59,7 +59,7 @@ func SetupConfiguration(gen bool, env string) (config *setupDatabase) {
 		}
 	} else {
 		if gen {
-			viper.AddConfigPath("../../../..development")
+			viper.AddConfigPath("../../.development")
 		} else {
 			viper.AddConfigPath(".development")
 		}
