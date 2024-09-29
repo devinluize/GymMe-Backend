@@ -70,9 +70,10 @@ func Migrate() {
 		&entities.Users{},
 		&entities.PaymentMethod{},
 		&entities.InformationType{},
-		&entities.Information{},
+		&entities.InformationEntities{},
 		&entities.BookmarkType{},
 		&entities.Bookmark{},
+		&entities.InformationBodyEntities{},
 	)
 
 	if err != nil {

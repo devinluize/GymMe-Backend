@@ -215,6 +215,79 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/information/by-id/{information_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Information By Information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Information"
+                ],
+                "summary": "Get Information By Information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "information_id",
+                        "name": "information_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.InformationEntities"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
         "/api/information/delete/{information_id}": {
             "delete": {
                 "security": [
@@ -445,20 +518,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "MenuPayloads.InformationBodyDetail": {
+            "type": "object",
+            "properties": {
+                "information_body_paragraph": {
+                    "type": "string"
+                },
+                "information_image_content_path": {
+                    "type": "string"
+                }
+            }
+        },
         "MenuPayloads.InformationInsertPayloads": {
             "type": "object",
             "properties": {
-                "information_body_paragraph_1": {
-                    "type": "string"
-                },
-                "information_body_paragraph_2": {
-                    "type": "string"
-                },
-                "information_body_paragraph_3": {
-                    "type": "string"
-                },
-                "information_body_paragraph_4": {
-                    "type": "string"
+                "information_body_paragraph": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MenuPayloads.InformationBodyDetail"
+                    }
                 },
                 "information_header": {
                     "type": "string"
@@ -489,35 +567,14 @@ const docTemplate = `{
         "MenuPayloads.InformationUpdatePayloads": {
             "type": "object",
             "properties": {
-                "information_body_paragraph_1": {
-                    "type": "string"
-                },
-                "information_body_paragraph_2": {
-                    "type": "string"
-                },
-                "information_body_paragraph_3": {
-                    "type": "string"
-                },
-                "information_body_paragraph_4": {
-                    "type": "string"
+                "information_body_content": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MenuPayloads.InformationBodyDetail"
+                    }
                 },
                 "information_id": {
                     "type": "integer"
-                },
-                "information_image_content_path_1": {
-                    "type": "string"
-                },
-                "information_image_content_path_2": {
-                    "type": "string"
-                },
-                "information_image_content_path_3": {
-                    "type": "string"
-                },
-                "information_image_content_path_4": {
-                    "type": "string"
-                },
-                "information_image_content_path_5": {
-                    "type": "string"
                 }
             }
         },
@@ -560,7 +617,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "information": {
-                    "$ref": "#/definitions/entities.Information"
+                    "$ref": "#/definitions/entities.InformationEntities"
                 },
                 "information_id": {
                     "type": "integer"
@@ -584,22 +641,39 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.Information": {
+        "entities.InformationBodyEntities": {
+            "type": "object",
+            "properties": {
+                "information_body_id": {
+                    "type": "integer"
+                },
+                "information_body_paragraph": {
+                    "type": "string"
+                },
+                "information_id": {
+                    "type": "integer"
+                },
+                "information_image_content_path": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.InformationEntities": {
             "type": "object",
             "properties": {
                 "informationType": {
                     "$ref": "#/definitions/entities.InformationType"
                 },
-                "information_body_paragraph_1": {
-                    "type": "string"
+                "information_body": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.InformationBodyEntities"
+                    }
                 },
-                "information_body_paragraph_2": {
-                    "type": "string"
+                "information_created_by_user_id": {
+                    "type": "integer"
                 },
-                "information_body_paragraph_3": {
-                    "type": "string"
-                },
-                "information_body_paragraph_4": {
+                "information_date_created": {
                     "type": "string"
                 },
                 "information_header": {
@@ -607,21 +681,6 @@ const docTemplate = `{
                 },
                 "information_id": {
                     "type": "integer"
-                },
-                "information_image_content_path_1": {
-                    "type": "string"
-                },
-                "information_image_content_path_2": {
-                    "type": "string"
-                },
-                "information_image_content_path_3": {
-                    "type": "string"
-                },
-                "information_image_content_path_4": {
-                    "type": "string"
-                },
-                "information_image_content_path_5": {
-                    "type": "string"
                 },
                 "information_type_id": {
                     "type": "integer"
@@ -654,6 +713,9 @@ const docTemplate = `{
                 "user_id": {
                     "type": "integer"
                 },
+                "user_phone_number": {
+                    "type": "string"
+                },
                 "user_profile_description": {
                     "type": "string"
                 },
@@ -668,11 +730,13 @@ const docTemplate = `{
         "entities.Users": {
             "type": "object",
             "properties": {
-                "is_vip": {
-                    "type": "boolean"
-                },
                 "user_detail": {
-                    "$ref": "#/definitions/entities.UserDetail"
+                    "description": "IsVIP        bool       ` + "`" + `gorm:\"column:is_vip\" json:\"is_vip\"` + "`" + `",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entities.UserDetail"
+                        }
+                    ]
                 },
                 "user_email": {
                     "type": "string"
@@ -702,16 +766,19 @@ const docTemplate = `{
         "payloads.RegisterPayloads": {
             "type": "object",
             "properties": {
-                "isVIP": {
-                    "type": "boolean"
-                },
-                "useremail": {
+                "user_email": {
                     "type": "string"
                 },
-                "username": {
+                "user_gender": {
                     "type": "string"
                 },
-                "userpasword": {
+                "user_name": {
+                    "type": "string"
+                },
+                "user_password": {
+                    "type": "string"
+                },
+                "user_phone_number": {
                     "type": "string"
                 }
             }

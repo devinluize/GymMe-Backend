@@ -17,32 +17,29 @@ type InformationMenu struct {
 func NewInformationMenu() menuRepository.InformationMenu {
 	return &InformationMenu{}
 }
+func (i *InformationMenu) UpdateInformation(tx *gorm.DB, payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses) {
+	var InformationEntities entities.InformationEntities
+	var InformationBodyEntities []entities.InformationBodyEntities
 
-func (i *InformationMenu) UpdateInformation(tx *gorm.DB, payloads MenuPayloads.InformationUpdatePayloads) (entities.Information, *responses.ErrorResponses) {
-	var InformationEntities entities.Information
-
-	err := tx.Model(&InformationEntities).Where(&MenuPayloads.InformationUpdatePayloads{InformationId: payloads.InformationId}).
-		First(&InformationEntities).Error
-
+	err := tx.Model(&InformationEntities).Where(entities.InformationEntities{InformationId: payloads.InformationId}).First(&InformationEntities).Error
 	if err != nil {
 		return InformationEntities,
 			&responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
 				Err:     err,
 				Message: err.Error()}
 	}
-
-	InformationEntities.InformationBodyParagraph1 = payloads.InformationBodyParagraph1
-	InformationEntities.InformationBodyParagraph2 = payloads.InformationBodyParagraph2
-	InformationEntities.InformationBodyParagraph3 = payloads.InformationBodyParagraph3
-	InformationEntities.InformationBodyParagraph4 = payloads.InformationBodyParagraph4
-	InformationEntities.InformationImageContentPath1 = payloads.InformationImageContentPath1
-	InformationEntities.InformationImageContentPath2 = payloads.InformationImageContentPath2
-	InformationEntities.InformationImageContentPath3 = payloads.InformationImageContentPath3
-	InformationEntities.InformationImageContentPath4 = payloads.InformationImageContentPath4
-	InformationEntities.InformationImageContentPath5 = payloads.InformationImageContentPath5
-
+	for _, i := range payloads.InformationBodyContent {
+		InformationBodyEntitiesData := entities.InformationBodyEntities{
+			InformationBodyParagraph:    i.InformationBodyParagraph,
+			InformationImageContentPath: i.InformationImageContentPath,
+			InformationId:               payloads.InformationId,
+		}
+		InformationBodyEntities = append(InformationBodyEntities, InformationBodyEntitiesData)
+	}
+	//Information Body Inserting
+	InformationEntities.InformationBody = InformationBodyEntities
+	err = tx.Delete(entities.InformationBodyEntities{}, entities.InformationBodyEntities{InformationId: payloads.InformationId}).Error
 	err = tx.Save(&InformationEntities).Error
-
 	if err != nil {
 		return InformationEntities, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
@@ -53,9 +50,8 @@ func (i *InformationMenu) UpdateInformation(tx *gorm.DB, payloads MenuPayloads.I
 	}
 	return InformationEntities, nil
 }
-
 func (i *InformationMenu) DeleteInformationById(db *gorm.DB, id int) (bool, *responses.ErrorResponses) {
-	err := db.Model(&entities.Information{}).Where(entities.Information{InformationId: id}).Error
+	err := db.Model(&entities.InformationEntities{}).Where(entities.InformationEntities{InformationId: id}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, &responses.ErrorResponses{
@@ -69,31 +65,52 @@ func (i *InformationMenu) DeleteInformationById(db *gorm.DB, id int) (bool, *res
 			Message:    err.Error(),
 		}
 	}
-	err = db.Delete(entities.Information{}, entities.Information{InformationId: id}).Error
+	err = db.Delete(entities.InformationBodyEntities{}, entities.InformationBodyEntities{InformationId: id}).Error
+	if err != nil {
+		return false, &responses.ErrorResponses{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+		}
+	}
+
+	err = db.Delete(entities.InformationEntities{}, entities.InformationEntities{InformationId: id}).Error
 	if err != nil {
 		return false, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError, Message: err.Error()}
 	}
 	return true, nil
 }
-
-func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.InformationInsertPayloads) (entities.Information, *responses.ErrorResponses) {
-	var Entities entities.Information
-	Entities = entities.Information{
+func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.InformationInsertPayloads) (entities.InformationEntities, *responses.ErrorResponses) {
+	var Entities entities.InformationEntities
+	Entities = entities.InformationEntities{
 		//InformationId:                0,
-		InformationHeader:            payloads.InformationHeader,
-		InformationImageContentPath1: payloads.InformationImageContentPath1,
-		InformationImageContentPath2: payloads.InformationImageContentPath2,
-		InformationImageContentPath3: payloads.InformationImageContentPath3,
-		InformationImageContentPath4: payloads.InformationImageContentPath4,
-		InformationImageContentPath5: payloads.InformationImageContentPath5,
-		InformationBodyParagraph1:    payloads.InformationBodyParagraph1,
-		InformationBodyParagraph2:    payloads.InformationBodyParagraph2,
-		InformationBodyParagraph3:    payloads.InformationBodyParagraph3,
-		InformationBodyParagraph4:    payloads.InformationBodyParagraph4,
-		InformationTypeId:            payloads.InformationTypeId,
+		InformationHeader: payloads.InformationHeader,
+		//InformationImageContentPath1: payloads.InformationImageContentPath1,
+		//InformationImageContentPath2: payloads.InformationImageContentPath2,
+		//InformationImageContentPath3: payloads.InformationImageContentPath3,
+		//InformationImageContentPath4: payloads.InformationImageContentPath4,
+		//InformationImageContentPath5: payloads.InformationImageContentPath5,
+		InformationTypeId: payloads.InformationTypeId,
+	}
+	var EntitiesDetail []entities.InformationBodyEntities
+
+	//Entities.InformationId = Entities.InformationId
+	err := tx.Create(&Entities).Error
+	if err != nil {
+		return Entities, &responses.ErrorResponses{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+			Err:        err,
+			Success:    false,
+		}
 	}
 
-	err := tx.Create(&Entities).Error
+	err = tx.Model(&Entities).Where(entities.InformationEntities{InformationId: Entities.InformationId}).First(&Entities).Error
+	for _, paragraph := range payloads.InformationBodyParagraph {
+		EntitiesDetail = append(EntitiesDetail, entities.InformationBodyEntities{InformationBodyParagraph: paragraph.InformationBodyParagraph,
+			InformationId: Entities.InformationId,
+		})
+	}
+	err = tx.Create(&EntitiesDetail).Error
 	if err != nil {
 		return Entities, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
@@ -105,8 +122,8 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	return Entities, nil
 }
 func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
-	EntitiesInfo := entities.Information{}
-	err := db.Model(&entities.Information{}).Where(entities.Information{InformationId: id}).First(&EntitiesInfo).Error
+	EntitiesInfo := entities.InformationEntities{}
+	err := db.Model(&entities.InformationEntities{}).Where(entities.InformationEntities{InformationId: id}).First(&EntitiesInfo).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return MenuPayloads.InformationSelectResponses{}, &responses.ErrorResponses{
@@ -115,25 +132,36 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.
 			}
 		}
 	}
+	ResDetail := []MenuPayloads.InformationBodyDetail{}
+	err = db.Model(&entities.InformationBodyEntities{}).Where(entities.InformationBodyEntities{InformationId: id}).Scan(&ResDetail).Error
+	if err != nil {
+		return MenuPayloads.InformationSelectResponses{}, &responses.ErrorResponses{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+		}
+	}
+	SelectPayload := []MenuPayloads.InformationBodyDetail{}
+	for _, detail := range ResDetail {
+		SelectPayloadData := MenuPayloads.InformationBodyDetail{
+			InformationBodyParagraph:    detail.InformationBodyParagraph,
+			InformationImageContentPath: detail.InformationImageContentPath,
+		}
+		SelectPayload = append(SelectPayload, SelectPayloadData)
+	}
+
 	result := MenuPayloads.InformationSelectResponses{
-		InformationHeader:            EntitiesInfo.InformationHeader,
-		InformationImageContentPath1: EntitiesInfo.InformationImageContentPath1,
-		InformationImageContentPath2: EntitiesInfo.InformationImageContentPath2,
-		InformationImageContentPath3: EntitiesInfo.InformationImageContentPath3,
-		InformationImageContentPath4: EntitiesInfo.InformationImageContentPath4,
-		InformationImageContentPath5: EntitiesInfo.InformationImageContentPath5,
-		InformationBodyParagraph1:    EntitiesInfo.InformationBodyParagraph1,
-		InformationBodyParagraph2:    EntitiesInfo.InformationBodyParagraph2,
-		InformationBodyParagraph3:    EntitiesInfo.InformationBodyParagraph3,
-		InformationBodyParagraph4:    EntitiesInfo.InformationBodyParagraph4,
-		InformationTypeId:            EntitiesInfo.InformationTypeId,
+		InformationHeader:          EntitiesInfo.InformationHeader,
+		InformationDateCreated:     EntitiesInfo.InformationDateCreated,
+		InformationCreatedByUserId: EntitiesInfo.InformationCreatedByUserId,
+		InformationBodyContent:     SelectPayload,
+		InformationTypeId:          EntitiesInfo.InformationTypeId,
 	}
 	return result, nil
 }
-func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB) ([]entities.Information, *responses.ErrorResponses) {
+func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB) ([]entities.InformationEntities, *responses.ErrorResponses) {
 	fmt.Println("lljl")
 	panic("implement me")
 	//me := db.Model(&entities.UserDetail{}).Where(entities.UserDetail{UserId: 1})
 	//eads := database.Pagination{}
-	//err := db.Model(&entities.Information{}).Scopes(database.Paginate(entities.UserDetail{}, &eads, me)).Scan(&me).Error
+	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(entities.UserDetail{}, &eads, me)).Scan(&me).Error
 }

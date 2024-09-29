@@ -1,14 +1,17 @@
 definitions:
+  MenuPayloads.InformationBodyDetail:
+    properties:
+      information_body_paragraph:
+        type: string
+      information_image_content_path:
+        type: string
+    type: object
   MenuPayloads.InformationInsertPayloads:
     properties:
-      information_body_paragraph_1:
-        type: string
-      information_body_paragraph_2:
-        type: string
-      information_body_paragraph_3:
-        type: string
-      information_body_paragraph_4:
-        type: string
+      information_body_paragraph:
+        items:
+          $ref: '#/definitions/MenuPayloads.InformationBodyDetail'
+        type: array
       information_header:
         type: string
       information_id:
@@ -28,26 +31,12 @@ definitions:
     type: object
   MenuPayloads.InformationUpdatePayloads:
     properties:
-      information_body_paragraph_1:
-        type: string
-      information_body_paragraph_2:
-        type: string
-      information_body_paragraph_3:
-        type: string
-      information_body_paragraph_4:
-        type: string
+      information_body_content:
+        items:
+          $ref: '#/definitions/MenuPayloads.InformationBodyDetail'
+        type: array
       information_id:
         type: integer
-      information_image_content_path_1:
-        type: string
-      information_image_content_path_2:
-        type: string
-      information_image_content_path_3:
-        type: string
-      information_image_content_path_4:
-        type: string
-      information_image_content_path_5:
-        type: string
     type: object
   MenuPayloads.ProfilePayloadRequest:
     properties:
@@ -75,7 +64,7 @@ definitions:
       bookmarkType:
         $ref: '#/definitions/entities.BookmarkType'
       information:
-        $ref: '#/definitions/entities.Information'
+        $ref: '#/definitions/entities.InformationEntities'
       information_id:
         type: integer
       user:
@@ -90,30 +79,31 @@ definitions:
       bookmark_type_name:
         type: string
     type: object
-  entities.Information:
+  entities.InformationBodyEntities:
     properties:
-      information_body_paragraph_1:
+      information_body_id:
+        type: integer
+      information_body_paragraph:
         type: string
-      information_body_paragraph_2:
+      information_id:
+        type: integer
+      information_image_content_path:
         type: string
-      information_body_paragraph_3:
-        type: string
-      information_body_paragraph_4:
+    type: object
+  entities.InformationEntities:
+    properties:
+      information_body:
+        items:
+          $ref: '#/definitions/entities.InformationBodyEntities'
+        type: array
+      information_created_by_user_id:
+        type: integer
+      information_date_created:
         type: string
       information_header:
         type: string
       information_id:
         type: integer
-      information_image_content_path_1:
-        type: string
-      information_image_content_path_2:
-        type: string
-      information_image_content_path_3:
-        type: string
-      information_image_content_path_4:
-        type: string
-      information_image_content_path_5:
-        type: string
       information_type_id:
         type: integer
       informationType:
@@ -136,6 +126,8 @@ definitions:
         type: number
       user_id:
         type: integer
+      user_phone_number:
+        type: string
       user_profile_description:
         type: string
       user_profile_image:
@@ -145,10 +137,10 @@ definitions:
     type: object
   entities.Users:
     properties:
-      is_vip:
-        type: boolean
       user_detail:
-        $ref: '#/definitions/entities.UserDetail'
+        allOf:
+        - $ref: '#/definitions/entities.UserDetail'
+        description: IsVIP        bool       `gorm:"column:is_vip" json:"is_vip"`
       user_email:
         type: string
       user_id:
@@ -167,13 +159,15 @@ definitions:
     type: object
   payloads.RegisterPayloads:
     properties:
-      isVIP:
-        type: boolean
-      useremail:
+      user_email:
         type: string
-      username:
+      user_gender:
         type: string
-      userpasword:
+      user_name:
+        type: string
+      user_password:
+        type: string
+      user_phone_number:
         type: string
     type: object
   responses.ErrorResponses:
@@ -330,6 +324,53 @@ paths:
       security:
       - BearerAuth: []
       summary: Create New Information
+      tags:
+      - Information
+  /api/information/by-id/{information_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Information By Information
+      parameters:
+      - description: information_id
+        in: path
+        name: information_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.InformationEntities'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Get Information By Information
       tags:
       - Information
   /api/information/delete/{information_id}:

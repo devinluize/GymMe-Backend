@@ -8,6 +8,7 @@ type UserDetail struct {
 	UserGender             string  `gorm:"column:user_gender;size:1" json:"user_gender"`
 	UserProfileDescription string  `gorm:"column:user_profile_description" json:"user_profile_description"`
 	UserProfileImage       string  `gorm:"column:user_profile_image" json:"user_profile_image"`
+	UserPhoneNumber        string  `gorm:"column:user_phone_number" json:"user_phone_number"`
 }
 
 //func (*UserDetail) TableName() string {

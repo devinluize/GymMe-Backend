@@ -73,6 +73,7 @@ func ReturnError(writer http.ResponseWriter, errorResponses *responses.ErrorResp
 }
 func HandleSuccess(writer http.ResponseWriter, data interface{}, message string, status int) {
 	res := responses.StandarAPIResponses{
+		Success:    true,
 		StatusCode: status,
 		Message:    message,
 		Data:       data,

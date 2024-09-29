@@ -13,6 +13,7 @@ type InformationController interface {
 	InsertInformation(writer http.ResponseWriter, request *http.Request)
 	DeleteInformationById(writer http.ResponseWriter, request *http.Request)
 	UpdateInformation(writer http.ResponseWriter, request *http.Request)
+	GeById(writer http.ResponseWriter, request *http.Request)
 }
 
 type InformationControllerImpl struct {
@@ -95,4 +96,31 @@ func (i *InformationControllerImpl) UpdateInformation(writer http.ResponseWriter
 		return
 	}
 	helper.HandleSuccess(writer, res, "Update Successfully", http.StatusOK)
+}
+
+// GeById List Via Header
+//
+//	@Security		BearerAuth
+//	@Summary		Get Information By Information
+//	@Description	Get Information By Information
+//	@Tags			Information
+//	@Accept			json
+//	@Produce		json
+//	@Param			information_id	path int			true		"information_id"
+//	@Success		200									{object}	entities.InformationEntities
+//	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
+//	@Router			/api/information/by-id/{information_id} [get]
+func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *http.Request) {
+	InformationId := chi.URLParam(request, "information_id")
+	InformationIds, err := strconv.Atoi(InformationId)
+	if err != nil {
+		return
+	}
+	res, errs := i.InformationService.GetInformationById(InformationIds)
+	if errs != nil {
+		helper.ReturnError(writer, errs)
+		return
+
+	}
+	helper.HandleSuccess(writer, res, "Get Data Successfuull", http.StatusOK)
 }

@@ -2,11 +2,13 @@ package UserRepositoryImpl
 
 import (
 	"GymMe-Backend/api/entities"
+	payloads "GymMe-Backend/api/payloads/auth"
 	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/repositories/user"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"runtime"
+	"strconv"
 )
 
 type AuthRepoImpl struct{}
@@ -15,15 +17,22 @@ func NewAuthRepoImpl() userrepositories.UsersRepository {
 	return &AuthRepoImpl{}
 }
 
-func (a *AuthRepoImpl) Register(requestData entities.Users, DB *gorm.DB) responses.ErrorResponses {
+func (a *AuthRepoImpl) Register(requestData payloads.RegisterPayloads, DB *gorm.DB) responses.ErrorResponses {
 	//TODO implement me
-	hashPassword, _ := bcrypt.GenerateFromPassword([]byte(requestData.UserPassword), bcrypt.DefaultCost)
-	requestData.UserPassword = string(hashPassword)
-	err2 := DB.AutoMigrate(&requestData)
-	if err2 != nil {
-		fmt.Println("Failed to auto-migrate:", err2)
+	hashPassword, _ := bcrypt.GenerateFromPassword([]byte(requestData.Userpasword), bcrypt.DefaultCost)
+	requestData.Userpasword = string(hashPassword)
+	//err2 := DB.AutoMigrate(&requestData)
+	//if err2 != nil {
+	//	fmt.Println("Failed to auto-migrate:", err2)
+	//}
+	entitiesUser := entities.Users{
+		//UserId:       0,
+		UserName:     requestData.Username,
+		UserEmail:    requestData.Useremail,
+		UserPassword: requestData.Userpasword,
+		//UserDetail:   entities.UserDetail{},
 	}
-	err := DB.Create(&requestData)
+	err := DB.Create(&entitiesUser).Scan(&entitiesUser)
 	if err.Error != nil {
 		return responses.ErrorResponses{
 			Success: false,
@@ -31,10 +40,30 @@ func (a *AuthRepoImpl) Register(requestData entities.Users, DB *gorm.DB) respons
 			Data:    nil,
 		}
 	}
+	detailEntities := entities.UserDetail{
+		UserDetailId:           0,
+		UserId:                 entitiesUser.UserId,
+		UserWeight:             0,
+		UserHeight:             0,
+		UserGender:             requestData.UserGender,
+		UserProfileDescription: "",
+		UserProfileImage:       "",
+		UserPhoneNumber:        requestData.UserPhoneNumber,
+	}
+	errs := DB.Create(&detailEntities).Scan(&detailEntities).Error
+	if errs != nil {
+		_, file, line, _ := runtime.Caller(1)
+		return responses.ErrorResponses{
+			Success: false,
+			Message: "Failed To Create in file and line " + file + strconv.Itoa(line),
+			Data:    requestData,
+		}
+	}
+	err = DB.Model(&entitiesUser).Where(entities.Users{UserId: entitiesUser.UserId}).Scan(&entitiesUser)
 	return responses.ErrorResponses{
 		Success: true,
 		Message: "Register Success",
-		Data:    requestData,
+		Data:    entitiesUser,
 	}
 
 }

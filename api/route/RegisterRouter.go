@@ -26,7 +26,7 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	r.Post("/", controller.InsertInformation)
 	r.Delete("/delete/{information_id}", controller.DeleteInformationById)
 	r.Patch("/", controller.UpdateInformation)
-
+	r.Get("/by-id/{information_id}", controller.GeById)
 	return r
 }
 
@@ -38,6 +38,5 @@ func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r.Post("/", controller.CreateProfileMenu)
 	r.Get("/{user_id}", controller.GetProfileMenu)
 	r.Patch("/", controller.UpdateProfileMenu)
-
 	return r
 }

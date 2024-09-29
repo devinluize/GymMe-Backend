@@ -67,7 +67,7 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 
 	claims := configenv.JWTClaim{
 		UserName: data.UserEmail,
-		IsVIP:    data.IsVIP,
+		//IsVIP:    data.IsVIP,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "devin",
 			ExpiresAt: jwt.NewNumericDate(expTime),
@@ -85,8 +85,8 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	helper.WriteToResponseBody(writer, payloads.LoginRespons{
 		UserName:  data.UserName,
 		UserEmail: data.UserEmail,
-		IsVIP:     data.IsVIP,
-		Token:     token,
+		//IsVIP:     data.IsVIP,
+		Token: token,
 	})
 	return
 	//panic("implement me")

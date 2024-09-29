@@ -20,14 +20,28 @@ func NewAuthServiceImpl(db *gorm.DB, Repo userrepositories.UsersRepository) Auth
 		Repo: Repo,
 	}
 }
-func ConverToEntities(payloads payloads.RegisterPayloads) entities.Users {
-	return entities.Users{
-		UserName:     payloads.Username,
-		UserEmail:    payloads.Useremail,
-		UserPassword: payloads.Userpasword,
-		IsVIP:        payloads.IsVIP,
-	}
-}
+
+//func ConvertToDetailEntities(payloads payloads.RegisterPayloads)entities.UserDetail{
+//	return entities.UserDetail{
+//		UserDetailId:           0,
+//		UserId:                 0,
+//		UserWeight:             0,
+//		UserHeight:             0,
+//		UserGender:             "",
+//		UserProfileDescription: "",
+//		UserProfileImage:       "",
+//		UserPhoneNumber:        "",
+//	}
+//}
+//func ConverToEntities(payloads payloads.RegisterPayloads) entities.Users {
+//	return entities.Users{
+//		UserName:     payloads.Username,
+//		UserEmail:    payloads.Useremail,
+//		UserPassword: payloads.Userpasword,
+//		UserDetails:
+//		//IsVIP:        payloads.IsVIP,
+//	}
+//}
 
 func ConverToEntitiesLogin(payloads payloads.LoginPaylods) entities.Users {
 	return entities.Users{
@@ -39,7 +53,7 @@ func ConverToEntitiesLogin(payloads payloads.LoginPaylods) entities.Users {
 }
 func (a *AuthServiceImpl) Register(payloads payloads.RegisterPayloads) responses.ErrorResponses {
 	tx := a.DB.Begin()
-	str := a.Repo.Register(ConverToEntities(payloads), tx)
+	str := a.Repo.Register(payloads, tx)
 	defer helper.CommitOrRollback(tx)
 	return str
 }
