@@ -2,6 +2,7 @@ package MenuImplRepositories
 
 import (
 	"GymMe-Backend/api/entities"
+	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
@@ -158,10 +159,18 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.
 	}
 	return result, nil
 }
-func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB) ([]entities.InformationEntities, *responses.ErrorResponses) {
-	fmt.Println("lljl")
-	panic("implement me")
-	//me := db.Model(&entities.UserDetail{}).Where(entities.UserDetail{UserId: 1})
-	//eads := database.Pagination{}
-	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(entities.UserDetail{}, &eads, me)).Scan(&me).Error
+func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses) {
+
+	var Entities []entities.InformationEntities
+	//me := db.Model(&entities.InformationEntities{}) -> table joinan
+	//cara 1
+	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
+	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
+	err := db.Model(&entities.InformationEntities{}).Scopes(helper.Paginate(&Entities, &paginationResponses, db)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
+	if err != nil {
+		return paginationResponses, &responses.ErrorResponses{}
+	}
+	paginationResponses.Rows = Entities
+	fmt.Println(paginationResponses.Rows)
+	return paginationResponses, nil
 }

@@ -29,8 +29,14 @@ func InitDB() *gorm.DB {
 	val.Add("parseTime", "True")
 	val.Add("loc", "Asia/Jakarta")
 	//	dsn := fmt.Sprintf("sqlserver://localhost:1433?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient", EnvConfigs.DBName)
-	dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
-		EnvConfigs.Hostname,
+	//dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+	//	EnvConfigs.Hostname,
+	//	EnvConfigs.DBPort,
+	//	EnvConfigs.DBName)
+	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+		EnvConfigs.DBUser,
+		EnvConfigs.DBPass,
+		EnvConfigs.DBHost,
 		EnvConfigs.DBPort,
 		EnvConfigs.DBName)
 	//dsn := "sqlserver://localhost:1433?database=assignmentDB&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient"

@@ -14,6 +14,7 @@ type InformationController interface {
 	DeleteInformationById(writer http.ResponseWriter, request *http.Request)
 	UpdateInformation(writer http.ResponseWriter, request *http.Request)
 	GeById(writer http.ResponseWriter, request *http.Request)
+	GetAllByPagination(writer http.ResponseWriter, request *http.Request)
 }
 
 type InformationControllerImpl struct {
@@ -58,7 +59,7 @@ func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter
 //	@Accept			json
 //	@Produce		json
 //	@Param			information_id	path int	true	"information_id"
-//	@Success		200		{object}	 responses.ErrorResponses
+//	@Success		200		{object}	 responses.StandarAPIResponses
 //	@Router			/api/information/delete/{information_id} [delete]
 func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWriter, request *http.Request) {
 	InformationId := chi.URLParam(request, "information_id")
@@ -123,4 +124,36 @@ func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *
 
 	}
 	helper.HandleSuccess(writer, res, "Get Data Successfuull", http.StatusOK)
+}
+
+// GetAllByPagination List Via Header
+//
+//	@Security		BearerAuth
+//	@Summary		Get All Information By Pagination
+//	@Description	Get All Information By Pagination
+//	@Tags			Information
+//	@Accept			json
+//	@Produce		json
+//	@Param			sort_by								query		string	false	"sort_by"
+//	@Param			sort_of								query		string	false	"sort_of"
+//	@Param			page								query		string	true	"page"
+//	@Param			limit								query		string	true	"limit"
+//	@Success		200									{object}	[]entities.InformationEntities
+//	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
+//	@Router			/api/information [get]
+func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWriter, request *http.Request) {
+	queryValues := request.URL.Query()
+
+	pagination := helper.Pagination{
+		Limit:  helper.NewGetQueryInt(queryValues, "limit"),
+		Page:   helper.NewGetQueryInt(queryValues, "page"),
+		SortOf: queryValues.Get("sort_of"),
+		SortBy: queryValues.Get("sort_by"),
+	}
+	res, err := i.InformationService.GetAllInformationWithPagination(pagination)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
 }

@@ -1,6 +1,7 @@
-package database
+package helper
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"math"
 )
@@ -51,6 +52,10 @@ func Paginate(value interface{}, pagination *Pagination, db *gorm.DB) func(db *g
 	pagination.TotalRows = totalRows
 	totalPages := int(math.Ceil(float64(totalRows) / float64(pagination.Limit)))
 	pagination.TotalPages = totalPages
+	ofset := pagination.GetOffset()
+	limit := pagination.GetLimit()
+
+	fmt.Println(ofset, limit)
 	return func(db *gorm.DB) *gorm.DB {
 		return db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(sort)
 	}

@@ -26,6 +26,7 @@ func TestInsertBookmark(t *testing.T) {
 		sqlDB, _ := db.DB()
 		sqlDB.Close()
 	}()
+
 	_, err := service.AddBookmark(userId, InformationId)
 	if err != nil {
 		t.Errorf("Failed On: %v", err)

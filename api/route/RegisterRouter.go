@@ -27,6 +27,7 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	r.Delete("/delete/{information_id}", controller.DeleteInformationById)
 	r.Patch("/", controller.UpdateInformation)
 	r.Get("/by-id/{information_id}", controller.GeById)
+	r.Get("/", controller.GetAllByPagination)
 	return r
 }
 
@@ -38,5 +39,12 @@ func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r.Post("/", controller.CreateProfileMenu)
 	r.Get("/{user_id}", controller.GetProfileMenu)
 	r.Patch("/", controller.UpdateProfileMenu)
+	return r
+}
+func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router {
+	r := chi.NewRouter()
+	r.Post("/", controller.PostWeightNotes)
+	r.Delete("/delete/{weight_id}/{user_id}", controller.DeleteWeightNotes)
+	r.Get("/{user_id}", controller.GetWeightNotes)
 	return r
 }

@@ -2,6 +2,7 @@ package menu
 
 import (
 	"GymMe-Backend/api/entities"
+	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
 )
@@ -11,4 +12,5 @@ type InformationService interface {
 	DeleteInformationById(id int) (bool, *responses.ErrorResponses)
 	UpdateInformation(payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses)
 	GetInformationById(id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses)
+	GetAllInformationWithPagination(paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
 }
