@@ -16,11 +16,16 @@ func Migrate() {
 	configenv.InitEnvConfigs(false, "")
 	logEntry := "Auto Migrating to database"
 	//dsn := "Server=localhost\\MSSQLSERVER01;Database=GymMe;Trusted_Connection=True;"
-	dsn := fmt.Sprintf("sqlserver://%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
-		configenv.EnvConfigs.Hostname,
+	//dsn := fmt.Sprintf("sqlserver://34.101.163.215:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+	//	configenv.EnvConfigs.DBPort,
+	//	configenv.EnvConfigs.DBName)
+	//fmt.Println(dsn)
+	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
+		configenv.EnvConfigs.DBUser,
+		configenv.EnvConfigs.DBPass,
+		configenv.EnvConfigs.DBHost,
 		configenv.EnvConfigs.DBPort,
 		configenv.EnvConfigs.DBName)
-	fmt.Println(dsn)
 
 	newLogger := logger.New(
 		log.New(log.Writer(), "\r\n", log.LstdFlags),
@@ -55,6 +60,8 @@ func Migrate() {
 			log.Printf("Successfully dropped table %s", tableName)
 		}
 	}
+	//}
+	/////
 	//migrate all table if neccesay
 	//err = database.DropAllDatabase(db)
 	//if err != nil {
@@ -74,6 +81,7 @@ func Migrate() {
 		&entities.BookmarkType{},
 		&entities.Bookmark{},
 		&entities.InformationBodyEntities{},
+		&entities.WeightHistoryEntities{},
 	)
 
 	if err != nil {

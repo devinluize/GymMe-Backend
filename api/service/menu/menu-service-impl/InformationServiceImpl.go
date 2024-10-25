@@ -57,3 +57,12 @@ func (service *InformationServiceImpl) GetInformationById(id int) (MenuPayloads.
 	}
 	return res, nil
 }
+func (service *InformationServiceImpl) GetAllInformationWithPagination(paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses) {
+	trans := service.db.Begin()
+	res, err := service.repo.GetAllInformationWithPagination(trans, paginationResponses)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
