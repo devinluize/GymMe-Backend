@@ -13,4 +13,5 @@ type InformationService interface {
 	UpdateInformation(payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses)
 	GetInformationById(id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses)
 	GetAllInformationWithPagination(paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
+	GetAllInformationWithFilter(paginationResponses helper.Pagination, Key string) (helper.Pagination, *responses.ErrorResponses)
 }

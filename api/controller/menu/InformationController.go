@@ -15,6 +15,7 @@ type InformationController interface {
 	UpdateInformation(writer http.ResponseWriter, request *http.Request)
 	GeById(writer http.ResponseWriter, request *http.Request)
 	GetAllByPagination(writer http.ResponseWriter, request *http.Request)
+	GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request)
 }
 
 type InformationControllerImpl struct {
@@ -151,6 +152,40 @@ func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWrite
 		SortBy: queryValues.Get("sort_by"),
 	}
 	res, err := i.InformationService.GetAllInformationWithPagination(pagination)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
+}
+
+// GetAllInformationByFilter List Via Header
+//
+//	@Security		BearerAuth
+//	@Summary		Get All Information By Pagination With Filter
+//	@Description	Get All Information By Pagination With Filter
+//	@Tags			Information
+//	@Accept			json
+//	@Produce		json
+//	@Param			key_filter							query		string	false	"key_filter"
+//	@Param			sort_by								query		string	false	"sort_by"
+//	@Param			sort_of								query		string	false	"sort_of"
+//	@Param			page								query		string	true	"page"
+//	@Param			limit								query		string	true	"limit"
+//	@Success		200									{object}	[]entities.InformationEntities
+//	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
+//	@Router			/api/information/search [get]
+func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request) {
+	queryValues := request.URL.Query()
+
+	pagination := helper.Pagination{
+		Limit:  helper.NewGetQueryInt(queryValues, "limit"),
+		Page:   helper.NewGetQueryInt(queryValues, "page"),
+		SortOf: queryValues.Get("sort_of"),
+		SortBy: queryValues.Get("sort_by"),
+	}
+	Key := queryValues.Get("key_filter")
+	res, err := i.InformationService.GetAllInformationWithFilter(pagination, Key)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

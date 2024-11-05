@@ -174,3 +174,17 @@ func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginatio
 	fmt.Println(paginationResponses.Rows)
 	return paginationResponses, nil
 }
+func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string) (helper.Pagination, *responses.ErrorResponses) {
+	var Entities []entities.InformationEntities
+	//me := db.Model(&entities.InformationEntities{}) -> table joinan
+	//cara 1
+	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
+	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
+	err := db.Model(&entities.InformationEntities{}).Scopes(helper.Paginate(&Entities, &paginationResponses, db)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
+	if err != nil {
+		return paginationResponses, &responses.ErrorResponses{}
+	}
+	paginationResponses.Rows = Entities
+	fmt.Println(paginationResponses.Rows)
+	return paginationResponses, nil
+}

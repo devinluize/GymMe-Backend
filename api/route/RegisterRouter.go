@@ -28,6 +28,7 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	r.Patch("/", controller.UpdateInformation)
 	r.Get("/by-id/{information_id}", controller.GeById)
 	r.Get("/", controller.GetAllByPagination)
+	r.Get("/search", controller.GetAllInformationByFilter)
 	return r
 }
 

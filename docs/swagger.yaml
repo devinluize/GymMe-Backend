@@ -479,6 +479,72 @@ paths:
       summary: Delete Information
       tags:
       - Information
+  /api/information/search:
+    get:
+      consumes:
+      - application/json
+      description: Get All Information By Pagination With Filter
+      parameters:
+      - description: key_filter
+        in: query
+        name: key_filter
+        type: string
+      - description: sort_by
+        in: query
+        name: sort_by
+        type: string
+      - description: sort_of
+        in: query
+        name: sort_of
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.InformationEntities'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Get All Information By Pagination With Filter
+      tags:
+      - Information
   /api/profile:
     patch:
       consumes:
