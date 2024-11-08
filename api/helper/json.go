@@ -28,17 +28,17 @@ func WriteToResponseBody(writer http.ResponseWriter, response interface{}) error
 func ReturnStandarResponses(writer http.ResponseWriter, status bool, message string, data interface{}) {
 	writer.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(writer)
-	response := responses.StandarAPIResponses{
+	response := responses.ApiResponseError{
 		Message: message,
 		Success: status,
-		Data:    data,
+		Err:     data,
 	}
 	err := encoder.Encode(response)
 	Paniciferror(err)
 
 }
 
-func ReturnAPIResponses(writer http.ResponseWriter, responses responses.StandarAPIResponses) {
+func ReturnAPIResponses(writer http.ResponseWriter, responses responses.ApiResponseError) {
 	writer.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(writer)
 	err := encoder.Encode(responses)
@@ -60,7 +60,7 @@ func ReturnError(writer http.ResponseWriter, errorResponses *responses.ErrorResp
 		res := &responses.ErrorResponses{
 			StatusCode: statusCode,
 			Message:    errorResponses.Message,
-			//Data:       err,
+			//Err:       err,
 		}
 
 		writer.WriteHeader(statusCode)
@@ -72,11 +72,11 @@ func ReturnError(writer http.ResponseWriter, errorResponses *responses.ErrorResp
 	}
 }
 func HandleSuccess(writer http.ResponseWriter, data interface{}, message string, status int) {
-	res := responses.StandarAPIResponses{
+	res := responses.ApiResponseError{
 		Success:    true,
 		StatusCode: status,
 		Message:    message,
-		Data:       data,
+		Err:        data,
 	}
 
 	WriteToOutputResponseBody(writer, res, status)

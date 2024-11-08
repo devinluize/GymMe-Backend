@@ -82,6 +82,7 @@ func Migrate() {
 		&entities.Bookmark{},
 		&entities.InformationBodyEntities{},
 		&entities.WeightHistoryEntities{},
+		&entities.CalenderEntity{},
 	)
 
 	if err != nil {

@@ -64,7 +64,7 @@ func InitDB() *gorm.DB {
 	sqlDB.SetMaxOpenConns(20)
 	sqlDB.SetConnMaxLifetime(time.Minute * 3)
 
-	log.Info("Connected Database " + EnvConfigs.DBDriver + "- Connected on : " + EnvConfigs.ClientOrigin)
+	log.Info("Connected Database " + EnvConfigs.DBDriver + "- Connected on : " + EnvConfigs.DBHost)
 
 	return db
 }

@@ -32,25 +32,25 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 			return configenv.JWT_KEY, nil
 		})
 		if err != nil {
-			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.ApiResponseError{
 				Message: "token invalid or expired",
 				Success: false,
-				Data:    nil,
+				Err:     nil,
 			})
 			return
 		}
 		//if claims.UserName != "devin" {
-		//	helper.ReturnAPIResponses(writer, Responses.StandarAPIResponses{
+		//	helper.ReturnAPIResponses(writer, Responses.ApiResponseError{
 		//		Message: "note devin",
 		//		Success: false,
-		//		Data:    nil,
+		//		Err:    nil,
 		//	})
 		//}
 		if claims.IsVIP {
-			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.ApiResponseError{
 				Message: "not devin",
 				Success: false,
-				Data:    claims.IsVIP,
+				Err:     claims.IsVIP,
 			})
 			//return
 		}
@@ -58,16 +58,16 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 		//	exceptions.NewAuthorizationException(writer, request, &exceptions.BaseErrorResponse{
 		//		StatusCode: http.StatusUnauthorized,
 		//		Message:    "You are not authorized to this endpoint",
-		//		Data:       nil,
+		//		Err:       nil,
 		//		Err:        err,
 		//	})
 		//	return
 		//}
 		if !myToken.Valid {
-			helper.ReturnAPIResponses(writer, responses.StandarAPIResponses{
+			helper.ReturnAPIResponses(writer, responses.ApiResponseError{
 				Message: "Token invalid",
 				Success: false,
-				Data:    nil,
+				Err:     nil,
 			})
 			return
 		}

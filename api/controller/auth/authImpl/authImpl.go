@@ -76,10 +76,10 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, erronToken := tokenAlgo.SignedString(configenv.JWT_KEY)
 	if erronToken != nil {
-		helper.WriteToResponseBody(writer, responses.StandarAPIResponses{
+		helper.WriteToResponseBody(writer, responses.ApiResponseError{
 			Message: "parse failed",
 			Success: false,
-			Data:    nil,
+			Err:     nil,
 		})
 	}
 	helper.WriteToResponseBody(writer, payloads.LoginRespons{

@@ -124,7 +124,7 @@ func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *
 		return
 
 	}
-	helper.HandleSuccess(writer, res, "Get Data Successfuull", http.StatusOK)
+	helper.HandleSuccess(writer, res, "Get Err Successfuull", http.StatusOK)
 }
 
 // GetAllByPagination List Via Header

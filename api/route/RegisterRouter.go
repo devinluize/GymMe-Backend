@@ -49,3 +49,13 @@ func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router 
 	r.Get("/{user_id}", controller.GetWeightNotes)
 	return r
 }
+
+func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
+	router := chi.NewRouter()
+
+	router.Post("/", controller.InsertCalendar)
+	router.Get("/by-user-id/{user_id}", controller.GetCalendarByUserId)
+	router.Delete("/delete/{calender_id}", controller.DeleteCalendarById)
+	router.Put("/", controller.UpdateCalendar)
+	return router
+}

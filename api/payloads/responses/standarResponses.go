@@ -1,8 +1,8 @@
 package responses
 
-type StandarAPIResponses struct {
+type ApiResponseError struct {
 	StatusCode int         `json:"statusCode"`
 	Message    string      `json:"message"`
 	Success    bool        `json:"success"`
-	Data       interface{} `json:"data"`
+	Err        interface{} `json:"data"`
 }

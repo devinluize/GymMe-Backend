@@ -50,7 +50,7 @@ func (controller *WeightHistoryControllerImpl) GetWeightNotes(writer http.Respon
 		helper.ReturnError(writer, err)
 		return
 	}
-	helper.HandleSuccess(writer, res, "Get Data Success", http.StatusOK)
+	helper.HandleSuccess(writer, res, "Get Err Success", http.StatusOK)
 }
 
 // PostWeightNotes List Via Header
