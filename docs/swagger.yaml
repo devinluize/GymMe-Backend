@@ -1,4 +1,32 @@
 definitions:
+  MenuPayloads.CalenderInsertPayload:
+    properties:
+      calender_date:
+        type: string
+      calender_name:
+        type: string
+      calender_time_from:
+        type: string
+      calender_time_to:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  MenuPayloads.CalenderUpdatePayload:
+    properties:
+      calender_date:
+        type: string
+      calender_id:
+        type: integer
+      calender_name:
+        type: string
+      calender_time_from:
+        type: string
+      calender_time_to:
+        type: string
+      user_id:
+        type: integer
+    type: object
   MenuPayloads.InformationBodyDetail:
     properties:
       information_body_paragraph:
@@ -207,7 +235,7 @@ definitions:
       data: {}
       message:
         type: string
-      statusCode:
+      status_code:
         type: integer
       success:
         type: boolean
@@ -277,6 +305,123 @@ paths:
       summary: Remove Bookmark
       tags:
       - Bookmark
+  /api/calendar:
+    patch:
+      consumes:
+      - application/json
+      description: Update Calendar
+      parameters:
+      - description: Update Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.CalenderUpdatePayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Update Calendar
+      tags:
+      - Calendar
+    post:
+      consumes:
+      - application/json
+      description: Create New Calendar
+      parameters:
+      - description: Insert Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MenuPayloads.CalenderInsertPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StandarAPIResponses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponses'
+      security:
+      - BearerAuth: []
+      summary: Create New Calendar
+      tags:
+      - Calendar
+  /api/calendar/by-user-id/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Calendar by Id
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StandarAPIResponses'
+      security:
+      - BearerAuth: []
+      summary: Get Calendar by Id
+      tags:
+      - Calendar
+  /api/calendar/delete/{calendar_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Calendar by Id
+      parameters:
+      - description: calendar_id
+        in: path
+        name: calendar_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StandarAPIResponses'
+      security:
+      - BearerAuth: []
+      summary: Delete Calendar by Id
+      tags:
+      - Calendar
   /api/information:
     get:
       consumes:

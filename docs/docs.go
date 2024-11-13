@@ -103,6 +103,192 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/calendar": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create New Calendar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Create New Calendar",
+                "parameters": [
+                    {
+                        "description": "Insert Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.CalenderInsertPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StandarAPIResponses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update Calendar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Update Calendar",
+                "parameters": [
+                    {
+                        "description": "Update Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MenuPayloads.CalenderUpdatePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/calendar/by-user-id/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Calendar by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Get Calendar by Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StandarAPIResponses"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/calendar/delete/{calendar_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete Calendar by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Calendar"
+                ],
+                "summary": "Delete Calendar by Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "calendar_id",
+                        "name": "calendar_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StandarAPIResponses"
+                        }
+                    }
+                }
+            }
+        },
         "/api/information": {
             "get": {
                 "security": [
@@ -933,6 +1119,49 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "MenuPayloads.CalenderInsertPayload": {
+            "type": "object",
+            "properties": {
+                "calender_date": {
+                    "type": "string"
+                },
+                "calender_name": {
+                    "type": "string"
+                },
+                "calender_time_from": {
+                    "type": "string"
+                },
+                "calender_time_to": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "MenuPayloads.CalenderUpdatePayload": {
+            "type": "object",
+            "properties": {
+                "calender_date": {
+                    "type": "string"
+                },
+                "calender_id": {
+                    "type": "integer"
+                },
+                "calender_name": {
+                    "type": "string"
+                },
+                "calender_time_from": {
+                    "type": "string"
+                },
+                "calender_time_to": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "MenuPayloads.InformationBodyDetail": {
             "type": "object",
             "properties": {
@@ -1254,7 +1483,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
-                "statusCode": {
+                "status_code": {
                     "type": "integer"
                 },
                 "success": {
