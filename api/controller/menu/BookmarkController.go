@@ -25,8 +25,8 @@ func NewBookmarkController(service menu.BookmarkService) BookmarkController {
 // AddBookmark List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Add New Information
-//	@Description	Add New Information
+//	@Summary		Add New BookMark
+//	@Description	Add New BookMark
 //	@Tags			Bookmark
 //	@Accept			json
 //	@Produce		json
@@ -63,7 +63,7 @@ func (controller *bookmarkControllerImpl) AddBookmark(writer http.ResponseWriter
 //	@Param			information_id			query		int		true	"information_id"
 //	@Success		200									{object}	entities.Bookmark
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/bookmark [post]
+//	@Router			/api/bookmark [delete]
 func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
 	Params := map[string]string{
@@ -80,6 +80,18 @@ func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWri
 	helper.HandleSuccess(writer, res, "Success Remove Bookmark", http.StatusOK)
 }
 
+// GetBookmarks List Via Header
+//
+//	@Security		BearerAuth
+//	@Summary		Get bookmark by Id
+//	@Description	Get bookmark by Id
+//	@Tags			Calendar
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	path int	true	"user_id"
+//	@Param			user_id	path int	true	"information_type_id"
+//	@Success		200		{object}	 MenuPayloads.InformationSelectResponses
+//	@Router			/api/bookmark/{user_id}/{information_type_id} [get]
 func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
 	Params := map[string]string{
