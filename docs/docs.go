@@ -219,7 +219,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/MenuPayloads.InformationSelectResponses"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/MenuPayloads.InformationSelectResponses"
+                            }
                         }
                     }
                 }

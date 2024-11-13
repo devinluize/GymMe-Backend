@@ -90,7 +90,7 @@ func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWri
 //	@Produce		json
 //	@Param			user_id	path int	true	"user_id"
 //	@Param			user_id	path int	true	"information_type_id"
-//	@Success		200		{object}	 MenuPayloads.InformationSelectResponses
+//	@Success		200		{object}	 []MenuPayloads.InformationSelectResponses
 //	@Router			/api/bookmark/{user_id}/{information_type_id} [get]
 func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()

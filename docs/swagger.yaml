@@ -393,7 +393,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/MenuPayloads.InformationSelectResponses'
+            items:
+              $ref: '#/definitions/MenuPayloads.InformationSelectResponses'
+            type: array
       security:
       - BearerAuth: []
       summary: Get bookmark by Id
