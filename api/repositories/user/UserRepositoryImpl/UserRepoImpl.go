@@ -74,7 +74,7 @@ func (a *AuthRepoImpl) Login(requestData entities.Users, DB *gorm.DB) (responses
 	////err := DB.Debug().Where("UserEmail = ?", requestData.Useremail).
 	//Offset(0).
 	//	Limit(1).First(&user).Error
-	data := DB.Raw("SELECT TOP 1 * FROM users A WHERE A.UserEmail = ?", requestData.UserEmail).Scan(&user).Error
+	data := DB.Raw("SELECT TOP 1 * FROM mtr_user A WHERE A.user_email = ?", requestData.UserEmail).Scan(&user).Error
 	if data != nil {
 		return responses.ErrorResponses{
 			Success: false,

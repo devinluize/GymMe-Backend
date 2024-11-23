@@ -105,5 +105,6 @@ func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWrite
 		helper.ReturnError(writer, err)
 		return
 	}
+
 	helper.HandleSuccess(writer, res, "Success get Bookmark", http.StatusOK)
 }

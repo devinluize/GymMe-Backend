@@ -66,7 +66,8 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	expTime := time.Now().Add(time.Hour * 1000)
 
 	claims := configenv.JWTClaim{
-		UserName: data.UserEmail,
+		UserName:  data.UserName,
+		UserEmail: data.UserEmail,
 		//IsVIP:    data.IsVIP,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "devin",

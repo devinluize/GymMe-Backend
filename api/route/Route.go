@@ -85,11 +85,17 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	CalendarService := menuserviceimpl.NewCalendarServiceImpl(CalendarRepository, db)
 	CalenderController := menucontroller.NewCalendarController(CalendarService)
 
+	//Timer
+	TimerRepository := MenuImplRepositories.NewTimerRepositoryImpl()
+	TimerService := menuserviceimpl.NewTimerServiceImpl(TimerRepository, db)
+	TimerController := menucontroller.NewTimerControllerImpl(TimerService)
+
 	AuthRouter := AuthRouter(authController)
 	InformationRouter := InformationRouter(InformationController)
 	ProfileRouter := ProfileRouter(ProfileController)
 	WeightRouter := WeightRouter(WeightController)
 	CalendarRouter := CalendarRouter(CalenderController)
+	TimerRouter := TimerRoute(TimerController)
 	////////////////////////////////////////////
 
 	router.Mount("/user", AuthRouter)
@@ -97,5 +103,6 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	router.Mount("/profile", ProfileRouter)
 	router.Mount("/weight", WeightRouter)
 	router.Mount("/calendar", CalendarRouter)
+	router.Mount("/timer", TimerRouter)
 	return router
 }

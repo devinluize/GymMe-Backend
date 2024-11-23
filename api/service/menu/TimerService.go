@@ -11,6 +11,6 @@ type TimerService interface {
 	InsertQueueTimer(payload MenuPayloads.TimerQueueInsertResponse) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	UpdateQueueTimer(payload MenuPayloads.TimerQueueUpdatePayload) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	DeleteTimerQueueTimer(TimerQueueId int) (bool, *responses.ErrorResponses)
-	GetAllTimer(timerId int) ([]entities.TimerEntity, *responses.ErrorResponses)
-	GetAllQueueTimer(timerQueueId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
+	GetAllTimer(UserId int) ([]entities.TimerEntity, *responses.ErrorResponses)
+	GetAllQueueTimer(TimerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
 }
