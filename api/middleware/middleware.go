@@ -48,7 +48,7 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 		//}
 		if claims.IsVIP {
 			helper.ReturnAPIResponses(writer, responses.ApiResponseError{
-				Message: "not devin",
+				Message: "not VIP",
 				Success: false,
 				Err:     claims.IsVIP,
 			})
