@@ -34,3 +34,13 @@ func NewGetParamInt(r *http.Request, param string) int {
 	value, _ := strconv.Atoi(chi.URLParam(r, param))
 	return value
 }
+
+type UserContext struct {
+	UserName string
+	UserId   int
+}
+
+func GetRequestCredentialFromHeaderToken(r *http.Request) UserContext {
+	//return UserContext{}
+	return r.Context().Value("user_credential").(UserContext)
+}
