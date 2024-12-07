@@ -68,6 +68,7 @@ func (controller *AuthControllerImpl) AuthLogin(writer http.ResponseWriter, requ
 	claims := configenv.JWTClaim{
 		UserName:  data.UserName,
 		UserEmail: data.UserEmail,
+		UserId:    data.UserId,
 		//IsVIP:    data.IsVIP,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "devin",

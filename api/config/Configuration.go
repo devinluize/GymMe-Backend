@@ -92,6 +92,7 @@ var JWT_KEY = []byte("dasdasdasdas")
 type JWTClaim struct {
 	UserName string
 	//UserRole int
+	UserId    int
 	IsVIP     bool
 	UserEmail string
 	jwt.RegisteredClaims
