@@ -85,12 +85,10 @@ func (t *TimerControllerImpl) DeleteTimerQueueTimer(writer http.ResponseWriter, 
 }
 
 func (t *TimerControllerImpl) GetAllTimer(writer http.ResponseWriter, request *http.Request) {
-	UserId := chi.URLParam(request, "user_id")
-	UserIds, err := strconv.Atoi(UserId)
-	if err != nil {
-		return
-	}
-	res, errs := t.TimerServices.GetAllTimer(UserIds)
+	//UserId := request.Context().Value("user_id").(int)
+	User := helper.GetRequestCredentialFromHeaderToken(request)
+
+	res, errs := t.TimerServices.GetAllTimer(User.UserId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
