@@ -4,7 +4,9 @@ import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/service/menu"
+	"github.com/go-chi/chi/v5"
 	"net/http"
+	"strconv"
 )
 
 type ProfileController interface {
@@ -31,14 +33,11 @@ func NewProfileControllerImpl(service menu.ProfileService) ProfileController {
 //	@Produce		json
 //	@Param			user_id	path		int	true	"user_id"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/profile/ [get]
+//	@Router			/api/profile/{user_id} [get]
 func (controller *ProfileControllerImpl) GetProfileMenu(writer http.ResponseWriter, request *http.Request) {
-	//UserId := chi.URLParam(request, "user_id")
-	//UserId := request.Context().Value("user_id").(int)
-	//res, _ := strconv.Atoi(UserId)
-	User := helper.GetRequestCredentialFromHeaderToken(request)
-
-	response, err := controller.service.GetProfileMenu(User.UserId)
+	UserId := chi.URLParam(request, "user_id")
+	res, _ := strconv.Atoi(UserId)
+	response, err := controller.service.GetProfileMenu(res)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

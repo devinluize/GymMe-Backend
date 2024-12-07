@@ -35,18 +35,17 @@ func NewWeightHistoryController(service menu.WeightHistoryService) WeightHistory
 //	@Param			limit								query		string	true	"limit"
 //	@Success		200									{object}	[]entities.WeightHistoryEntities
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/weight [get]
+//	@Router			/api/weight/{user_id} [get]
 func (controller *WeightHistoryControllerImpl) GetWeightNotes(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
-	//userId := helper.NewGetParamInt(request, "user_id")
-	User := helper.GetRequestCredentialFromHeaderToken(request)
+	userId := helper.NewGetParamInt(request, "user_id")
 	pagination := helper.Pagination{
 		Page:   helper.NewGetQueryInt(queryValues, "page"),
 		Limit:  helper.NewGetQueryInt(queryValues, "limit"),
 		SortOf: queryValues.Get("sort_of"),
 		SortBy: queryValues.Get("sort_by"),
 	}
-	res, err := controller.service.GetWeightNotes(User.UserId, pagination)
+	res, err := controller.service.GetWeightNotes(userId, pagination)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -89,12 +88,11 @@ func (controller *WeightHistoryControllerImpl) PostWeightNotes(writer http.Respo
 //	@Param			weight_id	path int	true	"weight_id"
 //	@Param			user_id	path int	true	"user_id"
 //	@Success		200		{object}	 responses.StandarAPIResponses
-//	@Router			/api/weight/delete/{weight_id} [delete]
+//	@Router			/api/weight/delete/{weight_id}/{user_id} [delete]
 func (controller *WeightHistoryControllerImpl) DeleteWeightNotes(writer http.ResponseWriter, request *http.Request) {
 	WeightId := helper.NewGetParamInt(request, "weight_id")
-	//UserId := helper.NewGetParamInt(request, "user_id")
-	User := helper.GetRequestCredentialFromHeaderToken(request)
-	res, errs := controller.service.DeleteWeightNotes(User.UserId, WeightId)
+	UserId := helper.NewGetParamInt(request, "user_id")
+	res, errs := controller.service.DeleteWeightNotes(UserId, WeightId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return

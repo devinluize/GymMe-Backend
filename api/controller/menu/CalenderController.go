@@ -56,15 +56,14 @@ func (controller *CalenderControllerImpl) InsertCalendar(writer http.ResponseWri
 //	@Produce		json
 //	@Param			user_id	path int	true	"user_id"
 //	@Success		200		{object}	 responses.StandarAPIResponses
-//	@Router			/api/calendar/by-user-id/ [get]
+//	@Router			/api/calendar/by-user-id/{user_id} [get]
 func (controller *CalenderControllerImpl) GetCalendarByUserId(writer http.ResponseWriter, request *http.Request) {
-	//calendarId := chi.URLParam(request, "user_id")
-	User := helper.GetRequestCredentialFromHeaderToken(request)
-	//InformationIds, err := strconv.Atoi(calendarId)
-	//if err != nil {
-	//	return
-	//}
-	res, errs := controller.CalendarService.GetCalendarByUserId(User.UserId)
+	calendarId := chi.URLParam(request, "user_id")
+	InformationIds, err := strconv.Atoi(calendarId)
+	if err != nil {
+		return
+	}
+	res, errs := controller.CalendarService.GetCalendarByUserId(InformationIds)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
