@@ -71,8 +71,12 @@ func RouterMiddleware(handler http.Handler) http.Handler {
 			})
 			return
 		}
-		contexts := context.WithValue(request.Context(), "userName", claims.UserName)
-		request = request.WithContext(contexts)
+		ctx := context.WithValue(request.Context(), "user_credential", helper.UserContext{
+			UserName: claims.UserName,
+			UserId:   claims.UserId,
+		})
+		//contexts := context.WithValue(request.Context(), "userName", claims.UserName)
+		request = request.WithContext(ctx)
 		handler.ServeHTTP(writer, request)
 	})
 }
