@@ -7,13 +7,9 @@ type InformationBodyDetail struct {
 	InformationImageContentPath string `gorm:"column:information_image_content_path" json:"information_image_content_path"`
 }
 type InformationInsertPayloads struct {
-	InformationId                int                     `json:"information_id"`
+	//InformationId                int                     `json:"information_id"`
 	InformationHeader            string                  `json:"information_header"`
-	InformationImageContentPath1 string                  `json:"information_image_content_path_1"`
-	InformationImageContentPath2 string                  `json:"information_image_content_path_2"`
-	InformationImageContentPath3 string                  `json:"information_image_content_path_3"`
-	InformationImageContentPath4 string                  `json:"information_image_content_path_4"`
-	InformationImageContentPath5 string                  `json:"information_image_content_path_5"`
+	InformationHeaderPathContent string                  `gorm:"column:information_header_path_content" json:"information_header_path_content"`
 	InformationBodyParagraph     []InformationBodyDetail `json:"information_body_paragraph"`
 	InformationTypeId            int                     `json:"information_type_id"`
 }

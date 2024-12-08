@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"net/http"
+	"time"
 )
 
 type InformationMenu struct {
@@ -24,6 +25,13 @@ func (i *InformationMenu) UpdateInformation(tx *gorm.DB, payloads MenuPayloads.I
 
 	err := tx.Model(&InformationEntities).Where(entities.InformationEntities{InformationId: payloads.InformationId}).First(&InformationEntities).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return InformationEntities, &responses.ErrorResponses{
+				Message:    err.Error(),
+				StatusCode: http.StatusNotFound,
+				Err:        err,
+			}
+		}
 		return InformationEntities,
 			&responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
 				Err:     err,
@@ -84,18 +92,26 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	var Entities entities.InformationEntities
 	Entities = entities.InformationEntities{
 		//InformationId:                0,
-		InformationHeader: payloads.InformationHeader,
+		InformationHeader:            payloads.InformationHeader,
+		InformationHeaderPathContent: payloads.InformationHeaderPathContent,
 		//InformationImageContentPath1: payloads.InformationImageContentPath1,
 		//InformationImageContentPath2: payloads.InformationImageContentPath2,
 		//InformationImageContentPath3: payloads.InformationImageContentPath3,
 		//InformationImageContentPath4: payloads.InformationImageContentPath4,
 		//InformationImageContentPath5: payloads.InformationImageContentPath5,
-		InformationTypeId: payloads.InformationTypeId,
+		InformationTypeId:      payloads.InformationTypeId,
+		InformationDateCreated: time.Now(),
 	}
+	//for _, detail := range payloads.InformationBodyParagraph {
+	//	Entities.InformationBody = append(Entities.InformationBody, entities.InformationBodyEntities{
+	//		InformationBodyParagraph:    detail.InformationBodyParagraph,
+	//		InformationImageContentPath: detail.InformationImageContentPath,
+	//	})
+	//}
 	var EntitiesDetail []entities.InformationBodyEntities
 
 	//Entities.InformationId = Entities.InformationId
-	err := tx.Create(&Entities).Error
+	err := tx.Create(&Entities).First(&Entities).Error
 	if err != nil {
 		return Entities, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
@@ -105,10 +121,12 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 		}
 	}
 
-	err = tx.Model(&Entities).Where(entities.InformationEntities{InformationId: Entities.InformationId}).First(&Entities).Error
+	//err = tx.Model(&Entities).Where(entities.InformationEntities{InformationId: Entities.InformationId}).First(&Entities).Error
 	for _, paragraph := range payloads.InformationBodyParagraph {
-		EntitiesDetail = append(EntitiesDetail, entities.InformationBodyEntities{InformationBodyParagraph: paragraph.InformationBodyParagraph,
-			InformationId: Entities.InformationId,
+		EntitiesDetail = append(EntitiesDetail, entities.InformationBodyEntities{
+			InformationImageContentPath: paragraph.InformationImageContentPath,
+			InformationBodyParagraph:    paragraph.InformationBodyParagraph,
+			InformationId:               Entities.InformationId,
 		})
 	}
 	err = tx.Create(&EntitiesDetail).Error
@@ -164,6 +182,7 @@ func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginatio
 	var Entities []entities.InformationEntities
 	//me := db.Model(&entities.InformationEntities{}) -> table joinan
 	//cara 1
+	//myJoinTable := db.Model(&entities.InformationEntities{}).
 	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
 	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
 	err := db.Model(&entities.InformationEntities{}).Scopes(helper.Paginate(&Entities, &paginationResponses, db)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
@@ -178,9 +197,10 @@ func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationRes
 	var Entities []entities.InformationEntities
 	//me := db.Model(&entities.InformationEntities{}) -> table joinan
 	//cara 1
+	joinTable := db.Model(&entities.InformationEntities{}).Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%")
 	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
 	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
-	err := db.Model(&entities.InformationEntities{}).Scopes(helper.Paginate(&Entities, &paginationResponses, db)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
+	err := joinTable.Scopes(helper.Paginate(&Entities, &paginationResponses, joinTable)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
 	if err != nil {
 		return paginationResponses, &responses.ErrorResponses{}
 	}

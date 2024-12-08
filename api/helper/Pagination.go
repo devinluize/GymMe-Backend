@@ -47,6 +47,7 @@ func Paginate(value interface{}, pagination *Pagination, db *gorm.DB) func(db *g
 	if pagination.GetSortBy() != "" {
 		sort = pagination.GetSortBy() + " " + pagination.GetSortOf()
 	}
+	//db.Model()
 	db.Model(value).Count(&totalRows)
 
 	pagination.TotalRows = totalRows

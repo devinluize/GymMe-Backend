@@ -9,8 +9,8 @@ type RegisterPayloads struct {
 }
 
 type LoginPaylods struct {
-	Useremail   string `gorm:"UserEmail" json:"useremail"`
-	Userpasword string `gorm:"UserPassword" json:"userpasword"`
+	Useremail   string `gorm:"UserEmail" json:"user_email"`
+	Userpasword string `gorm:"UserPassword" json:"user_password"`
 }
 type LoginRespons struct {
 	UserName  string `json:"username"`

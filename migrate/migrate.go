@@ -3,6 +3,7 @@ package migrate
 import (
 	configenv "GymMe-Backend/api/config"
 	"GymMe-Backend/api/entities"
+	entities2 "GymMe-Backend/api/entities/Equipment"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -48,18 +49,19 @@ func Migrate() {
 		panic(err)
 	}
 	// Get the list of all tables
+	fmt.Println("check point")
 	var tableNames []string
 	db.Raw("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
 	//
 	//// Drop each table
-	for _, tableName := range tableNames {
-		err := db.Migrator().DropTable(tableName)
-		if err != nil {
-			log.Printf("Failed to drop table %s: %v", tableName, err)
-		} else {
-			log.Printf("Successfully dropped table %s", tableName)
-		}
-	}
+	//for _, tableName := range tableNames {
+	//	err := db.Migrator().DropTable(tableName)
+	//	if err != nil {
+	//		log.Printf("Failed to drop table %s: %v", tableName, err)
+	//	} else {
+	//		log.Printf("Successfully dropped table %s", tableName)
+	//	}
+	//	//}
 	//}
 	/////
 	//migrate all table if neccesay
@@ -83,6 +85,12 @@ func Migrate() {
 		&entities.InformationBodyEntities{},
 		&entities.WeightHistoryEntities{},
 		&entities.CalenderEntity{},
+		&entities2.EquipmentTypeEntity{},
+		&entities2.ForceTypeEntities{},
+		&entities2.MuscleGroupEntities{},
+		&entities2.EquipmentDifficultyEntities{},
+		&entities2.EquipmentMasterEntities{},
+		&entities2.EquipmentDetailEntity{},
 	)
 
 	if err != nil {

@@ -48,18 +48,18 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r := chi.NewRouter()
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
-	//r.Use(middleware.RouterMiddleware)
-
+	r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.CreateProfileMenu)
-	r.Get("/{user_id}", controller.GetProfileMenu)
+	r.Get("/", controller.GetProfileMenu)
 	r.Patch("/", controller.UpdateProfileMenu)
 	return r
 }
 func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router {
 	r := chi.NewRouter()
+	r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.PostWeightNotes)
-	r.Delete("/delete/{weight_id}/{user_id}", controller.DeleteWeightNotes)
-	r.Get("/{user_id}", controller.GetWeightNotes)
+	r.Delete("/delete/{weight_id}", controller.DeleteWeightNotes)
+	r.Get("/", controller.GetWeightNotes)
 	return r
 }
 
@@ -67,14 +67,23 @@ func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
 	router := chi.NewRouter()
 
 	router.Post("/", controller.InsertCalendar)
-	router.Get("/by-user-id/{user_id}", controller.GetCalendarByUserId)
+	router.Get("/by-user-id", controller.GetCalendarByUserId)
 	router.Delete("/delete/{calender_id}", controller.DeleteCalendarById)
 	router.Put("/", controller.UpdateCalendar)
 	return router
 }
+
+func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
+	router := chi.NewRouter()
+
+	router.Post("/{information_id}", controller.AddBookmark)
+	router.Delete("/{information_id}", controller.RemoveBookmark)
+	router.Get("/{information_type_id}", controller.GetBookmarks)
+	return router
+}
 func TimerRoute(controller menucontroller.TimerController) chi.Router {
 	router := chi.NewRouter()
-	router.Get("/{user_id}", controller.GetAllTimer)
+	router.Get("/", controller.GetAllTimer)
 	router.Post("/", controller.InsertTimer)
 	router.Post("/queue", controller.InsertQueueTimer)
 	router.Get("/queue/{timer_id}", controller.GetAllQueueTimer)
