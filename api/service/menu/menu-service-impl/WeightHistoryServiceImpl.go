@@ -29,9 +29,9 @@ func (service *WeightHistoryServiceImpl) GetWeightNotes(UserId int, paginationRe
 	return res, nil
 }
 
-func (service *WeightHistoryServiceImpl) PostWeightNotes(payloads MenuPayloads.WeightHistoryPayloads) (entities.WeightHistoryEntities, *responses.ErrorResponses) {
+func (service *WeightHistoryServiceImpl) PostWeightNotes(payloads MenuPayloads.WeightHistoryPayloads, userId int) (entities.WeightHistoryEntities, *responses.ErrorResponses) {
 	tx := service.db.Begin()
-	res, err := service.repo.PostWeightNotes(tx, payloads)
+	res, err := service.repo.PostWeightNotes(tx, payloads, userId)
 	defer helper.CommitOrRollback(tx)
 	if err != nil {
 		return res, err

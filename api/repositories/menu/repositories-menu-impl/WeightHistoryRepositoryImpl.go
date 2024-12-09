@@ -39,9 +39,10 @@ func (controller *WeightHistoryRepositoryImpl) GetWeightNotes(db *gorm.DB, UserI
 	return paginationResponses, nil
 }
 
-func (controller *WeightHistoryRepositoryImpl) PostWeightNotes(db *gorm.DB, payloads MenuPayloads.WeightHistoryPayloads) (entities.WeightHistoryEntities, *responses.ErrorResponses) {
+func (controller *WeightHistoryRepositoryImpl) PostWeightNotes(db *gorm.DB, payloads MenuPayloads.WeightHistoryPayloads, userId int) (entities.WeightHistoryEntities, *responses.ErrorResponses) {
 	WeightHistoryEntities := entities.WeightHistoryEntities{
 		//UserId:         payloads.UserId,
+		UserId:         userId,
 		UserWeight:     payloads.UserWeight,
 		UserWeightTime: payloads.UserWeightTime,
 	}

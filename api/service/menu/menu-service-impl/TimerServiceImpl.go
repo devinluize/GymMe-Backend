@@ -19,10 +19,10 @@ func NewTimerServiceImpl(repository menuRepository.TimerRepository, db *gorm.DB)
 	return &TimerServiceImpl{DB: db, repository: repository}
 }
 
-func (t *TimerServiceImpl) InsertTimer(payload MenuPayloads.TimerInsertResponse) (entities.TimerEntity, *responses.ErrorResponses) {
+func (t *TimerServiceImpl) InsertTimer(payload MenuPayloads.TimerInsertPayload, userId int) (entities.TimerEntity, *responses.ErrorResponses) {
 	db := t.DB.Begin()
 	defer helper.CommitOrRollback(db)
-	res, err := t.repository.InsertTimer(db, payload)
+	res, err := t.repository.InsertTimer(db, payload, userId)
 	if err != nil {
 		return res, err
 	}
@@ -59,10 +59,10 @@ func (t *TimerServiceImpl) DeleteTimerQueueTimer(TimerQueueId int) (bool, *respo
 	return res, nil
 }
 
-func (t *TimerServiceImpl) GetAllTimer(timerId int) ([]entities.TimerEntity, *responses.ErrorResponses) {
+func (t *TimerServiceImpl) GetTimerByUserId(timerId int) (entities.TimerEntity, *responses.ErrorResponses) {
 	db := t.DB.Begin()
 	defer helper.CommitOrRollback(db)
-	res, err := t.repository.GetAllTimer(db, timerId)
+	res, err := t.repository.GetTimerByUserId(db, timerId)
 	if err != nil {
 		return res, err
 	}

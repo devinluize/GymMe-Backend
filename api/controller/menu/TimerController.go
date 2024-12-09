@@ -14,7 +14,7 @@ type TimerController interface {
 	InsertQueueTimer(writer http.ResponseWriter, request *http.Request)
 	UpdateQueueTimer(writer http.ResponseWriter, request *http.Request)
 	DeleteTimerQueueTimer(writer http.ResponseWriter, request *http.Request)
-	GetAllTimer(writer http.ResponseWriter, request *http.Request)
+	GetTimerByUserId(writer http.ResponseWriter, request *http.Request)
 	GetAllQueueTimer(writer http.ResponseWriter, request *http.Request)
 }
 
@@ -26,10 +26,10 @@ func NewTimerControllerImpl(TimerService menu.TimerService) TimerController {
 	return &TimerControllerImpl{TimerServices: TimerService}
 }
 func (t *TimerControllerImpl) InsertTimer(writer http.ResponseWriter, request *http.Request) {
-	var TimerInsert MenuPayloads.TimerInsertResponse
+	var TimerInsert MenuPayloads.TimerInsertPayload
 	helper.ReadFromRequestBody(request, &TimerInsert)
-
-	res, err := t.TimerServices.InsertTimer(TimerInsert)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := t.TimerServices.InsertTimer(TimerInsert, user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -84,11 +84,11 @@ func (t *TimerControllerImpl) DeleteTimerQueueTimer(writer http.ResponseWriter, 
 	helper.HandleSuccess(writer, res, "Delete Timer Queue SucessFull", http.StatusOK)
 }
 
-func (t *TimerControllerImpl) GetAllTimer(writer http.ResponseWriter, request *http.Request) {
+func (t *TimerControllerImpl) GetTimerByUserId(writer http.ResponseWriter, request *http.Request) {
 	//UserId := request.Context().Value("user_id").(int)
 	User := helper.GetRequestCredentialFromHeaderToken(request)
-	
-	res, errs := t.TimerServices.GetAllTimer(User.UserId)
+
+	res, errs := t.TimerServices.GetTimerByUserId(User.UserId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
@@ -103,7 +103,7 @@ func (t *TimerControllerImpl) GetAllQueueTimer(writer http.ResponseWriter, reque
 	if err != nil {
 		return
 	}
-	res, errs := t.TimerServices.GetAllTimer(TimerIds)
+	res, errs := t.TimerServices.GetAllQueueTimer(TimerIds)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return

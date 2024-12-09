@@ -69,12 +69,14 @@ func (controller *WeightHistoryControllerImpl) GetWeightNotes(writer http.Respon
 func (controller *WeightHistoryControllerImpl) PostWeightNotes(writer http.ResponseWriter, request *http.Request) {
 	var WeightNotesPayloads MenuPayloads.WeightHistoryPayloads
 	helper.ReadFromRequestBody(request, &WeightNotesPayloads)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
 
-	res, err := controller.service.PostWeightNotes(WeightNotesPayloads)
+	res, err := controller.service.PostWeightNotes(WeightNotesPayloads, user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
 	}
+
 	helper.HandleSuccess(writer, res, "Insert Weight Success", http.StatusCreated)
 }
 

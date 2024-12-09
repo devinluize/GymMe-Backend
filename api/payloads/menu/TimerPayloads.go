@@ -1,11 +1,11 @@
 package MenuPayloads
 
-type TimerInsertResponse struct {
-	TimerId          int    `gorm:"column:timer_id" json:"timer_id"`
-	TimerName        string `json:"timer_name"`
-	UserId           int    `gorm:"column:user_id;" json:"user_id"`
-	RemindingHours   int    `gorm:"column:reminding_hours;" json:"reminding_hours"`
-	RemindingMinutes int    `gorm:"column:reminding_minutes;" json:"reminding_minutes"`
+type TimerInsertPayload struct {
+	TimerId   int    `gorm:"column:timer_id" json:"timer_id"`
+	TimerName string `json:"timer_name"`
+	//UserId           int    `gorm:"column:user_id;" json:"user_id"`
+	RemindingHours   int `gorm:"column:reminding_hours;" json:"reminding_hours"`
+	RemindingMinutes int `gorm:"column:reminding_minutes;" json:"reminding_minutes"`
 }
 
 type TimerQueueInsertResponse struct {

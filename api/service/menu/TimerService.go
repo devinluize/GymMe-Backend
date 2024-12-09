@@ -7,10 +7,10 @@ import (
 )
 
 type TimerService interface {
-	InsertTimer(payload MenuPayloads.TimerInsertResponse) (entities.TimerEntity, *responses.ErrorResponses)
+	InsertTimer(payload MenuPayloads.TimerInsertPayload, userId int) (entities.TimerEntity, *responses.ErrorResponses)
 	InsertQueueTimer(payload MenuPayloads.TimerQueueInsertResponse) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	UpdateQueueTimer(payload MenuPayloads.TimerQueueUpdatePayload) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	DeleteTimerQueueTimer(TimerQueueId int) (bool, *responses.ErrorResponses)
-	GetAllTimer(UserId int) ([]entities.TimerEntity, *responses.ErrorResponses)
+	GetTimerByUserId(UserId int) (entities.TimerEntity, *responses.ErrorResponses)
 	GetAllQueueTimer(TimerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
 }

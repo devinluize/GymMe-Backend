@@ -8,10 +8,10 @@ import (
 )
 
 type TimerRepository interface {
-	InsertTimer(db *gorm.DB, payload MenuPayloads.TimerInsertResponse) (entities.TimerEntity, *responses.ErrorResponses)
+	InsertTimer(db *gorm.DB, payload MenuPayloads.TimerInsertPayload, userId int) (entities.TimerEntity, *responses.ErrorResponses)
 	InsertQueueTimer(db *gorm.DB, payload MenuPayloads.TimerQueueInsertResponse) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	UpdateQueueTimer(db *gorm.DB, payload MenuPayloads.TimerQueueUpdatePayload) (entities.TimerQueueEntity, *responses.ErrorResponses)
 	DeleteTimerQueueTimer(db *gorm.DB, TimerQueueId int) (bool, *responses.ErrorResponses)
-	GetAllTimer(db *gorm.DB, UserId int) ([]entities.TimerEntity, *responses.ErrorResponses)
+	GetTimerByUserId(db *gorm.DB, UserId int) (entities.TimerEntity, *responses.ErrorResponses)
 	GetAllQueueTimer(db *gorm.DB, TimerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
 }

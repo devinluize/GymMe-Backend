@@ -9,6 +9,6 @@ import (
 
 type WeightHistoryService interface {
 	GetWeightNotes(UserId int, paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
-	PostWeightNotes(payloads MenuPayloads.WeightHistoryPayloads) (entities.WeightHistoryEntities, *responses.ErrorResponses)
+	PostWeightNotes(payloads MenuPayloads.WeightHistoryPayloads, userId int) (entities.WeightHistoryEntities, *responses.ErrorResponses)
 	DeleteWeightNotes(UserId int, WeightHistoryId int) (bool, *responses.ErrorResponses)
 }
