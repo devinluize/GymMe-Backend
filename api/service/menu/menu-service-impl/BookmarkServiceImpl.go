@@ -1,6 +1,7 @@
 package menuserviceimpl
 
 import (
+	"GymMe-Backend/api/entities"
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
@@ -18,7 +19,7 @@ func NewBookmarkServiceImpl(db *gorm.DB, repo menuRepository.BookmarkRepository)
 
 	return &BookmarkServiceImpl{db: db, repo: repo}
 }
-func (s *BookmarkServiceImpl) AddBookmark(userId int, menuId int) (bool, *responses.ErrorResponses) {
+func (s *BookmarkServiceImpl) AddBookmark(userId int, menuId int) (entities.Bookmark, *responses.ErrorResponses) {
 	trans := s.db.Begin()
 	res, err := s.repo.AddBookmark(trans, userId, menuId)
 	defer helper.CommitOrRollback(trans)
@@ -38,9 +39,9 @@ func (s *BookmarkServiceImpl) RemoveBookmark(userId int, menuId int) (bool, *res
 	return res, nil
 }
 
-func (s *BookmarkServiceImpl) GetBookmarks(userId int, InformationTypeId int) ([]MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
+func (s *BookmarkServiceImpl) GetBookmarks(userId int) ([]MenuPayloads.InformationSelectResponseHeader, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repo.GetBookmarks(trans, userId, InformationTypeId)
+	res, err := s.repo.GetBookmarks(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

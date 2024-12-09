@@ -91,10 +91,10 @@ func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWri
 func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWriter, request *http.Request) {
 	//queryValues := request.URL.Query()
 	//calendarId := chi.URLParam(request, "calendar_id")
-	informationTypeId := chi.URLParam(request, "information_type_id")
+	//informationTypeId := chi.URLParam(request, "information_type_id")
 	User := helper.GetRequestCredentialFromHeaderToken(request)
-	informationId, _ := strconv.Atoi(informationTypeId)
-	res, err := controller.service.GetBookmarks(User.UserId, informationId)
+	//informationId, _ := strconv.Atoi(informationTypeId)
+	res, err := controller.service.GetBookmarks(User.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

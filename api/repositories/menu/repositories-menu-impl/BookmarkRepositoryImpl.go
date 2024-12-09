@@ -15,26 +15,27 @@ type BookmarkRepositoryImpl struct {
 func NewBookmarkRepositoryImpl() menuRepository.BookmarkRepository {
 	return &BookmarkRepositoryImpl{}
 }
-func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, menuId int) (bool, *responses.ErrorResponses) {
+func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, menuId int) (entities.Bookmark, *responses.ErrorResponses) {
 	BookmarkEntities := entities.Bookmark{
-		BookmarkTypeId: 1,
-		InformationId:  menuId,
-		UserId:         userId,
+		//BookmarkTypeId: 1,
+		InformationId: menuId,
+		UserId:        userId,
 	}
-	err := db.Create(&BookmarkEntities).Error
+	err := db.Create(&BookmarkEntities).First(&BookmarkEntities).Error
 	if err != nil {
-		return false, &responses.ErrorResponses{
+		return BookmarkEntities, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
 			Message:    "Failed To Add Bookmark ",
 			Err:        err,
 			Success:    false,
 		}
 	}
-	return true, nil
+	return BookmarkEntities, nil
 }
 
 func (repository *BookmarkRepositoryImpl) RemoveBookmark(db *gorm.DB, userId int, menuId int) (bool, *responses.ErrorResponses) {
-	err := db.Where(entities.Bookmark{InformationId: menuId, UserId: userId}).Delete(&entities.Bookmark{}).Error
+	//err := db.Where(entities.Bookmark{InformationId: menuId, UserId: userId}).Delete(&entities.Bookmark{}).Error
+	err := db.Delete(&entities.Bookmark{}, entities.Bookmark{InformationId: menuId, UserId: userId}).Error
 	if err != nil {
 		return false, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
@@ -44,14 +45,16 @@ func (repository *BookmarkRepositoryImpl) RemoveBookmark(db *gorm.DB, userId int
 	return true, nil
 }
 
-func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int, InformationTypeId int) ([]MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
-	var InfoResponses []MenuPayloads.InformationSelectResponses
+func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.InformationSelectResponseHeader, *responses.ErrorResponses) {
+	var InfoResponses []MenuPayloads.InformationSelectResponseHeader
+
 	err := db.Table("mtr_bookmark A").
-		Joins("INNER JOIN mtr_information B ON A.information_id = B.id").
-		Where("A.user_id = ? AND B.information_type_id", userId, InformationTypeId).
-		Select("B.*").Scan(&InfoResponses).Error
+		Joins("INNER JOIN mtr_information B ON A.information_id = B.information_id").
+		Where("A.user_id = ?", userId).
+		Select("B.*,A.*").Scan(&InfoResponses).Error
+
 	if err != nil {
-		return nil, &responses.ErrorResponses{
+		return InfoResponses, &responses.ErrorResponses{
 			StatusCode: http.StatusInternalServerError,
 			Message:    "Failed fetching Bookmarks ",
 			Err:        err,

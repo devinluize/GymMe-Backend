@@ -14,12 +14,22 @@ type InformationInsertPayloads struct {
 	InformationTypeId            int                     `json:"information_type_id"`
 }
 type InformationSelectResponses struct {
-	InformationHeader          string                  `json:"information_header"`
-	InformationDateCreated     time.Time               `gorm:"column:information_date_created" json:"information_date_created"`
-	InformationCreatedByUserId int                     `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
-	InformationBodyContent     []InformationBodyDetail `json:"information_body_content"`
-	InformationTypeId          int                     `json:"information_type_id"`
+	InformationHeader          string    `json:"information_header"`
+	InformationDateCreated     time.Time `gorm:"column:information_date_created" json:"information_date_created"`
+	InformationCreatedByUserId int       `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
+	InformationId              int       `gorm:"column:information_id;not null;primaryKey" json:"information_id"`
+
+	InformationBodyContent []InformationBodyDetail `json:"information_body_content"`
+	//InformationTypeId          int                     `json:"information_type_id"`
 }
+type InformationSelectResponseHeader struct {
+	InformationHeader          string    `json:"information_header"`
+	InformationDateCreated     time.Time `gorm:"column:information_date_created" json:"information_date_created"`
+	InformationCreatedByUserId int       `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
+	InformationId              int       `gorm:"column:information_id;not null;primaryKey" json:"information_id"`
+	BookmarkId                 int       `json:"bookmark_id	"`
+}
+
 type InformationUpdatePayloads struct {
 	InformationId          int                     `json:"information_id"`
 	InformationBodyContent []InformationBodyDetail `json:"information_body_content"`

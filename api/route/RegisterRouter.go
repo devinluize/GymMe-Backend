@@ -75,10 +75,10 @@ func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
 
 func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 	router := chi.NewRouter()
-
+	router.Use(middleware.RouterMiddleware)
 	router.Post("/{information_id}", controller.AddBookmark)
 	router.Delete("/{information_id}", controller.RemoveBookmark)
-	router.Get("/{information_type_id}", controller.GetBookmarks)
+	router.Get("/", controller.GetBookmarks)
 	return router
 }
 func TimerRoute(controller menucontroller.TimerController) chi.Router {

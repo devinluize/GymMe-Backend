@@ -4,6 +4,7 @@ import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/service/menu"
+	"fmt"
 	"net/http"
 )
 
@@ -46,6 +47,7 @@ func (controller *WeightHistoryControllerImpl) GetWeightNotes(writer http.Respon
 		SortOf: queryValues.Get("sort_of"),
 		SortBy: queryValues.Get("sort_by"),
 	}
+	fmt.Println(pagination.Limit)
 	res, err := controller.service.GetWeightNotes(User.UserId, pagination)
 	if err != nil {
 		helper.ReturnError(writer, err)

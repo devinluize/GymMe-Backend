@@ -173,7 +173,7 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.
 		InformationDateCreated:     EntitiesInfo.InformationDateCreated,
 		InformationCreatedByUserId: EntitiesInfo.InformationCreatedByUserId,
 		InformationBodyContent:     SelectPayload,
-		InformationTypeId:          EntitiesInfo.InformationTypeId,
+		//InformationTypeId:          EntitiesInfo.InformationTypeId,
 	}
 	return result, nil
 }

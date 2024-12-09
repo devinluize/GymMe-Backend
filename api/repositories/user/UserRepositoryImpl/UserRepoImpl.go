@@ -7,6 +7,7 @@ import (
 	"GymMe-Backend/api/repositories/user"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"net/http"
 	"runtime"
 	"strconv"
 )
@@ -25,6 +26,23 @@ func (a *AuthRepoImpl) Register(requestData payloads.RegisterPayloads, DB *gorm.
 	//if err2 != nil {
 	//	fmt.Println("Failed to auto-migrate:", err2)
 	//}
+	isDuplicate := 0
+	errorUnique := DB.Model(&entities.Users{}).Where(entities.Users{UserEmail: requestData.Useremail}).
+		Select("1").Scan(&isDuplicate).Error
+	if errorUnique != nil {
+		return responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "error when checking duplicate email",
+			Err:        errorUnique,
+			Success:    false,
+			//Data:       nil,
+		}
+	}
+	if isDuplicate == 1 {
+		return responses.ErrorResponses{Success: false,
+			Err:        errorUnique,
+			StatusCode: http.StatusConflict, Message: "email is already exist"}
+	}
 	entitiesUser := entities.Users{
 		//UserId:       0,
 		UserName:     requestData.Username,
