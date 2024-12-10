@@ -27,3 +27,9 @@ type GetTimerResponse struct {
 	UserId    int    `gorm:"column:user_id;" json:"user_id"`
 	TimerName string `gorm:"column:timer_name" json:"timer_name"`
 }
+
+type GetAllTimerByUserIdResponse struct {
+	TimerId   int    `json:"timer_id"`
+	UserId    int    `json:"user_id"`
+	TimerName string `gorm:"column:timer_name" json:"timer_name"`
+}

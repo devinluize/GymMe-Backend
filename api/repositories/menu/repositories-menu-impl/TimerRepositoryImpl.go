@@ -120,10 +120,10 @@ func (repo *TimerRepositoryImpl) DeleteTimerQueueTimer(db *gorm.DB, TimerQueueId
 	return true, nil
 }
 
-func (repo *TimerRepositoryImpl) GetTimerByUserId(db *gorm.DB, UserId int) (entities.TimerEntity, *responses.ErrorResponses) {
-	var TimerPayloads entities.TimerEntity
+func (repo *TimerRepositoryImpl) GetTimerByUserId(db *gorm.DB, UserId int) ([]MenuPayloads.GetAllTimerByUserIdResponse, *responses.ErrorResponses) {
+	var TimerPayloads []MenuPayloads.GetAllTimerByUserIdResponse
 	err := db.Model(&entities.TimerEntity{}).
-		Where(entities.TimerEntity{UserId: UserId}).First(&TimerPayloads).Error
+		Where(entities.TimerEntity{UserId: UserId}).Scan(&TimerPayloads).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return TimerPayloads, &responses.ErrorResponses{

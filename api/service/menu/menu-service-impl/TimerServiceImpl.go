@@ -59,7 +59,7 @@ func (t *TimerServiceImpl) DeleteTimerQueueTimer(TimerQueueId int) (bool, *respo
 	return res, nil
 }
 
-func (t *TimerServiceImpl) GetTimerByUserId(timerId int) (entities.TimerEntity, *responses.ErrorResponses) {
+func (t *TimerServiceImpl) GetTimerByUserId(timerId int) ([]MenuPayloads.GetAllTimerByUserIdResponse, *responses.ErrorResponses) {
 	db := t.DB.Begin()
 	defer helper.CommitOrRollback(db)
 	res, err := t.repository.GetTimerByUserId(db, timerId)
