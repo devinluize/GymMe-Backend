@@ -14,4 +14,5 @@ type TimerRepository interface {
 	DeleteTimerQueueTimer(db *gorm.DB, TimerQueueId int) (bool, *responses.ErrorResponses)
 	GetTimerByUserId(db *gorm.DB, UserId int) ([]MenuPayloads.GetAllTimerByUserIdResponse, *responses.ErrorResponses)
 	GetAllQueueTimer(db *gorm.DB, TimerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
+	DeleteTimer(db *gorm.DB, timerId int) (bool, *responses.ErrorResponses)
 }

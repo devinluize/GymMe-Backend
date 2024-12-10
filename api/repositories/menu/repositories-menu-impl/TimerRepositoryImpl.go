@@ -163,3 +163,22 @@ func (repo *TimerRepositoryImpl) GetAllQueueTimer(db *gorm.DB, timerQueueId int)
 	}
 	return queueEntities, nil
 }
+func (repo *TimerRepositoryImpl) DeleteTimer(db *gorm.DB, timerId int) (bool, *responses.ErrorResponses) {
+	err := db.Delete(&entities.TimerQueueEntity{}, entities.TimerQueueEntity{TimerId: timerId}).Error
+	if err != nil {
+		return false, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Err:        err,
+		}
+	}
+	err = db.Delete(&entities.TimerEntity{}, entities.TimerEntity{TimerId: timerId}).Error
+	if err != nil {
+		return false, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Err:        err,
+		}
+	}
+	return true, nil
+}

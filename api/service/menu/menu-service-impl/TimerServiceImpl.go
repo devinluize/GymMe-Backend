@@ -15,6 +15,16 @@ type TimerServiceImpl struct {
 	DB         *gorm.DB
 }
 
+func (t *TimerServiceImpl) DeleteTimer(TimerId int) (bool, *responses.ErrorResponses) {
+	db := t.DB.Begin()
+	defer helper.CommitOrRollback(db)
+	res, err := t.repository.DeleteTimer(db, TimerId)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+
 func NewTimerServiceImpl(repository menuRepository.TimerRepository, db *gorm.DB) menu.TimerService {
 	return &TimerServiceImpl{DB: db, repository: repository}
 }

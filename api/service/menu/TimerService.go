@@ -13,4 +13,5 @@ type TimerService interface {
 	DeleteTimerQueueTimer(TimerQueueId int) (bool, *responses.ErrorResponses)
 	GetTimerByUserId(UserId int) ([]MenuPayloads.GetAllTimerByUserIdResponse, *responses.ErrorResponses)
 	GetAllQueueTimer(TimerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses)
+	DeleteTimer(TimerId int) (bool, *responses.ErrorResponses)
 }

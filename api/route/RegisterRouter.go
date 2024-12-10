@@ -90,5 +90,6 @@ func TimerRoute(controller menucontroller.TimerController) chi.Router {
 	router.Get("/queue/{timer_id}", controller.GetAllQueueTimer)
 	router.Patch("/queue", controller.UpdateQueueTimer)
 	router.Delete("/queue/{timer_queue_id}", controller.DeleteTimerQueueTimer)
+	router.Delete("/delete/{timer_id}", controller.DeleteTimer)
 	return router
 }

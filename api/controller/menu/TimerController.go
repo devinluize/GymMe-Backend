@@ -16,6 +16,7 @@ type TimerController interface {
 	DeleteTimerQueueTimer(writer http.ResponseWriter, request *http.Request)
 	GetTimerByUserId(writer http.ResponseWriter, request *http.Request)
 	GetAllQueueTimer(writer http.ResponseWriter, request *http.Request)
+	DeleteTimer(writer http.ResponseWriter, request *http.Request)
 }
 
 type TimerControllerImpl struct {
@@ -109,4 +110,18 @@ func (t *TimerControllerImpl) GetAllQueueTimer(writer http.ResponseWriter, reque
 		return
 	}
 	helper.HandleSuccess(writer, res, "GetAll Queue By Timer Id", http.StatusOK)
+}
+func (t *TimerControllerImpl) DeleteTimer(writer http.ResponseWriter, request *http.Request) {
+
+	TimerId := chi.URLParam(request, "timer_id")
+	TimerIds, err := strconv.Atoi(TimerId)
+	if err != nil {
+		return
+	}
+	res, errs := t.TimerServices.DeleteTimer(TimerIds)
+	if errs != nil {
+		helper.ReturnError(writer, errs)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Delete By Timer Id", http.StatusOK)
 }
