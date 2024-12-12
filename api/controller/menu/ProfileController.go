@@ -66,7 +66,6 @@ func (controller *ProfileControllerImpl) UpdateProfileMenu(writer http.ResponseW
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
-
 	}
 	helper.HandleSuccess(writer, res, "Success update data", http.StatusOK)
 }

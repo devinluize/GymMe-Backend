@@ -86,3 +86,26 @@ func (controller *WeightHistoryRepositoryImpl) DeleteWeightNotes(db *gorm.DB, Us
 	}
 	return true, nil
 }
+func (controller *WeightHistoryRepositoryImpl) GetLastWeightHistory(db *gorm.DB, UserId int) (MenuPayloads.LastWeightResponse, *responses.ErrorResponses) {
+	var response MenuPayloads.LastWeightResponse
+	Entities := entities.WeightHistoryEntities{}
+	err := db.Model(&entities.WeightHistoryEntities{}).
+		Where(&entities.WeightHistoryEntities{UserId: UserId}).
+		Order("user_weight_time DESC").First(&Entities).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return response, nil
+		}
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Err:        err,
+		}
+	}
+	response = MenuPayloads.LastWeightResponse{
+		UserWeightTime: Entities.UserWeightTime,
+		UserId:         UserId,
+		UserWeight:     Entities.UserWeight,
+	}
+	return response, nil
+}

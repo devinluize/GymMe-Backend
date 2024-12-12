@@ -2,6 +2,7 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
+	"GymMe-Backend/api/entities"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -72,25 +73,25 @@ func Migrate() {
 
 	//end off drop all table
 	err = db.AutoMigrate(
-	//&entities.Users{},
-	//&entities.UserDetail{},
-	//&entities.Users{},
-	//&entities.PaymentMethod{},
-	//&entities.InformationType{},
-	//&entities.InformationEntities{},
-	//&entities.BookmarkType{},
-	//&entities.Bookmark{},
-	//&entities.InformationBodyEntities{},
-	//&entities.WeightHistoryEntities{},
-	//&entities.CalenderEntity{},
-	//&entities2.EquipmentTypeEntity{},
-	//&entities2.ForceTypeEntities{},
-	//&entities2.MuscleGroupEntities{},
-	//&entities2.EquipmentDifficultyEntities{},
-	//&entities2.EquipmentMasterEntities{},
-	//&entities2.EquipmentDetailEntity{},
-	//&entities.TimerQueueEntity{},
-	//&entities.TimerEntity{},
+		//&entities.Users{},
+		//&entities.UserDetail{},
+		//&entities.Users{},
+		//&entities.PaymentMethod{},
+		//&entities.InformationType{},
+		//&entities.InformationEntities{},
+		//&entities.BookmarkType{},
+		//&entities.Bookmark{},
+		//&entities.InformationBodyEntities{},
+		//&entities.WeightHistoryEntities{},
+		//&entities.CalenderEntity{},
+		//&entities2.EquipmentTypeEntity{},
+		//&entities2.ForceTypeEntities{},
+		//&entities2.MuscleGroupEntities{},
+		//&entities2.EquipmentDifficultyEntities{},
+		//&entities2.EquipmentMasterEntities{},
+		//&entities2.EquipmentDetailEntity{},
+		//&entities.TimerQueueEntity{},
+		&entities.TimerEntity{},
 	)
 
 	if err != nil {

@@ -4,8 +4,9 @@ type TimerInsertPayload struct {
 	TimerId   int    `gorm:"column:timer_id" json:"timer_id"`
 	TimerName string `json:"timer_name"`
 	//UserId           int    `gorm:"column:user_id;" json:"user_id"`
-	RemindingHours   int `gorm:"column:reminding_hours;" json:"reminding_hours"`
-	RemindingMinutes int `gorm:"column:reminding_minutes;" json:"reminding_minutes"`
+	RemindingHours   int    `gorm:"column:reminding_hours;" json:"reminding_hours"`
+	RemindingMinutes int    `gorm:"column:reminding_minutes;" json:"reminding_minutes"`
+	TimerDescription string `json:"timer_description"`
 }
 
 type TimerQueueInsertResponse struct {
@@ -29,7 +30,8 @@ type GetTimerResponse struct {
 }
 
 type GetAllTimerByUserIdResponse struct {
-	TimerId   int    `json:"timer_id"`
-	UserId    int    `json:"user_id"`
-	TimerName string `gorm:"column:timer_name" json:"timer_name"`
+	TimerId          int    `json:"timer_id"`
+	UserId           int    `json:"user_id"`
+	TimerName        string `gorm:"column:timer_name" json:"timer_name"`
+	TimerDescription string `json:"timer_description"`
 }

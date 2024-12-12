@@ -99,7 +99,7 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 		//InformationImageContentPath3: payloads.InformationImageContentPath3,
 		//InformationImageContentPath4: payloads.InformationImageContentPath4,
 		//InformationImageContentPath5: payloads.InformationImageContentPath5,
-		InformationTypeId:      payloads.InformationTypeId,
+		//InformationTypeId:      payloads.InformationTypeId,
 		InformationDateCreated: time.Now(),
 	}
 	//for _, detail := range payloads.InformationBodyParagraph {

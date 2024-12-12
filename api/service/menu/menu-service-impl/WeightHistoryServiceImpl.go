@@ -48,3 +48,12 @@ func (service *WeightHistoryServiceImpl) DeleteWeightNotes(UserId int, WeightHis
 	}
 	return res, nil
 }
+func (service *WeightHistoryServiceImpl) GetLastWeightHistory(UserId int) (MenuPayloads.LastWeightResponse, *responses.ErrorResponses) {
+	tx := service.db.Begin()
+	res, err := service.repo.GetLastWeightHistory(tx, UserId)
+	defer helper.CommitOrRollback(tx)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}

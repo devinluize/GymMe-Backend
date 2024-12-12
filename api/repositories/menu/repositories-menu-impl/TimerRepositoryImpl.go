@@ -21,7 +21,8 @@ func (repo *TimerRepositoryImpl) InsertTimer(db *gorm.DB, payload MenuPayloads.T
 	TimerEntities := entities.TimerEntity{
 		UserId: userId,
 		//RemindingHours:   payload.RemindingHours,
-		TimerName: payload.TimerName,
+		TimerName:        payload.TimerName,
+		TimerDescription: payload.TimerDescription,
 		//RemindingMinutes: payload.RemindingMinutes,
 	}
 	err := db.Create(&TimerEntities).First(&TimerEntities).Error
