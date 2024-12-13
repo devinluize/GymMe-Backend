@@ -27,13 +27,14 @@ func AuthRouter(controller auth.AuthController) chi.Router {
 }
 func InformationRouter(controller menucontroller.InformationController) chi.Router {
 	r := chi.NewRouter()
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
-		AllowCredentials: true,
-		MaxAge:           300,
-	}))
+	//r.Use(cors.Handler(cors.Options{
+	//	AllowedOrigins:   []string{"*"},
+	//	AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+	//	AllowedHeaders:   []string{"Content-Type", "Authorization"},
+	//	AllowCredentials: true,
+	//	MaxAge:           300,
+	//}))
+	r.Use(middleware.SetupCorsMiddleware)
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
 	//r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.InsertInformation)
