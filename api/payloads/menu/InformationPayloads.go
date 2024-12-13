@@ -11,7 +11,7 @@ type InformationInsertPayloads struct {
 	InformationHeader            string                  `json:"information_header"`
 	InformationHeaderPathContent string                  `gorm:"column:information_header_path_content" json:"information_header_path_content"`
 	InformationBodyParagraph     []InformationBodyDetail `json:"information_body_paragraph"`
-	InformationTypeId            int                     `json:"information_type_id"`
+	//InformationTypeId            int                     `json:"information_type_id"`
 }
 type InformationSelectResponses struct {
 	InformationHeader          string    `json:"information_header"`

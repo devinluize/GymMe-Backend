@@ -60,6 +60,7 @@ func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router 
 	r.Post("/", controller.PostWeightNotes)
 	r.Delete("/delete/{weight_id}", controller.DeleteWeightNotes)
 	r.Get("/", controller.GetWeightNotes)
+	r.Get("/latest", controller.GetLastWeightHistory)
 	return r
 }
 

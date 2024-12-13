@@ -41,7 +41,7 @@ func (a *AuthRepoImpl) Register(requestData payloads.RegisterPayloads, DB *gorm.
 	if isDuplicate == 1 {
 		return responses.ErrorResponses{Success: false,
 			Err:        errorUnique,
-			StatusCode: http.StatusConflict, Message: "email is already exist"}
+			StatusCode: http.StatusBadRequest, Message: "email is already exist"}
 	}
 	entitiesUser := entities.Users{
 		//UserId:       0,

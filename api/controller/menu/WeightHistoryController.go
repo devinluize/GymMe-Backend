@@ -12,6 +12,7 @@ type WeightHistoryController interface {
 	GetWeightNotes(writer http.ResponseWriter, request *http.Request)
 	PostWeightNotes(writer http.ResponseWriter, request *http.Request)
 	DeleteWeightNotes(writer http.ResponseWriter, request *http.Request)
+	GetLastWeightHistory(writer http.ResponseWriter, request *http.Request)
 }
 type WeightHistoryControllerImpl struct {
 	service menu.WeightHistoryService
@@ -104,4 +105,13 @@ func (controller *WeightHistoryControllerImpl) DeleteWeightNotes(writer http.Res
 		return
 	}
 	helper.HandleSuccess(writer, res, "Delete Weight Success", http.StatusOK)
+}
+func (controller *WeightHistoryControllerImpl) GetLastWeightHistory(writer http.ResponseWriter, request *http.Request) {
+	User := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.service.GetLastWeightHistory(User.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Last Weight Success", http.StatusOK)
 }
