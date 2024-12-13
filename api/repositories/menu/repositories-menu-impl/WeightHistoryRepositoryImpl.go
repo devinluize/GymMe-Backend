@@ -24,7 +24,7 @@ func (controller *WeightHistoryRepositoryImpl) GetWeightNotes(db *gorm.DB, UserI
 	var ScannPl []MenuPayloads.WeightHistoryPayloads
 	err := db.Model(&entities.WeightHistoryEntities{}).Where("user_id = ?", UserId).
 		Scopes(helper.Paginate(&Entities, &paginationResponses, db)).
-		Order("user_weight_time").Where("user_id = ?", UserId).
+		Order("user_weight_time desc").Where("user_id = ?", UserId).
 		Scan(&ScannPl).Error
 	if err != nil {
 		return paginationResponses, &responses.ErrorResponses{

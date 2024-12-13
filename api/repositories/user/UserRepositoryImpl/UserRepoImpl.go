@@ -61,8 +61,8 @@ func (a *AuthRepoImpl) Register(requestData payloads.RegisterPayloads, DB *gorm.
 	detailEntities := entities.UserDetail{
 		UserDetailId:           0,
 		UserId:                 entitiesUser.UserId,
-		UserWeight:             0,
-		UserHeight:             0,
+		UserWeight:             requestData.UserWeight,
+		UserHeight:             requestData.UserHeight,
 		UserGender:             requestData.UserGender,
 		UserProfileDescription: "",
 		UserProfileImage:       "",

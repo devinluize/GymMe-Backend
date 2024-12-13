@@ -1,11 +1,13 @@
 package payloads
 
 type RegisterPayloads struct {
-	Username        string `gorm:"UserName" json:"user_name"`
-	Useremail       string `gorm:"UserEmail" json:"user_email"`
-	Userpasword     string `gorm:"UserPassword" json:"user_password"`
-	UserPhoneNumber string `gorm:"UserPhoneNumber" json:"user_phone_number"`
-	UserGender      string `gorm:"UserGender" json:"user_gender"`
+	Username        string  `gorm:"UserName" json:"user_name"`
+	Useremail       string  `gorm:"UserEmail" json:"user_email"`
+	Userpasword     string  `gorm:"UserPassword" json:"user_password"`
+	UserPhoneNumber string  `gorm:"UserPhoneNumber" json:"user_phone_number"`
+	UserGender      string  `gorm:"UserGender" json:"user_gender"`
+	UserHeight      float64 `gorm:"UserHeight" json:"user_height"`
+	UserWeight      float64 `gorm:"UserWeight" json:"user_weight"`
 }
 
 type LoginPaylods struct {
