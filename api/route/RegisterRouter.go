@@ -89,7 +89,7 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 }
 func TimerRoute(controller menucontroller.TimerController) chi.Router {
 	router := chi.NewRouter()
-	r.Use(middleware.SetupCorsMiddleware)
+	router.Use(middleware.SetupCorsMiddleware)
 
 	router.Use(middleware.RouterMiddleware)
 	router.Get("/", controller.GetTimerByUserId)
