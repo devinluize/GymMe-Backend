@@ -88,7 +88,7 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 }
 func TimerRoute(controller menucontroller.TimerController) chi.Router {
 	router := chi.NewRouter()
-	router.Use(middleware.SetupCorsMiddleware)
+	//router.Use(middleware.SetupCorsMiddleware)
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
