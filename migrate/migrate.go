@@ -90,8 +90,8 @@ func Migrate() {
 		//&entities2.EquipmentDifficultyEntities{},
 		//&entities2.EquipmentMasterEntities{},
 		//&entities2.EquipmentDetailEntity{},
-		//&entities.TimerQueueEntity{},
-		&entities.TimerEntity{},
+		&entities.TimerQueueEntity{},
+		//&entities.TimerEntity{},
 	)
 
 	if err != nil {

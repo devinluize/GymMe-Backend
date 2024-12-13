@@ -9,6 +9,7 @@ type TimerQueueEntity struct {
 	TimerQueueName             string `gorm:"column:timer_queue_name;not null" json:"timer_queue_name"`
 	TimerQueueRemindingHour    int    `gorm:"column:timer_queue_reminding_hour" json:"timer_queue_reminding_hour"`
 	TimerQueueRemindingMinutes int    `gorm:"column:timer_queue_reminding_minutes" json:"timer_queue_reminding_minutes"`
+	TimerQueueRemindingSecond  int    `gorm:"column:timer_queue_reminding_second" json:"timer_queue_reminding_second"`
 	TimerQueueLineNumber       int    `gorm:"column:timer_queue_line_number" json:"timer_queue_line_number"`
 }
 

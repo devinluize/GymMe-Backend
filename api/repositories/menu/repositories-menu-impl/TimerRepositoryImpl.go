@@ -43,6 +43,7 @@ func (repo *TimerRepositoryImpl) InsertQueueTimer(db *gorm.DB, payload MenuPaylo
 		TimerQueueName:             payload.TimerQueueName,
 		TimerQueueRemindingHour:    payload.TimerQueueRemindingHour,
 		TimerQueueRemindingMinutes: payload.TimerQueueRemindingMinutes,
+		TimerQueueRemindingSecond:  payload.TimerQueueRemindingSecond,
 	}
 	lastLineNumber := 0
 	err := db.Raw(`
@@ -96,6 +97,7 @@ func (repo *TimerRepositoryImpl) UpdateQueueTimer(db *gorm.DB, payload MenuPaylo
 	timerQueueEntity.TimerQueueName = payload.TimerQueueName
 	timerQueueEntity.TimerQueueRemindingMinutes = payload.TimerQueueRemindingMinutes
 	timerQueueEntity.TimerQueueRemindingHour = payload.TimerQueueRemindingHour
+	timerQueueEntity.TimerQueueRemindingSecond = payload.TimerQueueRemindingSecond
 
 	err = db.Save(&timerQueueEntity).Error
 	if err != nil {
@@ -143,9 +145,9 @@ func (repo *TimerRepositoryImpl) GetTimerByUserId(db *gorm.DB, UserId int) ([]Me
 	}
 	return TimerPayloads, nil
 }
-func (repo *TimerRepositoryImpl) GetAllQueueTimer(db *gorm.DB, timerQueueId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses) {
+func (repo *TimerRepositoryImpl) GetAllQueueTimer(db *gorm.DB, timerId int) ([]entities.TimerQueueEntity, *responses.ErrorResponses) {
 	var queueEntities []entities.TimerQueueEntity
-	err := db.Model(&entities.TimerQueueEntity{}).Where(entities.TimerQueueEntity{TimerId: timerQueueId}).Scan(&queueEntities).Error
+	err := db.Model(&entities.TimerQueueEntity{}).Where(entities.TimerQueueEntity{TimerId: timerId}).Scan(&queueEntities).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return queueEntities, &responses.ErrorResponses{
