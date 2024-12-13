@@ -60,7 +60,6 @@ func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.SetupCorsMiddleware)
-
 	r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.PostWeightNotes)
 	r.Delete("/delete/{weight_id}", controller.DeleteWeightNotes)
@@ -90,7 +89,13 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 func TimerRoute(controller menucontroller.TimerController) chi.Router {
 	router := chi.NewRouter()
 	router.Use(middleware.SetupCorsMiddleware)
-
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	router.Use(middleware.RouterMiddleware)
 	router.Get("/", controller.GetTimerByUserId)
 	router.Post("/", controller.InsertTimer)
