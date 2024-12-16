@@ -5,6 +5,7 @@ import (
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
+	"errors"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -21,6 +22,27 @@ func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, m
 		InformationId: menuId,
 		UserId:        userId,
 	}
+	//validate bookmark and user id cant be same
+	isExist := 0
+	errExist := db.Model(&BookmarkEntities).Where(entities.Bookmark{InformationId: menuId, UserId: userId}).
+		Select("1").Scan(&isExist).Error
+	if errExist != nil {
+		return BookmarkEntities, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errExist,
+			Message:    "failed to check duplicate bookmark",
+		}
+	}
+	if isExist == 1 {
+		return BookmarkEntities, &responses.ErrorResponses{
+			StatusCode: http.StatusBadRequest,
+			Message:    "cannot insert duplicate bookmark",
+			Err:        errors.New("cannot insert duplicate bookmark"),
+			Success:    false,
+			Data:       nil,
+		}
+	}
+
 	err := db.Create(&BookmarkEntities).First(&BookmarkEntities).Error
 	if err != nil {
 		return BookmarkEntities, &responses.ErrorResponses{
