@@ -39,7 +39,7 @@ func (s *BookmarkServiceImpl) RemoveBookmark(userId int, menuId int) (bool, *res
 	return res, nil
 }
 
-func (s *BookmarkServiceImpl) GetBookmarks(userId int) ([]MenuPayloads.InformationSelectResponseHeader, *responses.ErrorResponses) {
+func (s *BookmarkServiceImpl) GetBookmarks(userId int) ([]MenuPayloads.GetAllBookmarkResponse, *responses.ErrorResponses) {
 	trans := s.db.Begin()
 	res, err := s.repo.GetBookmarks(trans, userId)
 	defer helper.CommitOrRollback(trans)

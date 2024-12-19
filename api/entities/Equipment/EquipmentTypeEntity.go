@@ -3,7 +3,7 @@ package entities
 const EquipmentTypeTableName = "mtr_equipment_type"
 
 type EquipmentTypeEntity struct {
-	EquipmentTypeId   int    `gorm:"column:muscle_group_id;not null;primaryKey"`
+	EquipmentTypeId   int    `gorm:"column:equipment_type_id;not null;primaryKey"`
 	EquipmentTypeName string `gorm:"column:equipment_type_name;not null"`
 }
 

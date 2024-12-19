@@ -10,5 +10,5 @@ import (
 type BookmarkRepository interface {
 	AddBookmark(db *gorm.DB, userId int, menuId int) (entities.Bookmark, *responses.ErrorResponses)
 	RemoveBookmark(db *gorm.DB, userId int, menuId int) (bool, *responses.ErrorResponses)
-	GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.InformationSelectResponseHeader, *responses.ErrorResponses)
+	GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.GetAllBookmarkResponse, *responses.ErrorResponses)
 }

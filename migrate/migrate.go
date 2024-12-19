@@ -2,7 +2,7 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
-	"GymMe-Backend/api/entities"
+	entities "GymMe-Backend/api/entities/Equipment"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -84,16 +84,28 @@ func Migrate() {
 		//&entities.InformationBodyEntities{},
 		//&entities.WeightHistoryEntities{},
 		//&entities.CalenderEntity{},
-		//&entities2.EquipmentTypeEntity{},
-		//&entities2.ForceTypeEntities{},
-		//&entities2.MuscleGroupEntities{},
-		//&entities2.EquipmentDifficultyEntities{},
-		//&entities2.EquipmentMasterEntities{},
-		//&entities2.EquipmentDetailEntity{},
-		&entities.TimerQueueEntity{},
+		//&entities.TimerQueueEntity{},
 		//&entities.TimerEntity{},
-	)
+		//equipment
+		//&entities.EquipmentDetailEntity{},
 
+		//&entities.EquipmentDifficultyEntities{},
+		//&entities.EquipmentMasterEntities{},
+		//&entities.EquipmentTypeEntity{},
+		//&entities.ForceTypeEntities{},
+		//&entities.MuscleGroupEntities{},
+		//&entities.EquipmentProfileEntity{},
+		//&entities.EquipmentCourseDataEntity{},
+
+		//&entities.EquipmentDetailEntity{},
+		&entities.EquipmentCourseDataEntity{},
+	)
+	//&entities.EquipmentTypeEntity{},
+	//&entities.ForceTypeEntities{},
+	//&entities.MuscleGroupEntities{},
+	//&entities.EquipmentDifficultyEntities{},
+	//&entities.EquipmentMasterEntities{},
+	//&entities.EquipmentDetailEntity{},
 	if err != nil {
 		log.Printf("%s Failed with error: %s", logEntry, err)
 		panic(err)

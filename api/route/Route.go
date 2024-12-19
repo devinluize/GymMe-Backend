@@ -1,10 +1,13 @@
 package route
 
 import (
+	EquipmentController "GymMe-Backend/api/controller/Equipment"
 	auth3 "GymMe-Backend/api/controller/auth/authImpl"
 	menucontroller "GymMe-Backend/api/controller/menu"
+	repositoriesEquipmentImpl "GymMe-Backend/api/repositories/Equipment/repositories-equipment-impl"
 	MenuImplRepositories "GymMe-Backend/api/repositories/menu/repositories-menu-impl"
 	"GymMe-Backend/api/repositories/user/UserRepositoryImpl"
+	"GymMe-Backend/api/service/EquipmentService/EquipmentServiceImpl"
 	auth2 "GymMe-Backend/api/service/auth"
 	menuserviceimpl "GymMe-Backend/api/service/menu/menu-service-impl"
 	_ "GymMe-Backend/docs"
@@ -95,6 +98,12 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	BookmarkService := menuserviceimpl.NewBookmarkServiceImpl(db, BookmarkRepository)
 	BookmarkController := menucontroller.NewBookmarkController(BookmarkService)
 
+	//equipment course
+	EquipmentCourseRepository := repositoriesEquipmentImpl.NewEquipmentCourseRepositoryImpl()
+	EquipmentCourseService := EquipmentServiceImpl.NewEquipmentCourseServiceImpl(db, EquipmentCourseRepository)
+	EquipmentCourseController := EquipmentController.NewEquipmentCourseControllerImpl(EquipmentCourseService)
+
+	//
 	AuthRouter := AuthRouter(authController)
 	InformationRouter := InformationRouter(InformationController)
 	ProfileRouter := ProfileRouter(ProfileController)
@@ -102,6 +111,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	CalendarRouter := CalendarRouter(CalenderController)
 	TimerRouter := TimerRoute(TimerController)
 	BookmarkRouter := BookmarkRoute(BookmarkController)
+	EquipmentCourseRouter := EquipmentCourseRoute(EquipmentCourseController)
 	////////////////////////////////////////////
 
 	router.Mount("/user", AuthRouter)
@@ -111,5 +121,6 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	router.Mount("/calendar", CalendarRouter)
 	router.Mount("/timer", TimerRouter)
 	router.Mount("/bookmark", BookmarkRouter)
+	router.Mount("/equipment/course", EquipmentCourseRouter)
 	return router
 }

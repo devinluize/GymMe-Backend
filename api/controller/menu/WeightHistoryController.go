@@ -3,9 +3,12 @@ package menucontroller
 import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
+	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/service/menu"
+	"errors"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type WeightHistoryController interface {
@@ -13,6 +16,7 @@ type WeightHistoryController interface {
 	PostWeightNotes(writer http.ResponseWriter, request *http.Request)
 	DeleteWeightNotes(writer http.ResponseWriter, request *http.Request)
 	GetLastWeightHistory(writer http.ResponseWriter, request *http.Request)
+	GetAllWeightWithDateFilter(writer http.ResponseWriter, request *http.Request)
 }
 type WeightHistoryControllerImpl struct {
 	service menu.WeightHistoryService
@@ -114,4 +118,53 @@ func (controller *WeightHistoryControllerImpl) GetLastWeightHistory(writer http.
 		return
 	}
 	helper.HandleSuccess(writer, res, "Get Last Weight Success", http.StatusOK)
+}
+func (controller *WeightHistoryControllerImpl) GetAllWeightWithDateFilter(writer http.ResponseWriter, request *http.Request) {
+	queryValues := request.URL.Query()
+
+	DateParams := map[string]string{
+		"date_from": queryValues.Get("date_from"),
+		"date_to":   queryValues.Get("date_to"),
+	}
+	if DateParams["date_from"] != "" {
+
+		date_from, errsparseTime := time.Parse("02-01-2006", DateParams["date_from"])
+
+		//date_from, errsparseTime := time.Parse("2006-01-02T15:04:05.000Z", DateParams["date_from"])
+		if errsparseTime != nil {
+			helper.ReturnError(writer, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Message:    "failed to parse date time",
+				Err:        errors.New("Failed to parse date time"),
+				Success:    false,
+				Data:       nil,
+			})
+			return
+		}
+		DateParams["date_from"] = date_from.Format("2006-01-02")
+	}
+	if DateParams["date_to"] != "" {
+
+		date_to, errsparse := time.Parse("02-01-2006", DateParams["date_to"])
+		if errsparse != nil {
+			helper.ReturnError(writer, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Message:    "failed to parse date time",
+				Err:        errors.New("Failed to parse date time"),
+				Success:    false,
+				Data:       nil,
+			})
+			return
+		}
+		DateParams["date_to"] = date_to.Format("2006-01-02")
+		DateParams["date_to"] = DateParams["date_to"] + " 23:59:59.999"
+	}
+	User := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.service.GetAllWeightWithDateFilter(User.UserId, DateParams)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Last Weight Success", http.StatusOK)
+
 }

@@ -13,4 +13,5 @@ type WeightHistoryRepository interface {
 	PostWeightNotes(db *gorm.DB, payloads MenuPayloads.WeightHistoryPayloads, userId int) (entities.WeightHistoryEntities, *responses.ErrorResponses)
 	DeleteWeightNotes(db *gorm.DB, UserId int, WeightHistoryId int) (bool, *responses.ErrorResponses)
 	GetLastWeightHistory(db *gorm.DB, UserId int) (MenuPayloads.LastWeightResponse, *responses.ErrorResponses)
+	GetAllWeightWithDateFilter(db *gorm.DB, userId int, dateParams map[string]string) ([]MenuPayloads.WeightHistoryGetAllResponse, *responses.ErrorResponses)
 }

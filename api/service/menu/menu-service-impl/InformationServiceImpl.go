@@ -48,9 +48,9 @@ func (service *InformationServiceImpl) UpdateInformation(payloads MenuPayloads.I
 	return res, nil
 }
 
-func (service *InformationServiceImpl) GetInformationById(id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
+func (service *InformationServiceImpl) GetInformationById(id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetInformationById(trans, id)
+	res, err := service.repo.GetInformationById(trans, id, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

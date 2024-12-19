@@ -57,3 +57,12 @@ func (service *WeightHistoryServiceImpl) GetLastWeightHistory(UserId int) (MenuP
 	}
 	return res, nil
 }
+func (service *WeightHistoryServiceImpl) GetAllWeightWithDateFilter(userId int, dateParams map[string]string) ([]MenuPayloads.WeightHistoryGetAllResponse, *responses.ErrorResponses) {
+	tx := service.db.Begin()
+	res, err := service.repo.GetAllWeightWithDateFilter(tx, userId, dateParams)
+	defer helper.CommitOrRollback(tx)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}

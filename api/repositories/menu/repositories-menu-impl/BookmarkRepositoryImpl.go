@@ -67,8 +67,8 @@ func (repository *BookmarkRepositoryImpl) RemoveBookmark(db *gorm.DB, userId int
 	return true, nil
 }
 
-func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.InformationSelectResponseHeader, *responses.ErrorResponses) {
-	var InfoResponses []MenuPayloads.InformationSelectResponseHeader
+func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.GetAllBookmarkResponse, *responses.ErrorResponses) {
+	var InfoResponses []MenuPayloads.GetAllBookmarkResponse
 
 	err := db.Table("mtr_bookmark A").
 		Joins("INNER JOIN mtr_information B ON A.information_id = B.information_id").

@@ -109,3 +109,27 @@ func (controller *WeightHistoryRepositoryImpl) GetLastWeightHistory(db *gorm.DB,
 	}
 	return response, nil
 }
+func (controller *WeightHistoryRepositoryImpl) GetAllWeightWithDateFilter(db *gorm.DB, userId int, dateParams map[string]string) ([]MenuPayloads.WeightHistoryGetAllResponse, *responses.ErrorResponses) {
+	if dateParams["date_from"] == "" {
+		dateParams["date_from"] = "19000101"
+	}
+	if dateParams["date_to"] == "" {
+		dateParams["date_to"] = "99991212"
+	}
+	var responseData []MenuPayloads.WeightHistoryGetAllResponse
+	strDateFilter := "user_weight_time >='" + dateParams["date_from"] + "' AND user_weight_time <= '" + dateParams["date_to"] + "'"
+
+	err := db.Model(&entities.WeightHistoryEntities{}).
+		Where(strDateFilter).
+		Where(entities.WeightHistoryEntities{UserId: userId}).
+		Scan(&responseData).Error
+	if err != nil {
+		return responseData, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to get user weight data",
+		}
+	}
+	return responseData, nil
+
+}

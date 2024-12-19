@@ -1,6 +1,7 @@
 package route
 
 import (
+	EquipmentController "GymMe-Backend/api/controller/Equipment"
 	"GymMe-Backend/api/controller/auth"
 	menucontroller "GymMe-Backend/api/controller/menu"
 	"GymMe-Backend/api/middleware"
@@ -35,6 +36,7 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	//	MaxAge:           300,
 	//}))
 	r.Use(middleware.SetupCorsMiddleware)
+	r.Use(middleware.RouterMiddleware)
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
 	//r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.InsertInformation)
@@ -65,12 +67,14 @@ func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router 
 	r.Delete("/delete/{weight_id}", controller.DeleteWeightNotes)
 	r.Get("/", controller.GetWeightNotes)
 	r.Get("/latest", controller.GetLastWeightHistory)
+	r.Get("/date", controller.GetAllWeightWithDateFilter)
 	return r
 }
 
 func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
 	router := chi.NewRouter()
-
+	router.Use(middleware.SetupCorsMiddleware)
+	router.Use(middleware.RouterMiddleware)
 	router.Post("/", controller.InsertCalendar)
 	router.Get("/by-user-id", controller.GetCalendarByUserId)
 	router.Delete("/delete/{calender_id}", controller.DeleteCalendarById)
@@ -84,6 +88,15 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 	router.Post("/{information_id}", controller.AddBookmark)
 	router.Delete("/{information_id}", controller.RemoveBookmark)
 	router.Get("/", controller.GetBookmarks)
+	return router
+}
+func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseController) chi.Router {
+	router := chi.NewRouter()
+	router.Use(middleware.RouterMiddleware)
+	router.Post("/", controller.InsertEquipmentCourse)
+	router.Get("/{equipment_id}", controller.GetAllEquipmentCourseByEquipment)
+	router.Get("/{course_id}", controller.GetEquipmentCourse)
+	//router.Get("/", controller.GetBookmarks)
 	return router
 }
 func TimerRoute(controller menucontroller.TimerController) chi.Router {

@@ -140,7 +140,7 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	}
 	return Entities, nil
 }
-func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
+func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
 	EntitiesInfo := entities.InformationEntities{}
 	err := db.Model(&entities.InformationEntities{}).Where(entities.InformationEntities{InformationId: id}).First(&EntitiesInfo).Error
 	if err != nil {
@@ -167,11 +167,15 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int) (MenuPayloads.
 		}
 		SelectPayload = append(SelectPayload, SelectPayloadData)
 	}
-
+	isBookmarkExist := false
+	err = db.Model(&entities.Bookmark{}).Where(entities.Bookmark{InformationId: id, UserId: userId}).Select("1").
+		Scan(&isBookmarkExist).Error
 	result := MenuPayloads.InformationSelectResponses{
 		InformationHeader:          EntitiesInfo.InformationHeader,
 		InformationDateCreated:     EntitiesInfo.InformationDateCreated,
 		InformationCreatedByUserId: EntitiesInfo.InformationCreatedByUserId,
+		InformationId:              id,
+		IsBookmark:                 isBookmarkExist,
 		InformationBodyContent:     SelectPayload,
 		//InformationTypeId:          EntitiesInfo.InformationTypeId,
 	}

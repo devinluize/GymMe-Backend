@@ -13,3 +13,15 @@ type LastWeightResponse struct {
 	UserId         int       `json:"user_id"`
 	UserWeight     float64   `json:"user_weight"`
 }
+
+type WeightHistoryGetAllResponse struct {
+	WeightHistoryId int       `gorm:"weight_history_id;primaryKey;not null" json:"weight_history_id"`
+	UserId          int       `gorm:"column:user_id" json:"user_id"`
+	UserWeight      float64   `gorm:"column:user_weight" json:"user_weight"`
+	UserWeightTime  time.Time `gorm:"column:user_weight_time" json:"user_weight_time"`
+}
+
+type GetAllFilterCondition struct {
+	DateFrom time.Time `gorm:"column:date_from" json:"date_from"`
+	DateTo   time.Time `gorm:"column:date_to" json:"date_to"`
+}

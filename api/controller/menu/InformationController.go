@@ -118,7 +118,8 @@ func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *
 	if err != nil {
 		return
 	}
-	res, errs := i.InformationService.GetInformationById(InformationIds)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, errs := i.InformationService.GetInformationById(InformationIds, user.UserId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
