@@ -20,3 +20,10 @@ type LoginRespons struct {
 	IsVIP     bool   `json:"isVIP"`
 	Token     string `json:"token"`
 }
+
+type UserBmiResponse struct {
+	UserId     int     `json:"user_id"`
+	Bmi        float64 `json:"bmi"`
+	UserWeight float64 `json:"user_weight"`
+	UserHeight float64 `json:"user_height"`
+}

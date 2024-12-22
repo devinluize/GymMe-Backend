@@ -5,6 +5,7 @@ const EquipmentMasterEntityName = "mtr_equipment_master"
 type EquipmentMasterEntities struct {
 	EquipmentId        int    `gorm:"column:equipment_id;primary_key;AUTO_INCREMENT"`
 	EquipmentName      string `gorm:"column:equipment_name"`
+	EquipmentCode      string `gorm:"column:equipment_code"`
 	EquipmentPhotoPath string `gorm:"equipment_photo_path" json:"equipment_photo_path"`
 
 	//EquipmentTutorialVideoPath string `gorm:"column:equipment_tutorial_video_path"`

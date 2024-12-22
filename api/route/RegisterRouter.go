@@ -57,6 +57,7 @@ func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r.Post("/", controller.CreateProfileMenu)
 	r.Get("/", controller.GetProfileMenu)
 	r.Patch("/", controller.UpdateProfileMenu)
+	r.Get("/bmi", controller.GetBmi)
 	return r
 }
 func WeightRouter(controller menucontroller.WeightHistoryController) chi.Router {
@@ -96,6 +97,21 @@ func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseControll
 	router.Post("/", controller.InsertEquipmentCourse)
 	router.Get("/{equipment_id}", controller.GetAllEquipmentCourseByEquipment)
 	router.Get("/{course_id}", controller.GetEquipmentCourse)
+
+	//get equipment master
+
+	router.Get("/equipment/{equipment_key}", controller.SearchEquipmentByKey)
+	//router.Get("/", controller.GetBookmarks)
+	return router
+}
+func EquipmentMasterRoute(controller EquipmentController.EquipmentCourseController) chi.Router {
+	router := chi.NewRouter()
+	router.Use(middleware.RouterMiddleware)
+	router.Get("/", controller.SearchEquipmentByKey)
+
+	//get equipment master
+
+	router.Get("/equipment/{equipment_key}", controller.SearchEquipmentByKey)
 	//router.Get("/", controller.GetBookmarks)
 	return router
 }

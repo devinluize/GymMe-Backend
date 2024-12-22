@@ -112,6 +112,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	TimerRouter := TimerRoute(TimerController)
 	BookmarkRouter := BookmarkRoute(BookmarkController)
 	EquipmentCourseRouter := EquipmentCourseRoute(EquipmentCourseController)
+	EquipmentMasterRoute := EquipmentMasterRoute(EquipmentCourseController)
 	////////////////////////////////////////////
 
 	router.Mount("/user", AuthRouter)
@@ -122,5 +123,6 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	router.Mount("/timer", TimerRouter)
 	router.Mount("/bookmark", BookmarkRouter)
 	router.Mount("/equipment/course", EquipmentCourseRouter)
+	router.Mount("/equipment", EquipmentMasterRoute)
 	return router
 }

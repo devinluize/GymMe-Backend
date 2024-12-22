@@ -3,6 +3,7 @@ package menuserviceimpl
 import (
 	"GymMe-Backend/api/entities"
 	"GymMe-Backend/api/helper"
+	payloads "GymMe-Backend/api/payloads/auth"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
@@ -46,6 +47,15 @@ func (service *ProfileServiceImpl) UpdateProfileMenu(Request MenuPayloads.Profil
 func (service *ProfileServiceImpl) CreateProfileMenu(Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 	res, err := service.repository.CreateProfileMenu(trans, Request)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+func (service *ProfileServiceImpl) GetBmi(userId int) (payloads.UserBmiResponse, *responses.ErrorResponses) {
+	trans := service.db.Begin()
+	res, err := service.repository.GetBmi(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

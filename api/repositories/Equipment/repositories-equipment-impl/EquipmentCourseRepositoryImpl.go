@@ -265,3 +265,19 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 	return response, nil
 
 }
+func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
+	//get entities with equipment key
+	var EquipmentResponse []entities.EquipmentMasterEntities
+
+	err := db.Model(&entities.EquipmentMasterEntities{}).
+		Where("equipment_id <> 0 AND equipment_name LIKE ? ", "%"+EquipmentKey+"%").
+		Scan(&EquipmentResponse).Error
+	if err != nil {
+		return EquipmentResponse, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to get equipment by key",
+		}
+	}
+	return EquipmentResponse, nil
+}

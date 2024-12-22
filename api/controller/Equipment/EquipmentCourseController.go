@@ -15,6 +15,7 @@ type EquipmentCourseController interface {
 	GetAllEquipmentCourseByEquipment(writer http.ResponseWriter, request *http.Request)
 	InsertEquipmentCourse(writer http.ResponseWriter, request *http.Request)
 	GetEquipmentCourse(writer http.ResponseWriter, request *http.Request)
+	SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request)
 }
 
 type EquipmentCourseControllerImpl struct {
@@ -69,4 +70,16 @@ func (e *EquipmentCourseControllerImpl) GetEquipmentCourse(writer http.ResponseW
 		return
 	}
 	helper.HandleSuccess(writer, res, "success to get equipment course", http.StatusOK)
+}
+func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request) {
+	//searchKey := chi.URLParam(request, "equipment_key")
+	queryValue := request.URL.Query()
+
+	searchKey := queryValue.Get("equipment_key")
+	res, errs := e.service.SearchEquipmentByKey(searchKey)
+	if errs != nil {
+		helper.ReturnError(writer, errs)
+		return
+	}
+	helper.HandleSuccess(writer, res, "success to search equipment by key", http.StatusOK)
 }

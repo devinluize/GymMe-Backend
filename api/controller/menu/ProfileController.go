@@ -11,6 +11,7 @@ type ProfileController interface {
 	GetProfileMenu(writer http.ResponseWriter, request *http.Request)
 	UpdateProfileMenu(writer http.ResponseWriter, request *http.Request)
 	CreateProfileMenu(writer http.ResponseWriter, request *http.Request)
+	GetBmi(writer http.ResponseWriter, request *http.Request)
 }
 type ProfileControllerImpl struct {
 	service menu.ProfileService
@@ -90,4 +91,15 @@ func (controller *ProfileControllerImpl) CreateProfileMenu(writer http.ResponseW
 		return
 	}
 	helper.HandleSuccess(writer, res, "Success create data", http.StatusOK)
+}
+
+func (controller *ProfileControllerImpl) GetBmi(writer http.ResponseWriter, request *http.Request) {
+	//get user
+	User := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.service.GetBmi(User.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Success get user BMI", http.StatusOK)
 }
