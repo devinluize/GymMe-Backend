@@ -41,6 +41,7 @@ type setupDatabase struct {
 	SmtpPass      string `mapstructure:"SMTP_PASS"`
 	SmtpPort      int    `mapstructure:"SMTP_PORT"`
 	GeneralAPI    string `mapstructure:"GENERAL_API"`
+	AiBackendHost string `mapstructure:"AI_BE_ORIGIN"`
 }
 
 var EnvConfigs *setupDatabase

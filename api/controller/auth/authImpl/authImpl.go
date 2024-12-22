@@ -36,8 +36,52 @@ func (controller *AuthControllerImpl) Register(writer http.ResponseWriter, reque
 	helper.ReadFromRequestBody(request, &payloadsData)
 
 	data := controller.AuthService.Register(payloadsData)
+	if data.Success == false {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        data.Err,
+			Message:    data.Message,
+		})
+	}
+	loginPayloads := payloads.LoginPaylods{}
+	loginPayloads.Useremail = payloadsData.Useremail
+	loginPayloads.Userpasword = payloadsData.Userpasword
+	loginReq, datas := controller.AuthService.LoginAuth(loginPayloads)
+
+	if loginReq.Success == false {
+		helper.WriteToResponseBody(writer, loginReq)
+		return
+	}
+	expTime := time.Now().Add(time.Hour * 1000)
+
+	claims := configenv.JWTClaim{
+		UserName:  datas.UserName,
+		UserEmail: datas.UserEmail,
+		UserId:    datas.UserId,
+		//IsVIP:    data.IsVIP,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "devin",
+			ExpiresAt: jwt.NewNumericDate(expTime),
+		},
+	}
+	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, erronToken := tokenAlgo.SignedString(configenv.JWT_KEY)
+	if erronToken != nil {
+		helper.WriteToResponseBody(writer, responses.ApiResponseError{
+			Message: "parse failed",
+			Success: false,
+			Err:     nil,
+		})
+	}
+	helper.WriteToResponseBody(writer, payloads.LoginRespons{
+		UserName:  datas.UserName,
+		UserEmail: datas.UserEmail,
+		//IsVIP:     data.IsVIP,
+		Token: token,
+	})
+	return
 	//payloads.HandleSuccessStandarRespons(writer, data, "", http.StatusOK)
-	helper.WriteToResponseBody(writer, data)
+	//helper.WriteToResponseBody(writer, data)
 	//err := validation.ValidationForm(writer, request, &payloadsData)
 
 }

@@ -12,6 +12,7 @@ type ProfileController interface {
 	UpdateProfileMenu(writer http.ResponseWriter, request *http.Request)
 	CreateProfileMenu(writer http.ResponseWriter, request *http.Request)
 	GetBmi(writer http.ResponseWriter, request *http.Request)
+	AILensAPI(writer http.ResponseWriter, request *http.Request)
 }
 type ProfileControllerImpl struct {
 	service menu.ProfileService
@@ -102,4 +103,7 @@ func (controller *ProfileControllerImpl) GetBmi(writer http.ResponseWriter, requ
 		return
 	}
 	helper.HandleSuccess(writer, res, "Success get user BMI", http.StatusOK)
+}
+func (controller *ProfileControllerImpl) AILensAPI(writer http.ResponseWriter, request *http.Request) {
+
 }

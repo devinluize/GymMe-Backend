@@ -97,6 +97,7 @@ func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseControll
 	router.Post("/", controller.InsertEquipmentCourse)
 	router.Get("/{equipment_id}", controller.GetAllEquipmentCourseByEquipment)
 	router.Get("/{course_id}", controller.GetEquipmentCourse)
+	//router.Get("/")
 
 	//get equipment master
 
@@ -108,6 +109,7 @@ func EquipmentMasterRoute(controller EquipmentController.EquipmentCourseControll
 	router := chi.NewRouter()
 	router.Use(middleware.RouterMiddleware)
 	router.Get("/", controller.SearchEquipmentByKey)
+	router.Post("/ai", controller.AiLensEquipmentSearch)
 
 	//get equipment master
 

@@ -47,3 +47,17 @@ type GetCourseByIdResponse struct {
 	EquipmentProfileName    string                           `json:"equipment_profile_name"`
 	EquipmentDetail         []entities.EquipmentDetailEntity `json:"equipment_detail"`
 }
+type AiLensPayload struct {
+	//CloudinaryPublicId string `json:"cloudinary_public_id"`
+	ImageUrl string `json:"image_url"`
+	UserId   int    `json:"user_id"`
+}
+type AiLensEquipmentMasterResponse struct {
+	EquipmentMasterId   int    `json:"equipment_master_id"`
+	EquipmentMasterCode string `json:"equipment_master_code"`
+}
+type AiLensResponse struct {
+	ApiSuccess  bool                           `json:"api_success"`
+	ApiMessage  string                         `json:"api_message"`
+	ApiResponse *AiLensEquipmentMasterResponse `json:"api_response"`
+}

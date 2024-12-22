@@ -8,12 +8,17 @@ import (
 	"net/http"
 )
 
-func ReadFromRequestBody(request *http.Request, result interface{}) {
+func ReadFromRequestBody(request *http.Request, result interface{}) *responses.ErrorResponses {
 	decoder := json.NewDecoder(request.Body)
 	err := decoder.Decode(result)
 	if err != nil {
-		panic(err)
+		return &responses.ErrorResponses{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+			Message:    "failed to read request body",
+		}
 	}
+	return nil
 }
 
 func WriteToResponseBody(writer http.ResponseWriter, response interface{}) error {

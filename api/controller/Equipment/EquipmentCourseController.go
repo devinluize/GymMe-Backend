@@ -1,13 +1,18 @@
 package EquipmentController
 
 import (
+	configenv "GymMe-Backend/api/config"
 	"GymMe-Backend/api/helper"
 	"GymMe-Backend/api/payloads/Equipment"
 	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/service/EquipmentService"
+	"bytes"
+	"encoding/json"
 	"errors"
 	"github.com/go-chi/chi/v5"
+	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -16,6 +21,7 @@ type EquipmentCourseController interface {
 	InsertEquipmentCourse(writer http.ResponseWriter, request *http.Request)
 	GetEquipmentCourse(writer http.ResponseWriter, request *http.Request)
 	SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request)
+	AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request)
 }
 
 type EquipmentCourseControllerImpl struct {
@@ -82,4 +88,92 @@ func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.Respons
 		return
 	}
 	helper.HandleSuccess(writer, res, "success to search equipment by key", http.StatusOK)
+}
+func (e *EquipmentCourseControllerImpl) AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request) {
+	queryvalue := request.URL.Query()
+	publicId := queryvalue.Get("cloudinary_public_id")
+	var equipmentMaster Equipment.AiLensPayload
+	err := helper.ReadFromRequestBody(request, &equipmentMaster)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	//hit endpoint python
+	// Convert equipmentMaster to JSON
+	//equipmentMaster.UserId = 3
+	//equipmentMaster.ImageUrl = "THIS IS IMAGE URL FROM GOLANG"
+	jsonData, errMarshal := json.Marshal(equipmentMaster)
+	if errMarshal != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errMarshal,
+			Message:    "failed to marshal equipmentMaster to JSON",
+		})
+		return
+	}
+	encodedPath := url.QueryEscape(publicId)
+	pythonEndpoint := configenv.EnvConfigs.AiBackendHost + "api/ailens?cloudinary_path=" + encodedPath
+	req, errRequest := http.NewRequest("POST", pythonEndpoint, bytes.NewBuffer(jsonData))
+	if errRequest != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errRequest,
+			Message:    "failed to create POST request",
+		})
+		return
+	}
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, errResp := client.Do(req)
+	if errResp != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errResp,
+			Message:    "failed to send POST request",
+		})
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			helper.ReturnError(writer, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+				Message:    "failed to closed body response",
+			})
+		}
+	}(resp.Body)
+	targetResponse := Equipment.AiLensResponse{}
+	errDecode := json.NewDecoder(resp.Body).Decode(&targetResponse)
+	if errDecode != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errDecode,
+			Message:    "failed to decode api data from external services",
+		})
+	}
+	if resp.StatusCode != http.StatusOK {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: resp.StatusCode,
+			Err:        errors.New("there is an error"),
+			Message:    "there is an error on sending request",
+		})
+		return
+	}
+	if targetResponse.ApiResponse == nil || targetResponse.ApiSuccess == false {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errors.New("backend python failed to fetch api"),
+			Message:    "ai backend failed to getch api",
+		})
+		return
+	}
+	//get course ai lense equipment by id
+
+	res, errGetlens := e.service.GetAllEquipmentCourseByEquipment(targetResponse.ApiResponse.EquipmentMasterId)
+	if errGetlens != nil {
+		helper.ReturnError(writer, errGetlens)
+		return
+	}
+	helper.HandleSuccess(writer, res, "success to get equipment course data", http.StatusOK)
+
 }
