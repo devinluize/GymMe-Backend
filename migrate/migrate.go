@@ -98,8 +98,10 @@ func Migrate() {
 		//&entities.EquipmentCourseDataEntity{},
 
 		//&entities.EquipmentDetailEntity{},
-		&entities.EquipmentCourseDataEntity{},
+		//&entities.EquipmentCourseDataEntity{},
+		&entities.EquipmentBookmark{},
 	)
+
 	//&entities.EquipmentTypeEntity{},
 	//&entities.ForceTypeEntities{},
 	//&entities.MuscleGroupEntities{},

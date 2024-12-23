@@ -86,6 +86,13 @@ func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
 func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 	router := chi.NewRouter()
 	router.Use(middleware.RouterMiddleware)
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	router.Post("/{information_id}", controller.AddBookmark)
 	router.Delete("/{information_id}", controller.RemoveBookmark)
 	router.Get("/", controller.GetBookmarks)
@@ -94,6 +101,13 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseController) chi.Router {
 	router := chi.NewRouter()
 	router.Use(middleware.RouterMiddleware)
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	router.Post("/", controller.InsertEquipmentCourse)
 	router.Get("/{equipment_id}", controller.GetAllEquipmentCourseByEquipment)
 	router.Get("/{course_id}", controller.GetEquipmentCourse)
@@ -108,12 +122,39 @@ func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseControll
 func EquipmentMasterRoute(controller EquipmentController.EquipmentCourseController) chi.Router {
 	router := chi.NewRouter()
 	router.Use(middleware.RouterMiddleware)
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	router.Get("/", controller.SearchEquipmentByKey)
 	router.Post("/ai", controller.AiLensEquipmentSearch)
 
 	//get equipment master
 
 	router.Get("/equipment/{equipment_key}", controller.SearchEquipmentByKey)
+	//router.Get("/", controller.GetBookmarks)
+	return router
+}
+func EquipmentBookmarkRoute(controller EquipmentController.EquipmentBookmarkController) chi.Router {
+	router := chi.NewRouter()
+	router.Use(middleware.RouterMiddleware)
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
+	//router.Get("/", controller.SearchEquipmentByKey)
+	router.Post("/{equipment_course_id}", controller.AddEquipmentBookmark)
+	router.Delete("/{equipment_course_id}", controller.RemoveEquipmentBookmark)
+
+	//get equipment master
+
+	//router.Get("/equipment/{equipment_key}", controller.SearchEquipmentByKey)
 	//router.Get("/", controller.GetBookmarks)
 	return router
 }

@@ -103,6 +103,11 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	EquipmentCourseService := EquipmentServiceImpl.NewEquipmentCourseServiceImpl(db, EquipmentCourseRepository)
 	EquipmentCourseController := EquipmentController.NewEquipmentCourseControllerImpl(EquipmentCourseService)
 
+	//equipment bookmark
+	EquipmentBookmarkRepository := repositoriesEquipmentImpl.NewEquipmentBookmarkRepositoryImpl()
+	EquipmentBookmarkService := EquipmentServiceImpl.NewEquipmentBookmarkServiceImpl(EquipmentBookmarkRepository, db)
+	EquipmentBookmarkController := EquipmentController.NewEquipmentBookmarkControllerImpl(EquipmentBookmarkService)
+
 	//
 	AuthRouter := AuthRouter(authController)
 	InformationRouter := InformationRouter(InformationController)
@@ -113,6 +118,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	BookmarkRouter := BookmarkRoute(BookmarkController)
 	EquipmentCourseRouter := EquipmentCourseRoute(EquipmentCourseController)
 	EquipmentMasterRoute := EquipmentMasterRoute(EquipmentCourseController)
+	EquipmentBookmarkRouter := EquipmentBookmarkRoute(EquipmentBookmarkController)
 	////////////////////////////////////////////
 
 	router.Mount("/user", AuthRouter)
@@ -124,5 +130,6 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	router.Mount("/bookmark", BookmarkRouter)
 	router.Mount("/equipment/course", EquipmentCourseRouter)
 	router.Mount("/equipment", EquipmentMasterRoute)
+	router.Mount("/equipment/bookmark", EquipmentBookmarkRouter)
 	return router
 }
