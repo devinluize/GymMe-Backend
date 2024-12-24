@@ -151,6 +151,8 @@ func (e *EquipmentCourseControllerImpl) AiLensEquipmentSearch(writer http.Respon
 			Message:    "failed to decode api data from external services",
 		})
 	}
+	//helper.HandleSuccess(writer, targetResponse, "success to get equipment course data", http.StatusOK)
+	//return
 	if resp.StatusCode != http.StatusOK {
 		helper.ReturnError(writer, &responses.ErrorResponses{
 			StatusCode: resp.StatusCode,

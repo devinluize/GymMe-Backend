@@ -122,6 +122,7 @@ func (controller *WeightHistoryRepositoryImpl) GetAllWeightWithDateFilter(db *go
 	err := db.Model(&entities.WeightHistoryEntities{}).
 		Where(strDateFilter).
 		Where(entities.WeightHistoryEntities{UserId: userId}).
+		Order("user_weight_time DESC").
 		Scan(&responseData).Error
 	if err != nil {
 		return responseData, &responses.ErrorResponses{

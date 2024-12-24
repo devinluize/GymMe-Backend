@@ -110,7 +110,7 @@ func EquipmentCourseRoute(controller EquipmentController.EquipmentCourseControll
 	}))
 	router.Post("/", controller.InsertEquipmentCourse)
 	router.Get("/{equipment_id}", controller.GetAllEquipmentCourseByEquipment)
-	router.Get("/{course_id}", controller.GetEquipmentCourse)
+	router.Get("/by-id/{course_id}", controller.GetEquipmentCourse)
 	//router.Get("/")
 
 	//get equipment master
