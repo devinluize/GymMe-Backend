@@ -8,6 +8,7 @@ type WeightHistoryEntities struct {
 	User            Users
 	UserWeight      float64   `gorm:"column:user_weight" json:"user_weight"`
 	UserWeightTime  time.Time `gorm:"column:user_weight_time" json:"user_weight_time"`
+	UserBmi         float64   `gorm:"column:user_bmi" json:"user_bmi"`
 }
 
 type WeightHistoryPayloads struct {

@@ -8,6 +8,7 @@ import (
 	menuRepository "GymMe-Backend/api/repositories/menu"
 	"errors"
 	"gorm.io/gorm"
+	"math"
 	"net/http"
 )
 
@@ -46,7 +47,25 @@ func (controller *WeightHistoryRepositoryImpl) PostWeightNotes(db *gorm.DB, payl
 		UserWeight:     payloads.UserWeight,
 		UserWeightTime: payloads.UserWeightTime,
 	}
-	err := db.Create(&WeightHistoryEntities).Scan(&WeightHistoryEntities).Error
+	profile := entities.UserDetail{}
+	err := db.Model(&profile).Where(entities.UserDetail{UserId: userId}).First(&profile).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return WeightHistoryEntities, &responses.ErrorResponses{
+				StatusCode: http.StatusNotFound,
+				Err:        err,
+				Message:    "user detail is not found",
+			}
+		}
+		return WeightHistoryEntities, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "failed to get user detail",
+			Err:        err,
+		}
+	}
+	heightMeterSquare := math.Pow(profile.UserHeight/100, 2)
+	WeightHistoryEntities.UserBmi = payloads.UserWeight / heightMeterSquare
+	err = db.Create(&WeightHistoryEntities).Scan(&WeightHistoryEntities).Error
 	if err != nil {
 		return WeightHistoryEntities, &responses.ErrorResponses{
 			StatusCode: http.StatusInternalServerError,
