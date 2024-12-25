@@ -24,7 +24,7 @@ type ProfileServiceImpl struct {
 	repository menuRepository.ProfileMenuRepository
 }
 
-func (service *ProfileServiceImpl) GetProfileMenu(id int) (entities.UserDetail, *responses.ErrorResponses) {
+func (service *ProfileServiceImpl) GetProfileMenu(id int) (payloads.GetUserDetailById, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 	res, err := service.repository.GetProfileMenu(trans, id)
 	defer helper.CommitOrRollback(trans)

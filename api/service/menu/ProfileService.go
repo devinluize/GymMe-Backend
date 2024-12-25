@@ -8,7 +8,7 @@ import (
 )
 
 type ProfileService interface {
-	GetProfileMenu(id int) (entities.UserDetail, *responses.ErrorResponses)
+	GetProfileMenu(id int) (payloads.GetUserDetailById, *responses.ErrorResponses)
 	UpdateProfileMenu(Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses)
 	CreateProfileMenu(Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses)
 	GetBmi(userId int) (payloads.UserBmiResponse, *responses.ErrorResponses)

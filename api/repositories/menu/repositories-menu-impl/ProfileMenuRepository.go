@@ -19,9 +19,12 @@ func NewProfileMenuRepositoryImpl() menuRepository.ProfileMenuRepository {
 	return &ProfileMenuRepositoryImpl{}
 
 }
-func (p *ProfileMenuRepositoryImpl) GetProfileMenu(db *gorm.DB, id int) (entities.UserDetail, *responses.ErrorResponses) {
-	Entities := entities.UserDetail{}
-	err := db.Where(entities.UserDetail{UserId: id}).First(&Entities).Error
+func (p *ProfileMenuRepositoryImpl) GetProfileMenu(db *gorm.DB, id int) (payloads.GetUserDetailById, *responses.ErrorResponses) {
+	Entities := payloads.GetUserDetailById{}
+	err := db.Table("user_details A").
+		Joins("INNER JOIN mtr_user B ON A.user_id = B.user_id").
+		Select("A.*,B.*").
+		Where(entities.Users{UserId: id}).First(&Entities).Error
 	if err != nil {
 		return Entities,
 			&responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
