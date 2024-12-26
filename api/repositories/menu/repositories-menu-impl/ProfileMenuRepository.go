@@ -80,6 +80,26 @@ func (p *ProfileMenuRepositoryImpl) UpdateProfileMenu(db *gorm.DB, Request MenuP
 	if Request.UserPhoneNumber != "" {
 		Entities.UserPhoneNumber = Request.UserPhoneNumber
 	}
+	entitiesUser := entities.Users{}
+	err = db.Model(&entitiesUser).Where(entities.Users{UserId: userId}).First(&entitiesUser).Error
+	if err != nil {
+		return Entities, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
+			Err:     err,
+			Message: err.Error()}
+	}
+	if Request.UserEmail != "" {
+		entitiesUser.UserEmail = Request.UserEmail
+	}
+	if Request.UserName != "" {
+		entitiesUser.UserName = Request.UserName
+	}
+	err = db.Save(&entitiesUser).Error
+	if err != nil {
+		return Entities, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
+			Message: "Error updating profile menu",
+			Err:     err,
+		}
+	}
 	err = db.Save(&Entities).Error
 	if err != nil {
 		return Entities, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError,

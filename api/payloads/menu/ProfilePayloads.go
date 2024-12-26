@@ -9,4 +9,6 @@ type ProfilePayloadRequest struct {
 	UserProfileDescription string  `gorm:"column:user_profile_description" json:"user_profile_description"`
 	UserProfileImage       string  `gorm:"column:user_profile_image" json:"user_profile_image"`
 	UserPhoneNumber        string  `json:"user_phone_number"`
+	UserName               string  `json:"user_name"`
+	UserEmail              string  `json:"user_email"`
 }
