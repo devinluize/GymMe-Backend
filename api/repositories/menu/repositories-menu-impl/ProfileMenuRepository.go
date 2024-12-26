@@ -23,30 +23,64 @@ func (p *ProfileMenuRepositoryImpl) GetProfileMenu(db *gorm.DB, id int) (payload
 	Entities := payloads.GetUserDetailById{}
 	err := db.Table("user_details A").
 		Joins("INNER JOIN mtr_user B ON A.user_id = B.user_id").
+		Where(entities.Users{UserId: id}).
 		Select("A.*,B.*").
-		Where(entities.Users{UserId: id}).First(&Entities).Error
+		Order("A.user_detail_id DESC").
+		Scan(&Entities).Error
 	if err != nil {
 		return Entities,
 			&responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
 				Err:     err,
 				Message: err.Error()}
 	}
+	EntitiesWeight := entities.WeightHistoryEntities{}
+	err = db.Model(&entities.WeightHistoryEntities{}).
+		Where(&entities.WeightHistoryEntities{UserId: id}).
+		Order("user_weight_time DESC").First(&EntitiesWeight).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return Entities, nil
+		}
+		return Entities, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Err:        err,
+		}
+	}
+	Entities.UserWeight = EntitiesWeight.UserWeight
+
 	return Entities, nil
 }
 
-func (p *ProfileMenuRepositoryImpl) UpdateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses) {
+func (p *ProfileMenuRepositoryImpl) UpdateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest, userId int) (entities.UserDetail, *responses.ErrorResponses) {
 	Entities := entities.UserDetail{}
-	err := db.Model(&Entities).Where(entities.UserDetail{UserId: Request.UserId}).Scan(&Entities).Error
+	err := db.Model(&Entities).Where(entities.UserDetail{UserId: userId}).
+		Order("user_detail_id DESC").
+		Scan(&Entities).Error
 	if err != nil {
 		return Entities, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
 			Err:     err,
 			Message: err.Error()}
 	}
-	Entities.UserHeight = Request.UserHeight
-	Entities.UserWeight = Request.UserWeight
-	Entities.UserGender = Request.UserGender
-
-	err = db.Updates(&Entities).Error
+	if Request.UserHeight != 0 {
+		Entities.UserHeight = Request.UserHeight
+	}
+	if Request.UserWeight != 0 {
+		Entities.UserWeight = Request.UserWeight
+	}
+	if Request.UserGender != "" {
+		Entities.UserGender = Request.UserGender
+	}
+	if Request.UserProfileDescription != "" {
+		Entities.UserProfileDescription = Request.UserProfileDescription
+	}
+	if Request.UserProfileImage != "" {
+		Entities.UserProfileImage = Request.UserProfileImage
+	}
+	if Request.UserPhoneNumber != "" {
+		Entities.UserPhoneNumber = Request.UserPhoneNumber
+	}
+	err = db.Save(&Entities).Error
 	if err != nil {
 		return Entities, &responses.ErrorResponses{StatusCode: http.StatusInternalServerError,
 			Message: "Error updating profile menu",
@@ -55,14 +89,15 @@ func (p *ProfileMenuRepositoryImpl) UpdateProfileMenu(db *gorm.DB, Request MenuP
 	}
 	return Entities, nil
 }
-func (p *ProfileMenuRepositoryImpl) CreateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses) {
+func (p *ProfileMenuRepositoryImpl) CreateProfileMenu(db *gorm.DB, Request MenuPayloads.ProfilePayloadRequest, userId int) (entities.UserDetail, *responses.ErrorResponses) {
 	Entities := entities.UserDetail{
-		UserId:                 Request.UserId,
+		UserId:                 userId,
 		UserWeight:             Request.UserWeight,
 		UserHeight:             Request.UserHeight,
 		UserGender:             Request.UserGender,
 		UserProfileDescription: Request.UserProfileDescription,
 		UserProfileImage:       Request.UserProfileImage,
+		UserPhoneNumber:        Request.UserPhoneNumber,
 	}
 	err := db.Create(&Entities).Error
 	if err != nil {

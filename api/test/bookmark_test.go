@@ -2,36 +2,63 @@ package test
 
 import (
 	configenv "GymMe-Backend/api/config"
+	"GymMe-Backend/api/entities"
 	MenuImplRepositories "GymMe-Backend/api/repositories/menu/repositories-menu-impl"
 	"GymMe-Backend/api/service/menu"
 	menuserviceimpl "GymMe-Backend/api/service/menu/menu-service-impl"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
+	"os"
 	"testing"
 )
 
-func setupBookmark() (*gorm.DB, menu.BookmarkService) {
+var (
+	db           *gorm.DB
+	service      menu.BookmarkService
+	bookmarkTest entities.Bookmark
+)
+
+// TestMain runs once for the entire package
+func TestMain(m *testing.M) {
+	// Initialize environment configs and the test database
 	configenv.InitEnvConfigs(true, "")
-	db := configenv.InitDB()
+	db = configenv.InitTestDB()
+
+	// Initialize the Bookmark service
 	BookmarkRepo := MenuImplRepositories.NewBookmarkRepositoryImpl()
-	Bookmarkservice := menuserviceimpl.NewBookmarkServiceImpl(db, BookmarkRepo)
-	return db, Bookmarkservice
+	service = menuserviceimpl.NewBookmarkServiceImpl(db, BookmarkRepo)
+
+	// Run the tests
+	code := m.Run()
+
+	// Cleanup database connection after tests
+	if sqlDB, err := db.DB(); err == nil {
+		sqlDB.Close()
+	}
+
+	// Exit with the test code
+	os.Exit(code)
 }
 
 func TestInsertBookmark(t *testing.T) {
-	db, service := setupBookmark()
 	userId := 1
 	InformationId := 3
-	defer func() {
-		sqlDB, _ := db.DB()
-		sqlDB.Close()
-	}()
 
-	_, err := service.AddBookmark(userId, InformationId)
+	res, err := service.AddBookmark(userId, InformationId)
 	if err != nil {
 		t.Errorf("Failed On: %v", err)
 	}
 	t.Log("Bookmark Inserted Successfully")
-	assert.Nil(t, err, nil)
+	assert.Nil(t, err)
+	bookmarkTest = res // Save the result for other tests
+}
 
+func TestRemoveBookmark(t *testing.T) {
+	_, err := service.RemoveBookmark(bookmarkTest.UserId, bookmarkTest.InformationId)
+	if err != nil {
+		t.Errorf("Failed to remove bookmark: %v", err)
+	}
+	fmt.Println("Bookmark Removed Successfully")
+	assert.Nil(t, err)
 }

@@ -64,7 +64,8 @@ func (controller *ProfileControllerImpl) UpdateProfileMenu(writer http.ResponseW
 	var profile MenuPayloads.ProfilePayloadRequest
 
 	helper.ReadFromRequestBody(request, &profile)
-	res, err := controller.service.UpdateProfileMenu(profile)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.service.UpdateProfileMenu(profile, user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -86,7 +87,8 @@ func (controller *ProfileControllerImpl) UpdateProfileMenu(writer http.ResponseW
 func (controller *ProfileControllerImpl) CreateProfileMenu(writer http.ResponseWriter, request *http.Request) {
 	var profile MenuPayloads.ProfilePayloadRequest
 	helper.ReadFromRequestBody(request, &profile)
-	res, err := controller.service.CreateProfileMenu(profile)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.service.CreateProfileMenu(profile, user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

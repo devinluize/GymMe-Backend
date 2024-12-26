@@ -56,7 +56,7 @@ func ProfileRouter(controller menucontroller.ProfileController) chi.Router {
 	r.Use(middleware.RouterMiddleware)
 	r.Post("/", controller.CreateProfileMenu)
 	r.Get("/", controller.GetProfileMenu)
-	r.Patch("/", controller.UpdateProfileMenu)
+	r.Put("/", controller.UpdateProfileMenu)
 	r.Get("/bmi", controller.GetBmi)
 	return r
 }

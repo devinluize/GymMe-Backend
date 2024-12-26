@@ -34,9 +34,9 @@ func (service *ProfileServiceImpl) GetProfileMenu(id int) (payloads.GetUserDetai
 	return res, nil
 }
 
-func (service *ProfileServiceImpl) UpdateProfileMenu(Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses) {
+func (service *ProfileServiceImpl) UpdateProfileMenu(Request MenuPayloads.ProfilePayloadRequest, userId int) (entities.UserDetail, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.UpdateProfileMenu(trans, Request)
+	res, err := service.repository.UpdateProfileMenu(trans, Request, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -44,9 +44,9 @@ func (service *ProfileServiceImpl) UpdateProfileMenu(Request MenuPayloads.Profil
 	return res, nil
 }
 
-func (service *ProfileServiceImpl) CreateProfileMenu(Request MenuPayloads.ProfilePayloadRequest) (entities.UserDetail, *responses.ErrorResponses) {
+func (service *ProfileServiceImpl) CreateProfileMenu(Request MenuPayloads.ProfilePayloadRequest, userId int) (entities.UserDetail, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.CreateProfileMenu(trans, Request)
+	res, err := service.repository.CreateProfileMenu(trans, Request, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
