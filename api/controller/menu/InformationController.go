@@ -16,6 +16,7 @@ type InformationController interface {
 	GeById(writer http.ResponseWriter, request *http.Request)
 	GetAllByPagination(writer http.ResponseWriter, request *http.Request)
 	GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request)
+	GetInformationHistory(writer http.ResponseWriter, request *http.Request)
 }
 
 type InformationControllerImpl struct {
@@ -185,8 +186,19 @@ func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.Respon
 		SortOf: queryValues.Get("sort_of"),
 		SortBy: queryValues.Get("sort_by"),
 	}
+	user := helper.GetRequestCredentialFromHeaderToken(request)
 	Key := queryValues.Get("key_filter")
-	res, err := i.InformationService.GetAllInformationWithFilter(pagination, Key)
+	res, err := i.InformationService.GetAllInformationWithFilter(pagination, Key, user.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
+}
+func (i *InformationControllerImpl) GetInformationHistory(writer http.ResponseWriter, request *http.Request) {
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+
+	res, err := i.InformationService.GetInformationHistory(user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

@@ -45,6 +45,7 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	r.Get("/by-id/{information_id}", controller.GeById)
 	r.Get("/", controller.GetAllByPagination)
 	r.Get("/search", controller.GetAllInformationByFilter)
+	r.Get("/history", controller.GetInformationHistory)
 	return r
 }
 
@@ -131,6 +132,7 @@ func EquipmentMasterRoute(controller EquipmentController.EquipmentCourseControll
 	}))
 	router.Get("/", controller.SearchEquipmentByKey)
 	router.Post("/ai", controller.AiLensEquipmentSearch)
+	router.Get("/history", controller.GetEquipmentSearchHistoryByKey)
 
 	//get equipment master
 

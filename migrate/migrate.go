@@ -2,7 +2,7 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
-	entities2 "GymMe-Backend/api/entities"
+	entities "GymMe-Backend/api/entities/Equipment"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -84,23 +84,31 @@ func Migrate() {
 		//&entities.InformationBodyEntities{},
 		//&entities.WeightHistoryEntities{},
 		//&entities.CalenderEntity{},
-		&entities2.WeightHistoryEntities{},
-		//&entities.TimerQueueEntity{},
+		//&entities.WeightHistoryEntities{},
 		//&entities.TimerEntity{},
-		//equipment
-		//&entities.EquipmentDetailEntity{},
+		////-----
+		//&entities.TimerQueueEntity{},
+		////equipment
+		//&entities2.EquipmentDetailEntity{},
+		//&entities2.EquipmentDetailEntity{},
+		//&entities2.EquipmentDifficultyEntities{},
+		//
+		////$entities2.EquipmentMasterEntities{}
+		//&entities2.EquipmentMasterEntities{},
+		//&entities2.EquipmentTypeEntity{},
+		//&entities2.ForceTypeEntities{},
+		//&entities2.MuscleGroupEntities{},
+		//&entities2.EquipmentProfileEntity{},
+		//
+		//&entities2.EquipmentDetailEntity{},
 
-		//&entities.EquipmentDifficultyEntities{},
-		//&entities.EquipmentMasterEntities{},
-		//&entities.EquipmentTypeEntity{},
-		//&entities.ForceTypeEntities{},
-		//&entities.MuscleGroupEntities{},
-		//&entities.EquipmentProfileEntity{},
+		//------
+		//&entities2.EquipmentCourseDataEntity{},
+		//
 		//&entities.EquipmentCourseDataEntity{},
-
-		//&entities.EquipmentDetailEntity{},
-		//&entities.EquipmentCourseDataEntity{},
-		//&entities.EquipmentBookmark{},
+		//&entities2.EquipmentBookmark{},
+		//&entities.SearchHistoryEntities{},
+		&entities.EquipmentSearchHistoryEntities{},
 	)
 
 	//&entities.EquipmentTypeEntity{},

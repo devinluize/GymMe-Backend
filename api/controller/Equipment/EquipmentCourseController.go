@@ -22,6 +22,7 @@ type EquipmentCourseController interface {
 	GetEquipmentCourse(writer http.ResponseWriter, request *http.Request)
 	SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request)
 	AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request)
+	GetEquipmentSearchHistoryByKey(writer http.ResponseWriter, request *http.Request)
 }
 
 type EquipmentCourseControllerImpl struct {
@@ -80,9 +81,10 @@ func (e *EquipmentCourseControllerImpl) GetEquipmentCourse(writer http.ResponseW
 func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request) {
 	//searchKey := chi.URLParam(request, "equipment_key")
 	queryValue := request.URL.Query()
+	user := helper.GetRequestCredentialFromHeaderToken(request)
 
 	searchKey := queryValue.Get("equipment_key")
-	res, errs := e.service.SearchEquipmentByKey(searchKey)
+	res, errs := e.service.SearchEquipmentByKey(searchKey, user.UserId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
@@ -178,4 +180,13 @@ func (e *EquipmentCourseControllerImpl) AiLensEquipmentSearch(writer http.Respon
 	}
 	helper.HandleSuccess(writer, res, "success to get equipment course data", http.StatusOK)
 
+}
+func (e *EquipmentCourseControllerImpl) GetEquipmentSearchHistoryByKey(writer http.ResponseWriter, request *http.Request) {
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := e.service.GetEquipmentSearchHistoryByKey(user.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "success get equipment search history", http.StatusOK)
 }

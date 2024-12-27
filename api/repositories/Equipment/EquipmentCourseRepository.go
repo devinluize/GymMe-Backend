@@ -11,5 +11,6 @@ type EquipmentCourseRepository interface {
 	GetAllEquipmentCourseByEquipment(db *gorm.DB, equipmentId int) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses)
 	InsertEquipmentCourse(db *gorm.DB, payload Equipment.InsertEquipmentCourseDataPayload) (entities.EquipmentCourseDataEntity, *responses.ErrorResponses)
 	GetEquipmentCourse(db *gorm.DB, courseId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses)
-	SearchEquipmentByKey(db *gorm.DB, EquipmentKey string) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses)
+	SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses)
+	GetEquipmentSearchHistoryByKey(db *gorm.DB, userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses)
 }

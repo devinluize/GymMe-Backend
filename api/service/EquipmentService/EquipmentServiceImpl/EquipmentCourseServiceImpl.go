@@ -48,9 +48,18 @@ func (s *EquipmentCourseServiceImpl) GetEquipmentCourse(courseId int) (Equipment
 	}
 	return res, nil
 }
-func (s *EquipmentCourseServiceImpl) SearchEquipmentByKey(EquipmentKey string) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
+func (s *EquipmentCourseServiceImpl) SearchEquipmentByKey(EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repository.SearchEquipmentByKey(trans, EquipmentKey)
+	res, err := s.repository.SearchEquipmentByKey(trans, EquipmentKey, userId)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+func (s *EquipmentCourseServiceImpl) GetEquipmentSearchHistoryByKey(userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses) {
+	trans := s.db.Begin()
+	res, err := s.repository.GetEquipmentSearchHistoryByKey(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

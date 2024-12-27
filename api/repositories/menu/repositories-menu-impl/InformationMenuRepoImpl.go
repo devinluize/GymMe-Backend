@@ -198,18 +198,48 @@ func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginatio
 	fmt.Println(paginationResponses.Rows)
 	return paginationResponses, nil
 }
-func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string) (helper.Pagination, *responses.ErrorResponses) {
+func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
+	//create history logging
+	historyLogging := entities.SearchHistoryEntities{
+		UserId:     userId,
+		SearchKey:  Key,
+		DateSearch: time.Now(),
+	}
+	err := db.Create(&historyLogging).Error
+	if err != nil {
+		return paginationResponses, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    err.Error(),
+		}
+	}
 	var Entities []entities.InformationEntities
 	//me := db.Model(&entities.InformationEntities{}) -> table joinan
 	//cara 1
 	joinTable := db.Model(&entities.InformationEntities{}).Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%")
 	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
 	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
-	err := joinTable.Scopes(helper.Paginate(&Entities, &paginationResponses, joinTable)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
+	err = joinTable.Scopes(helper.Paginate(&Entities, &paginationResponses, joinTable)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
 	if err != nil {
 		return paginationResponses, &responses.ErrorResponses{}
 	}
 	paginationResponses.Rows = Entities
 	fmt.Println(paginationResponses.Rows)
 	return paginationResponses, nil
+}
+func (i *InformationMenu) GetInformationHistory(db *gorm.DB, userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses) {
+	var entitiesData []entities.SearchHistoryEntities
+	err := db.Model(&entities.SearchHistoryEntities{}).
+		Where(entities.SearchHistoryEntities{UserId: userId}).
+		Order("date_search DESC").
+		Limit(10).
+		Scan(&entitiesData).Error
+	if err != nil {
+		return entitiesData, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to get information history search data",
+		}
+	}
+	return entitiesData, nil
 }

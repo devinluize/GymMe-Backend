@@ -66,9 +66,18 @@ func (service *InformationServiceImpl) GetAllInformationWithPagination(paginatio
 	}
 	return res, nil
 }
-func (service *InformationServiceImpl) GetAllInformationWithFilter(paginationResponses helper.Pagination, Key string) (helper.Pagination, *responses.ErrorResponses) {
+func (service *InformationServiceImpl) GetAllInformationWithFilter(paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetAllInformationWithFilter(trans, paginationResponses, Key)
+	res, err := service.repo.GetAllInformationWithFilter(trans, paginationResponses, Key, userId)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+func (service *InformationServiceImpl) GetInformationHistory(userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses) {
+	trans := service.db.Begin()
+	res, err := service.repo.GetInformationHistory(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"net/http"
+	"time"
 )
 
 type EquipmentCourseRepositoryImpl struct {
@@ -265,11 +266,24 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 	return response, nil
 
 }
-func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
+func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
 	//get entities with equipment key
 	var EquipmentResponse []entities.EquipmentMasterEntities
 
-	err := db.Model(&entities.EquipmentMasterEntities{}).
+	loggingEntity := entities.EquipmentSearchHistoryEntities{
+		UserId:     userId,
+		SearchKey:  EquipmentKey,
+		DateSearch: time.Now(),
+	}
+	err := db.Create(&loggingEntity).Error
+	if err != nil {
+		return EquipmentResponse, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    err.Error(),
+		}
+	}
+	err = db.Model(&entities.EquipmentMasterEntities{}).
 		Where("equipment_id <> 0 AND equipment_name LIKE ? ", "%"+EquipmentKey+"%").
 		Scan(&EquipmentResponse).Error
 	if err != nil {
@@ -280,4 +294,20 @@ func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, Equipm
 		}
 	}
 	return EquipmentResponse, nil
+}
+func (e *EquipmentCourseRepositoryImpl) GetEquipmentSearchHistoryByKey(db *gorm.DB, userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses) {
+	var model []entities.EquipmentSearchHistoryEntities
+	err := db.Model(&model).
+		Where(entities.EquipmentSearchHistoryEntities{UserId: userId}).
+		Order("date_search DESC").
+		Limit(10).
+		Scan(&model).Error
+	if err != nil {
+		return model, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to get equipment search history by user id",
+		}
+	}
+	return model, nil
 }
