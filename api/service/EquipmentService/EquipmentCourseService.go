@@ -12,4 +12,5 @@ type EquipmentCourseService interface {
 	GetEquipmentCourse(courseId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses)
 	SearchEquipmentByKey(EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses)
 	GetEquipmentSearchHistoryByKey(userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses)
+	DeleteEquipmentSearchHistoryById(equipmentSearchHistoryId int) (bool, *responses.ErrorResponses)
 }

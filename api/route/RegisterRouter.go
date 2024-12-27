@@ -133,6 +133,7 @@ func EquipmentMasterRoute(controller EquipmentController.EquipmentCourseControll
 	router.Get("/", controller.SearchEquipmentByKey)
 	router.Post("/ai", controller.AiLensEquipmentSearch)
 	router.Get("/history", controller.GetEquipmentSearchHistoryByKey)
+	router.Delete("/history/{equipment_search_history_id}", controller.DeleteEquipmentSearchHistoryById)
 
 	//get equipment master
 

@@ -2,6 +2,7 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
+	entities2 "GymMe-Backend/api/entities"
 	entities "GymMe-Backend/api/entities/Equipment"
 	"fmt"
 	"gorm.io/driver/sqlserver"
@@ -107,7 +108,7 @@ func Migrate() {
 		//
 		//&entities.EquipmentCourseDataEntity{},
 		//&entities2.EquipmentBookmark{},
-		//&entities.SearchHistoryEntities{},
+		&entities2.SearchHistoryEntities{},
 		&entities.EquipmentSearchHistoryEntities{},
 	)
 

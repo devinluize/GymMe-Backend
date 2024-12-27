@@ -311,3 +311,14 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentSearchHistoryByKey(db *gorm.
 	}
 	return model, nil
 }
+func (e *EquipmentCourseRepositoryImpl) DeleteEquipmentSearchHistoryById(db *gorm.DB, equipmentSearchHistoryId int) (bool, *responses.ErrorResponses) {
+	err := db.Delete(&entities.EquipmentSearchHistoryEntities{}, entities.EquipmentSearchHistoryEntities{EquipmentSearchHistoryId: equipmentSearchHistoryId}).Error
+	if err != nil {
+		return false, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to delete equipment search",
+		}
+	}
+	return true, nil
+}

@@ -66,3 +66,12 @@ func (s *EquipmentCourseServiceImpl) GetEquipmentSearchHistoryByKey(userId int) 
 	}
 	return res, nil
 }
+func (s *EquipmentCourseServiceImpl) DeleteEquipmentSearchHistoryById(equipmentSearchHistoryId int) (bool, *responses.ErrorResponses) {
+	trans := s.db.Begin()
+	res, err := s.repository.DeleteEquipmentSearchHistoryById(trans, equipmentSearchHistoryId)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}

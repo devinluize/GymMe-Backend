@@ -23,6 +23,7 @@ type EquipmentCourseController interface {
 	SearchEquipmentByKey(writer http.ResponseWriter, request *http.Request)
 	AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request)
 	GetEquipmentSearchHistoryByKey(writer http.ResponseWriter, request *http.Request)
+	DeleteEquipmentSearchHistoryById(writer http.ResponseWriter, request *http.Request)
 }
 
 type EquipmentCourseControllerImpl struct {
@@ -189,4 +190,20 @@ func (e *EquipmentCourseControllerImpl) GetEquipmentSearchHistoryByKey(writer ht
 		return
 	}
 	helper.HandleSuccess(writer, res, "success get equipment search history", http.StatusOK)
+}
+func (e *EquipmentCourseControllerImpl) DeleteEquipmentSearchHistoryById(writer http.ResponseWriter, request *http.Request) {
+	equipmentSearchHistoryId, errConvert := strconv.Atoi(chi.URLParam(request, "equipment_search_history_id"))
+	if errConvert != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errConvert,
+			Message:    errConvert.Error(),
+		})
+	}
+	res, err := e.service.DeleteEquipmentSearchHistoryById(equipmentSearchHistoryId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "success delete equipment history", http.StatusOK)
 }
