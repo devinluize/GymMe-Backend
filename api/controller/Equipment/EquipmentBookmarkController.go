@@ -36,6 +36,7 @@ func (e *EquipmentBookmarkControllerImpl) AddEquipmentBookmark(writer http.Respo
 		helper.ReturnError(writer, errRes)
 		return
 	}
+
 	helper.HandleSuccess(writer, res, "success to insert bookmark", http.StatusOK)
 }
 

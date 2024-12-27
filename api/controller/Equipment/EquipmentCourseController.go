@@ -90,6 +90,11 @@ func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.Respons
 		helper.ReturnError(writer, errs)
 		return
 	}
+	if len(res) == 0 {
+		helper.HandleSuccess(writer, []string{}, "success get equipment search", http.StatusOK)
+		return
+		
+	}
 	helper.HandleSuccess(writer, res, "success to search equipment by key", http.StatusOK)
 }
 func (e *EquipmentCourseControllerImpl) AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request) {
@@ -188,6 +193,11 @@ func (e *EquipmentCourseControllerImpl) GetEquipmentSearchHistoryByKey(writer ht
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
+	}
+	if len(res) == 0 {
+		helper.HandleSuccess(writer, []string{}, "success get equipment search history", http.StatusOK)
+		return
+
 	}
 	helper.HandleSuccess(writer, res, "success get equipment search history", http.StatusOK)
 }
