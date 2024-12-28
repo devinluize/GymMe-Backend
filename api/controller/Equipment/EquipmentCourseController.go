@@ -93,7 +93,7 @@ func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.Respons
 	if len(res) == 0 {
 		helper.HandleSuccess(writer, []string{}, "success get equipment search", http.StatusOK)
 		return
-		
+
 	}
 	helper.HandleSuccess(writer, res, "success to search equipment by key", http.StatusOK)
 }

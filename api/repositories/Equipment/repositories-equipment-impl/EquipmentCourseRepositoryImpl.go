@@ -245,6 +245,18 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 			Err:        err,
 		}
 	}
+	//cek if bookmark
+	var isBookmark = false
+	err = db.Model(&entities.EquipmentBookmark{}).
+		Where(entities.EquipmentBookmark{EquipmentCourseId: courseId}).
+		Select("1").Scan(&isBookmark).Error
+	if err != nil {
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to check bookmark",
+		}
+	}
 	response = Equipment.GetCourseByIdResponse{
 		EquipmentCourseDataId:   courseEntities.EquipmentCourseDataId,
 		EquipmentCourseDataName: courseEntities.EquipmentCourseDataName,
@@ -262,6 +274,7 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 		EquipmentProfileId:      courseEntities.EquipmentProfileId,
 		EquipmentProfileName:    EquipmentProfile.EquipmentProfileName,
 		EquipmentDetail:         courseDetailEntities,
+		IsBookmark:              isBookmark,
 	}
 	return response, nil
 

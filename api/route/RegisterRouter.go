@@ -154,6 +154,7 @@ func EquipmentBookmarkRoute(controller EquipmentController.EquipmentBookmarkCont
 	//router.Get("/", controller.SearchEquipmentByKey)
 	router.Post("/{equipment_course_id}", controller.AddEquipmentBookmark)
 	router.Delete("/{equipment_course_id}", controller.RemoveEquipmentBookmark)
+	router.Get("/", controller.GetEquipmentBookmarkByUserId)
 
 	//get equipment master
 

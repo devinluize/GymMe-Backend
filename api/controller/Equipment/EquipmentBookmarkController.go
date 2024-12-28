@@ -12,6 +12,7 @@ import (
 type EquipmentBookmarkController interface {
 	AddEquipmentBookmark(writer http.ResponseWriter, request *http.Request)
 	RemoveEquipmentBookmark(writer http.ResponseWriter, request *http.Request)
+	GetEquipmentBookmarkByUserId(writer http.ResponseWriter, request *http.Request)
 }
 
 type EquipmentBookmarkControllerImpl struct {
@@ -59,6 +60,15 @@ func (e *EquipmentBookmarkControllerImpl) RemoveEquipmentBookmark(writer http.Re
 		return
 	}
 	helper.HandleSuccess(writer, res, "success to delete  bookmark", http.StatusOK)
+}
+func (e *EquipmentBookmarkControllerImpl) GetEquipmentBookmarkByUserId(writer http.ResponseWriter, request *http.Request) {
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := e.service.GetEquipmentBookmarkByUserId(user.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "success to get bookmark", http.StatusOK)
 }
 
 func NewEquipmentBookmarkControllerImpl(service EquipmentService.EquipmentBookmarkService) EquipmentBookmarkController {

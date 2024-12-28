@@ -46,6 +46,7 @@ type GetCourseByIdResponse struct {
 	EquipmentProfileId      int                              `json:"equipment_profile_id"`
 	EquipmentProfileName    string                           `json:"equipment_profile_name"`
 	EquipmentDetail         []entities.EquipmentDetailEntity `json:"equipment_detail"`
+	IsBookmark              bool                             `json:"is_bookmark"`
 }
 type AiLensPayload struct {
 	//CloudinaryPublicId string `json:"cloudinary_public_id"`

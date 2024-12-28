@@ -2,6 +2,7 @@ package repositoriesEquipmentImpl
 
 import (
 	entities "GymMe-Backend/api/entities/Equipment"
+	"GymMe-Backend/api/payloads/Equipment"
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/Equipment"
 	"errors"
@@ -64,4 +65,64 @@ func (e *EquipmentBookmarkRepositoryImpl) RemoveEquipmentBookmark(db *gorm.DB, u
 		}
 	}
 	return true, nil
+}
+func (e *EquipmentBookmarkRepositoryImpl) GetEquipmentBookmarkByUserId(db *gorm.DB, userId int) ([]Equipment.GetBookmarkEquipmentResponse, *responses.ErrorResponses) {
+	var response []Equipment.GetBookmarkEquipmentResponse
+	var equipmentBookmark []entities.EquipmentBookmark
+	err := db.Model(&entities.EquipmentBookmark{}).
+		Where(entities.EquipmentBookmark{UserId: userId}).
+		Scan(&equipmentBookmark).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "failed to get equipment bookmark",
+		}
+	}
+
+	for _, bookmark := range equipmentBookmark {
+		//get equipment names
+		equipmentCourseEntities := entities.EquipmentCourseDataEntity{}
+		err = db.Model(&equipmentCourseEntities).
+			Where(entities.EquipmentCourseDataEntity{EquipmentCourseDataId: bookmark.EquipmentCourseId}).
+			First(&equipmentCourseEntities).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return response, &responses.ErrorResponses{
+					StatusCode: http.StatusInternalServerError,
+					Err:        err,
+					Message:    "course data is not found",
+				}
+			}
+			return response, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+				Message:    "failed to get equipment course entities",
+			}
+		}
+		//get equipment data
+		equipmentMaster := entities.EquipmentMasterEntities{}
+		err = db.Model(&equipmentMaster).
+			Where(entities.EquipmentMasterEntities{EquipmentId: equipmentCourseEntities.EquipmentMasterId}).
+			First(&equipmentMaster).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return response, &responses.ErrorResponses{
+					StatusCode: http.StatusNotFound,
+					Err:        err,
+					Message:    "equipment master is not found",
+				}
+			}
+		}
+		resp := Equipment.GetBookmarkEquipmentResponse{
+			UserId:              bookmark.UserId,
+			EquipmentName:       equipmentMaster.EquipmentName,
+			EquipmentId:         equipmentMaster.EquipmentId,
+			EquipmentCourseId:   equipmentCourseEntities.EquipmentCourseDataId,
+			EquipmentCourseName: equipmentCourseEntities.EquipmentCourseDataName,
+		}
+		response = append(response, resp)
+	}
+	return response, nil
+
 }
