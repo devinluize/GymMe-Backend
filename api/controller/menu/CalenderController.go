@@ -3,6 +3,7 @@ package menucontroller
 import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
+	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/service/menu"
 	"github.com/go-chi/chi/v5"
 	"net/http"
@@ -14,14 +15,15 @@ type CalendarController interface {
 	GetCalendarByUserId(writer http.ResponseWriter, request *http.Request)
 	UpdateCalendar(writer http.ResponseWriter, request *http.Request)
 	DeleteCalendarById(writer http.ResponseWriter, request *http.Request)
+	GetCalendarByDate(writer http.ResponseWriter, request *http.Request)
 }
 
-type CalenderControllerImpl struct {
+type CalendarControllerImpl struct {
 	CalendarService menu.CalendarService
 }
 
 func NewCalendarController(calendarService menu.CalendarService) CalendarController {
-	return &CalenderControllerImpl{CalendarService: calendarService}
+	return &CalendarControllerImpl{CalendarService: calendarService}
 }
 
 // InsertCalendar List Via Header
@@ -32,13 +34,15 @@ func NewCalendarController(calendarService menu.CalendarService) CalendarControl
 //	@Tags			Calendar
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		MenuPayloads.CalenderInsertPayload	true	"Insert Request"
+//	@Param			request	body		MenuPayloads.CalendarInsertPayload	true	"Insert Request"
 //	@Success		200		{object}	responses.StandarAPIResponses
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
 //	@Router			/api/calendar [post]
-func (controller *CalenderControllerImpl) InsertCalendar(writer http.ResponseWriter, request *http.Request) {
-	var insertCalendar MenuPayloads.CalenderInsertPayload
+func (controller *CalendarControllerImpl) InsertCalendar(writer http.ResponseWriter, request *http.Request) {
+	var insertCalendar MenuPayloads.CalendarInsertPayload
 	helper.ReadFromRequestBody(request, &insertCalendar)
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	insertCalendar.UserId = user.UserId
 	res, err := controller.CalendarService.InsertCalendar(insertCalendar)
 	if err != nil {
 		helper.ReturnError(writer, err)
@@ -57,7 +61,7 @@ func (controller *CalenderControllerImpl) InsertCalendar(writer http.ResponseWri
 //	@Param			user_id	path int	true	"user_id"
 //	@Success		200		{object}	 responses.StandarAPIResponses
 //	@Router			/api/calendar/by-user-id/ [get]
-func (controller *CalenderControllerImpl) GetCalendarByUserId(writer http.ResponseWriter, request *http.Request) {
+func (controller *CalendarControllerImpl) GetCalendarByUserId(writer http.ResponseWriter, request *http.Request) {
 	//calendarId := chi.URLParam(request, "user_id")
 	User := helper.GetRequestCredentialFromHeaderToken(request)
 	//InformationIds, err := strconv.Atoi(calendarId)
@@ -69,7 +73,7 @@ func (controller *CalenderControllerImpl) GetCalendarByUserId(writer http.Respon
 		helper.ReturnError(writer, errs)
 		return
 	}
-	helper.HandleSuccess(writer, res, "Update Successful", http.StatusOK)
+	helper.HandleSuccess(writer, res, "Get Successful", http.StatusOK)
 }
 
 // UpdateCalendar List Via Header
@@ -80,14 +84,25 @@ func (controller *CalenderControllerImpl) GetCalendarByUserId(writer http.Respon
 //	@Tags			Calendar
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		MenuPayloads.CalenderUpdatePayload	true	"Update Request"
+//	@Param			request	body		MenuPayloads.CalendarUpdatePayload	true	"Update Request"
 //	@Success		200		{object}	 responses.ErrorResponses
 //	@Router			/api/calendar [patch]
-func (controller *CalenderControllerImpl) UpdateCalendar(writer http.ResponseWriter, request *http.Request) {
+func (controller *CalendarControllerImpl) UpdateCalendar(writer http.ResponseWriter, request *http.Request) {
 
-	var UpdateCalendar MenuPayloads.CalenderUpdatePayload
+	var UpdateCalendar MenuPayloads.CalendarUpdatePayload
 	helper.ReadFromRequestBody(request, &UpdateCalendar)
-
+	calendarId := chi.URLParam(request, "calendar_id")
+	calendarIdInt, errConvert := strconv.Atoi(calendarId)
+	if errConvert != nil {
+		helper.ReturnError(writer, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errConvert,
+			Message:    errConvert.Error(),
+		})
+	}
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	UpdateCalendar.CalendarId = calendarIdInt
+	UpdateCalendar.UserId = user.UserId
 	res, err := controller.CalendarService.UpdateCalendar(UpdateCalendar)
 	if err != nil {
 		helper.ReturnError(writer, err)
@@ -107,7 +122,7 @@ func (controller *CalenderControllerImpl) UpdateCalendar(writer http.ResponseWri
 //	@Param			calendar_id	path int	true	"calendar_id"
 //	@Success		200		{object}	 responses.StandarAPIResponses
 //	@Router			/api/calendar/delete/{calendar_id} [delete]
-func (controller *CalenderControllerImpl) DeleteCalendarById(writer http.ResponseWriter, request *http.Request) {
+func (controller *CalendarControllerImpl) DeleteCalendarById(writer http.ResponseWriter, request *http.Request) {
 	calendarId := chi.URLParam(request, "calendar_id")
 
 	InformationIds, err := strconv.Atoi(calendarId)
@@ -120,4 +135,15 @@ func (controller *CalenderControllerImpl) DeleteCalendarById(writer http.Respons
 		return
 	}
 	helper.HandleSuccess(writer, res, "Delete Successful", http.StatusOK)
+}
+func (controller *CalendarControllerImpl) GetCalendarByDate(writer http.ResponseWriter, request *http.Request) {
+	queryValues := request.URL.Query()
+	date := queryValues.Get("calendar_date")
+	user := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := controller.CalendarService.GetCalendarByDate(date, user.UserId)
+	if err != nil {
+		helper.ReturnError(writer, err)
+		return
+	}
+	helper.HandleSuccess(writer, res, "Get Successful", http.StatusOK)
 }

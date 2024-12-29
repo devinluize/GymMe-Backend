@@ -4,8 +4,14 @@ import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/service/menu"
+	"context"
+	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-chi/chi/v5"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -193,6 +199,48 @@ func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.Respon
 		helper.ReturnError(writer, err)
 		return
 	}
+	localFilePath := `C:\Users\devin\Documents\Github\GymMe-Backend\api\controller\menu\asdasd.png`
+
+	// Open the local file
+	file, errOpen := os.Open(localFilePath)
+	if errOpen != nil {
+		panic("Failed to open file: %v")
+	}
+	defer file.Close()
+
+	//CLOUDINARY_URL:=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+	cld, errr := cloudinary.NewFromURL("cloudinary://695971277991789:jXnWGXSCY230XQ_5QUtMGcb9T18@dlrd9z1mk")
+	fmt.Println(errr)
+	cld.Config.URL.Secure = true
+	ctx := context.Background()
+	resp, errcld := cld.Upload.Upload(ctx, file, uploader.UploadParams{
+		PublicID:       "folder/12345asd",
+		UniqueFilename: api.Bool(false),
+		Overwrite:      api.Bool(true)})
+
+	//cld, errr := cloudinary.NewFromURL("cloudinary://225934859532926:CJUjvSBn-bvavAE8UipYgtSaDjw@dmgpda5o7")
+	//fmt.Println(errr)
+	//cld.Config.URL.Secure = true
+	//ctx := context.Background()
+	//resp, errcld := cld.Upload.Upload(ctx, "https://res.cloudinary.com/dlrd9z1mk/image/upload/v1735399592/folder/wrbcua7zbzxaqrokjia6.png", uploader.UploadParams{
+	//	PublicID:       "folder/wrbcua7zbzxaqrokjia6DEVIN",
+	//	UniqueFilename: api.Bool(false),
+	//	Overwrite:      api.Bool(true)})
+	if errcld != nil {
+		fmt.Println("error")
+		return
+	}
+
+	res.SortBy = resp.URL
+	urls, _ := cld.Image(resp.PublicID)
+	//res.SortOf = url
+	res.SortOf = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+		urls.AssetType,       // e.g., "image"
+		urls.DeliveryType,    // e.g., "upload"
+		urls.PublicID+".jpg", // Add appropriate file extension
+	)
+
 	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
 }
 func (i *InformationControllerImpl) GetInformationHistory(writer http.ResponseWriter, request *http.Request) {
@@ -203,5 +251,6 @@ func (i *InformationControllerImpl) GetInformationHistory(writer http.ResponseWr
 		helper.ReturnError(writer, err)
 		return
 	}
+
 	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
 }

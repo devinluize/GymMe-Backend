@@ -253,7 +253,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/MenuPayloads.CalenderInsertPayload"
+                            "$ref": "#/definitions/MenuPayloads.CalendarInsertPayload"
                         }
                     }
                 ],
@@ -326,7 +326,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/MenuPayloads.CalenderUpdatePayload"
+                            "$ref": "#/definitions/MenuPayloads.CalendarUpdatePayload"
                         }
                     }
                 ],
@@ -1244,19 +1244,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "MenuPayloads.CalenderInsertPayload": {
+        "MenuPayloads.CalendarInsertPayload": {
             "type": "object",
             "properties": {
-                "calender_date": {
+                "calendar_date": {
                     "type": "string"
                 },
-                "calender_name": {
+                "calendar_name": {
                     "type": "string"
                 },
-                "calender_time_from": {
+                "calendar_time_from": {
                     "type": "string"
                 },
-                "calender_time_to": {
+                "calendar_time_to": {
                     "type": "string"
                 },
                 "user_id": {
@@ -1264,22 +1264,22 @@ const docTemplate = `{
                 }
             }
         },
-        "MenuPayloads.CalenderUpdatePayload": {
+        "MenuPayloads.CalendarUpdatePayload": {
             "type": "object",
             "properties": {
-                "calender_date": {
+                "calendar_date": {
                     "type": "string"
                 },
-                "calender_id": {
+                "calendar_id": {
                     "type": "integer"
                 },
-                "calender_name": {
+                "calendar_name": {
                     "type": "string"
                 },
-                "calender_time_from": {
+                "calendar_time_from": {
                     "type": "string"
                 },
-                "calender_time_to": {
+                "calendar_time_to": {
                     "type": "string"
                 },
                 "user_id": {

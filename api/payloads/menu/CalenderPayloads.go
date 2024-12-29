@@ -2,25 +2,26 @@ package MenuPayloads
 
 import "time"
 
-type CalenderInsertPayload struct {
-	CalenderName     string    `gorm:"column:calender_name" json:"calender_name"`
-	CalenderDate     time.Time `gorm:"column:calender_date" json:"calender_date"`
+type CalendarInsertPayload struct {
+	CalendarName     string    `gorm:"column:calendar_name" json:"calendar_name"`
+	CalendarDate     time.Time `gorm:"column:calendar_date" json:"calendar_date"`
 	UserId           int       `gorm:"column:user_id" json:"user_id"`
-	CalenderTimeFrom time.Time `gorm:"column:calender_time_from" json:"calender_time_from"`
-	CalenderTimeTo   time.Time `gorm:"column:calender_time_to" json:"calender_time_to"`
+	CalendarTimeFrom time.Time `gorm:"column:calendar_time_from" json:"calendar_time_from"`
+	CalendarTimeTo   time.Time `gorm:"column:calendar_time_to" json:"calendar_time_to"`
 }
-type CalenderUpdatePayload struct {
-	CalenderId       int       `gorm:"column:calender_id;primaryKey;not null" json:"calender_id"`
-	CalenderName     string    `gorm:"column:calender_name" json:"calender_name"`
-	CalenderDate     time.Time `gorm:"column:calender_date" json:"calender_date"`
+type CalendarUpdatePayload struct {
+	CalendarId       int       `gorm:"column:calendar_id;primaryKey;not null" json:"calendar_id"`
+	CalendarName     string    `gorm:"column:calendar_name" json:"calendar_name"`
+	CalendarDate     time.Time `gorm:"column:calendar_date" json:"calendar_date"`
 	UserId           int       `gorm:"column:user_id" json:"user_id"`
-	CalenderTimeFrom time.Time `gorm:"column:calender_time_from" json:"calender_time_from"`
-	CalenderTimeTo   time.Time `gorm:"column:calender_time_to" json:"calender_time_to"`
+	CalendarTimeFrom time.Time `gorm:"column:calendar_time_from" json:"calendar_time_from"`
+	CalendarTimeTo   time.Time `gorm:"column:calendar_time_to" json:"calendar_time_to"`
 }
 type CalendarGetByIdResponse struct {
-	CalenderName     string    `gorm:"column:calender_name" json:"calender_name"`
-	CalenderDate     time.Time `gorm:"column:calender_date" json:"calender_date"`
+	CalendarName     string    `gorm:"column:calendar_name" json:"calendar_name"`
+	CalendarDate     time.Time `gorm:"column:calendar_date" json:"calendar_date"`
 	UserId           int       `gorm:"column:user_id" json:"user_id"`
-	CalenderTimeFrom time.Time `gorm:"column:calender_time_from" json:"calender_time_from"`
-	CalenderTimeTo   time.Time `gorm:"column:calender_time_to" json:"calender_time_to"`
+	CalendarTimeFrom time.Time `gorm:"column:calendar_time_from" json:"calendar_time_from"`
+	CalendarTimeTo   time.Time `gorm:"column:calendar_time_to" json:"calendar_time_to"`
+	CalendarId       int       `gorm:"column:calendar_id;primaryKey;not null" json:"calendar_id"`
 }

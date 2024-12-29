@@ -150,7 +150,7 @@ func (controller *WeightHistoryControllerImpl) GetAllWeightWithDateFilter(writer
 			helper.ReturnError(writer, &responses.ErrorResponses{
 				StatusCode: http.StatusInternalServerError,
 				Message:    "failed to parse date time",
-				Err:        errors.New("Failed to parse date time"),
+				Err:        errors.New("failed to parse date time"),
 				Success:    false,
 				Data:       nil,
 			})

@@ -79,8 +79,9 @@ func CalendarRouter(controller menucontroller.CalendarController) chi.Router {
 	router.Use(middleware.RouterMiddleware)
 	router.Post("/", controller.InsertCalendar)
 	router.Get("/by-user-id", controller.GetCalendarByUserId)
-	router.Delete("/delete/{calender_id}", controller.DeleteCalendarById)
-	router.Put("/", controller.UpdateCalendar)
+	router.Delete("/delete/{calendar_id}", controller.DeleteCalendarById)
+	router.Put("/{calendar_id}", controller.UpdateCalendar)
+	router.Get("/by-date", controller.GetCalendarByDate)
 	return router
 }
 

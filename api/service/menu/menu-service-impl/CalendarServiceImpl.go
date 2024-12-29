@@ -18,7 +18,7 @@ type CalendarServiceImpl struct {
 func NewCalendarServiceImpl(repository menuRepository.CalendarRepository, db *gorm.DB) menu.CalendarService {
 	return &CalendarServiceImpl{repository: repository, db: db}
 }
-func (service *CalendarServiceImpl) InsertCalendar(payloads MenuPayloads.CalenderInsertPayload) (entities.CalenderEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) InsertCalendar(payloads MenuPayloads.CalendarInsertPayload) (entities.CalendarEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 	res, err := service.repository.InsertCalendar(trans, payloads)
 	defer helper.CommitOrRollback(trans)
@@ -38,7 +38,7 @@ func (service *CalendarServiceImpl) GetCalendarByUserId(userId int) ([]MenuPaylo
 	return res, nil
 }
 
-func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.CalenderUpdatePayload) (entities.CalenderEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.CalendarUpdatePayload) (entities.CalendarEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 	res, err := service.repository.UpdateCalendar(trans, payloads)
 	defer helper.CommitOrRollback(trans)
@@ -48,9 +48,18 @@ func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.Calende
 	return res, nil
 }
 
-func (service *CalendarServiceImpl) DeleteCalendarById(calendarId int) (entities.CalenderEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) DeleteCalendarById(calendarId int) (entities.CalendarEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 	res, err := service.repository.DeleteCalendarById(trans, calendarId)
+	defer helper.CommitOrRollback(trans)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+func (service *CalendarServiceImpl) GetCalendarByDate(date string, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
+	trans := service.db.Begin()
+	res, err := service.repository.GetCalendarByDate(trans, date, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

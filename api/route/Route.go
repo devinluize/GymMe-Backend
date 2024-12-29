@@ -84,9 +84,9 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	WeightController := menucontroller.NewWeightHistoryController(WeightService)
 
 	//calendar
-	CalendarRepository := MenuImplRepositories.NewCalenderRepositoryImpl()
+	CalendarRepository := MenuImplRepositories.NewCalendarRepositoryImpl()
 	CalendarService := menuserviceimpl.NewCalendarServiceImpl(CalendarRepository, db)
-	CalenderController := menucontroller.NewCalendarController(CalendarService)
+	CalendarController := menucontroller.NewCalendarController(CalendarService)
 
 	//Timer
 	TimerRepository := MenuImplRepositories.NewTimerRepositoryImpl()
@@ -113,7 +113,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	InformationRouter := InformationRouter(InformationController)
 	ProfileRouter := ProfileRouter(ProfileController)
 	WeightRouter := WeightRouter(WeightController)
-	CalendarRouter := CalendarRouter(CalenderController)
+	CalendarRouter := CalendarRouter(CalendarController)
 	TimerRouter := TimerRoute(TimerController)
 	BookmarkRouter := BookmarkRoute(BookmarkController)
 	EquipmentCourseRouter := EquipmentCourseRoute(EquipmentCourseController)
