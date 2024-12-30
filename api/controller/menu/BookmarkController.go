@@ -99,6 +99,10 @@ func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWrite
 		helper.ReturnError(writer, err)
 		return
 	}
+	if len(res) == 0 {
+		helper.HandleSuccess(writer, []string{}, "success to get bookmark", http.StatusOK)
+		return
 
+	}
 	helper.HandleSuccess(writer, res, "Success get Bookmark", http.StatusOK)
 }

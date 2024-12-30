@@ -7,16 +7,18 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
 	"GymMe-Backend/api/service/menu"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 )
 
 type InformationServiceImpl struct {
 	repo menuRepository.InformationMenu
 	db   *gorm.DB
+	cld  *cloudinary.Cloudinary
 }
 
-func NewInformationServiceImpl(repo menuRepository.InformationMenu, db *gorm.DB) menu.InformationService {
-	return &InformationServiceImpl{repo: repo, db: db}
+func NewInformationServiceImpl(repo menuRepository.InformationMenu, db *gorm.DB, cld *cloudinary.Cloudinary) menu.InformationService {
+	return &InformationServiceImpl{repo: repo, db: db, cld: cld}
 }
 func (service *InformationServiceImpl) InsertInformation(payloads MenuPayloads.InformationInsertPayloads) (entities.InformationEntities, *responses.ErrorResponses) {
 	trans := service.db.Begin()
@@ -50,6 +52,7 @@ func (service *InformationServiceImpl) UpdateInformation(payloads MenuPayloads.I
 
 func (service *InformationServiceImpl) GetInformationById(id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
 	trans := service.db.Begin()
+
 	res, err := service.repo.GetInformationById(trans, id, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
@@ -68,7 +71,7 @@ func (service *InformationServiceImpl) GetAllInformationWithPagination(paginatio
 }
 func (service *InformationServiceImpl) GetAllInformationWithFilter(paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetAllInformationWithFilter(trans, paginationResponses, Key, userId)
+	res, err := service.repo.GetAllInformationWithFilter(trans, paginationResponses, Key, userId, service.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

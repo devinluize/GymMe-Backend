@@ -11,15 +11,16 @@ import (
 	auth2 "GymMe-Backend/api/service/auth"
 	menuserviceimpl "GymMe-Backend/api/service/menu/menu-service-impl"
 	_ "GymMe-Backend/docs"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"gorm.io/gorm"
 	"net/http"
 )
 
-func StartRouting(db *gorm.DB) {
+func StartRouting(db *gorm.DB, cld *cloudinary.Cloudinary) {
 	r := chi.NewRouter()
-	r.Mount("/api", versionedRouterV1(db))
+	r.Mount("/api", versionedRouterV1(db, cld))
 	swaggerURL := "http://localhost:3000/swagger/doc.json"
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL(swaggerURL),
@@ -27,7 +28,7 @@ func StartRouting(db *gorm.DB) {
 	http.ListenAndServe(":3000", r)
 
 }
-func versionedRouterV1(db *gorm.DB) chi.Router {
+func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 	router := chi.NewRouter()
 
 	router.Get("/dev", func(writer http.ResponseWriter, request *http.Request) {
@@ -72,7 +73,7 @@ func versionedRouterV1(db *gorm.DB) chi.Router {
 	authController := auth3.NewAuthController(authService)
 
 	InformationRepository := MenuImplRepositories.NewInformationMenu()
-	InformationService := menuserviceimpl.NewInformationServiceImpl(InformationRepository, db)
+	InformationService := menuserviceimpl.NewInformationServiceImpl(InformationRepository, db, cld)
 	InformationController := menucontroller.NewInformatioControllerImpl(InformationService)
 
 	ProfileRepository := MenuImplRepositories.NewProfileMenuRepositoryImpl()

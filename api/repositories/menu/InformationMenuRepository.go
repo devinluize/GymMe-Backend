@@ -5,6 +5,7 @@ import (
 	"GymMe-Backend/api/helper"
 	MenuPayloads "GymMe-Backend/api/payloads/menu"
 	"GymMe-Backend/api/payloads/responses"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 )
 
@@ -14,6 +15,6 @@ type InformationMenu interface {
 	UpdateInformation(tx *gorm.DB, payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses)
 	GetAllInformationWithPagination(db *gorm.DB, paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
 	GetInformationById(db *gorm.DB, id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses)
-	GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses)
+	GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int, cloudinary *cloudinary.Cloudinary) (helper.Pagination, *responses.ErrorResponses)
 	GetInformationHistory(db *gorm.DB, userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses)
 }

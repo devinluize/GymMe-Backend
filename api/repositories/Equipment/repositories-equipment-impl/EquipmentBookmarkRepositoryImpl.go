@@ -120,6 +120,7 @@ func (e *EquipmentBookmarkRepositoryImpl) GetEquipmentBookmarkByUserId(db *gorm.
 			EquipmentId:         equipmentMaster.EquipmentId,
 			EquipmentCourseId:   equipmentCourseEntities.EquipmentCourseDataId,
 			EquipmentCourseName: equipmentCourseEntities.EquipmentCourseDataName,
+			EquipmentPhotoPath:  equipmentMaster.EquipmentPhotoPath,
 		}
 		response = append(response, resp)
 	}

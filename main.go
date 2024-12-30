@@ -46,8 +46,9 @@ func main() {
 	}
 	//configenv.InitEnvConfigs(false, env)
 	db := configenv.InitDB()
+	cld := configenv.InitCloudinary()
 	//ds := configenv.EnvConfigs.Hostname
-	route.StartRouting(db)
+	route.StartRouting(db, cld)
 }
 func handleServerError(err error) {
 	fmt.Printf("Error starting the server: %s\n", err)

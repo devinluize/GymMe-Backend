@@ -8,6 +8,7 @@ import (
 	menuRepository "GymMe-Backend/api/repositories/menu"
 	"errors"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 	"net/http"
 	"time"
@@ -198,8 +199,9 @@ func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginatio
 	fmt.Println(paginationResponses.Rows)
 	return paginationResponses, nil
 }
-func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
+func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int, cloudinary *cloudinary.Cloudinary) (helper.Pagination, *responses.ErrorResponses) {
 	//create history logging
+	//ctx := context.Background()
 	historyLogging := entities.SearchHistoryEntities{
 		UserId:     userId,
 		SearchKey:  Key,
@@ -213,6 +215,7 @@ func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationRes
 			Message:    err.Error(),
 		}
 	}
+
 	var Entities []entities.InformationEntities
 	//me := db.Model(&entities.InformationEntities{}) -> table joinan
 	//cara 1
@@ -223,6 +226,18 @@ func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationRes
 	if err != nil {
 		return paginationResponses, &responses.ErrorResponses{}
 	}
+
+	for i2, entity := range Entities {
+		urls, _ := cloudinary.Image(entity.InformationHeaderPathContent)
+		//res.SortOf = url
+		Entities[i2].InformationHeaderPathContent = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+			urls.AssetType,       // e.g., "image"
+			urls.DeliveryType,    // e.g., "upload"
+			urls.PublicID+".jpg", // Add appropriate file extension
+		)
+	}
+
 	paginationResponses.Rows = Entities
 	fmt.Println(paginationResponses.Rows)
 	return paginationResponses, nil

@@ -63,8 +63,11 @@ func (controller *WeightHistoryRepositoryImpl) PostWeightNotes(db *gorm.DB, payl
 			Err:        err,
 		}
 	}
-	heightMeterSquare := math.Pow(profile.UserHeight/100, 2)
-	WeightHistoryEntities.UserBmi = payloads.UserWeight / heightMeterSquare
+	if profile.UserHeight != 0 {
+		heightMeterSquare := math.Pow(profile.UserHeight/100, 2)
+		WeightHistoryEntities.UserBmi = payloads.UserWeight / heightMeterSquare
+	}
+
 	err = db.Create(&WeightHistoryEntities).Scan(&WeightHistoryEntities).Error
 	if err != nil {
 		return WeightHistoryEntities, &responses.ErrorResponses{

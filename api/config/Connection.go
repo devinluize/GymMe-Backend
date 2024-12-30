@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"net/url"
 	"time"
 
@@ -113,6 +114,14 @@ func InitDB() *gorm.DB {
 	return db
 }
 
+func InitCloudinary() *cloudinary.Cloudinary {
+	cld, errr := cloudinary.NewFromURL("cloudinary://695971277991789:jXnWGXSCY230XQ_5QUtMGcb9T18@dlrd9z1mk")
+	if errr != nil {
+		log.Fatal("Request Timeout ", errr)
+	}
+	cld.Config.URL.Secure = true
+	return cld
+}
 func InitRedisDB() *Database {
 	client := goredis.NewClient(&goredis.Options{
 		Addr:     fmt.Sprintf("%s:%v", EnvConfigs.RedisHost, EnvConfigs.RedisPort),

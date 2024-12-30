@@ -68,6 +68,11 @@ func (e *EquipmentBookmarkControllerImpl) GetEquipmentBookmarkByUserId(writer ht
 		helper.ReturnError(writer, err)
 		return
 	}
+	if len(res) == 0 {
+		helper.HandleSuccess(writer, []string{}, "success to get bookmark", http.StatusOK)
+		return
+
+	}
 	helper.HandleSuccess(writer, res, "success to get bookmark", http.StatusOK)
 }
 

@@ -184,7 +184,6 @@ func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWrite
 //	@Router			/api/information/search [get]
 func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
-
 	pagination := helper.Pagination{
 		Limit:  helper.NewGetQueryInt(queryValues, "limit"),
 		Page:   helper.NewGetQueryInt(queryValues, "page"),
