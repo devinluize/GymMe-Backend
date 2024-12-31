@@ -96,7 +96,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 
 	//bookmark
 	BookmarkRepository := MenuImplRepositories.NewBookmarkRepositoryImpl()
-	BookmarkService := menuserviceimpl.NewBookmarkServiceImpl(db, BookmarkRepository)
+	BookmarkService := menuserviceimpl.NewBookmarkServiceImpl(db, BookmarkRepository, cld)
 	BookmarkController := menucontroller.NewBookmarkController(BookmarkService)
 
 	//equipment course

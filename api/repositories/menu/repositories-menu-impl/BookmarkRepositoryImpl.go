@@ -6,6 +6,8 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/menu"
 	"errors"
+	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -67,13 +69,23 @@ func (repository *BookmarkRepositoryImpl) RemoveBookmark(db *gorm.DB, userId int
 	return true, nil
 }
 
-func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int) ([]MenuPayloads.GetAllBookmarkResponse, *responses.ErrorResponses) {
+func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int, cld *cloudinary.Cloudinary) ([]MenuPayloads.GetAllBookmarkResponse, *responses.ErrorResponses) {
 	var InfoResponses []MenuPayloads.GetAllBookmarkResponse
 
 	err := db.Table("mtr_bookmark A").
 		Joins("INNER JOIN mtr_information B ON A.information_id = B.information_id").
 		Where("A.user_id = ?", userId).
 		Select("B.*,A.*").Scan(&InfoResponses).Error
+	for i, v := range InfoResponses {
+		urls, _ := cld.Image(v.InformationHeaderPathContent)
+		//res.SortOf = url
+		InfoResponses[i].InformationHeaderPathContent = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+			urls.AssetType,       // e.g., "image"
+			urls.DeliveryType,    // e.g., "upload"
+			urls.PublicID+".jpg", // Add appropriate file extension
+		)
+	}
 
 	if err != nil {
 		return InfoResponses, &responses.ErrorResponses{
