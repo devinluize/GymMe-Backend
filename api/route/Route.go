@@ -106,7 +106,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 
 	//equipment bookmark
 	EquipmentBookmarkRepository := repositoriesEquipmentImpl.NewEquipmentBookmarkRepositoryImpl()
-	EquipmentBookmarkService := EquipmentServiceImpl.NewEquipmentBookmarkServiceImpl(EquipmentBookmarkRepository, db)
+	EquipmentBookmarkService := EquipmentServiceImpl.NewEquipmentBookmarkServiceImpl(EquipmentBookmarkRepository, db, cld)
 	EquipmentBookmarkController := EquipmentController.NewEquipmentBookmarkControllerImpl(EquipmentBookmarkService)
 
 	//

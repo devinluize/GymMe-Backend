@@ -141,7 +141,7 @@ func (i *InformationMenu) InsertInformation(tx *gorm.DB, payloads MenuPayloads.I
 	}
 	return Entities, nil
 }
-func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
+func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int, cld *cloudinary.Cloudinary) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
 	EntitiesInfo := entities.InformationEntities{}
 	err := db.Model(&entities.InformationEntities{}).Where(entities.InformationEntities{InformationId: id}).First(&EntitiesInfo).Error
 	if err != nil {
@@ -162,6 +162,15 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int) (M
 	}
 	SelectPayload := []MenuPayloads.InformationBodyDetail{}
 	for _, detail := range ResDetail {
+		urls, _ := cld.Image(detail.InformationImageContentPath)
+		//res.SortOf = url
+		detail.InformationImageContentPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+			urls.AssetType,       // e.g., "image"
+			urls.DeliveryType,    // e.g., "upload"
+			urls.PublicID+".jpg", // Add appropriate file extension
+		)
+		
 		SelectPayloadData := MenuPayloads.InformationBodyDetail{
 			InformationBodyParagraph:    detail.InformationBodyParagraph,
 			InformationImageContentPath: detail.InformationImageContentPath,
@@ -169,15 +178,26 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int) (M
 		SelectPayload = append(SelectPayload, SelectPayloadData)
 	}
 	isBookmarkExist := false
+	urls, _ := cld.Image(EntitiesInfo.InformationHeaderPathContent)
+	//res.SortOf = url
+	EntitiesInfo.InformationHeaderPathContent = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+		urls.AssetType,       // e.g., "image"
+		urls.DeliveryType,    // e.g., "upload"
+		urls.PublicID+".jpg", // Add appropriate file extension
+	)
+
+	//EntitiesInfo.InformationHeaderPathContent
 	err = db.Model(&entities.Bookmark{}).Where(entities.Bookmark{InformationId: id, UserId: userId}).Select("1").
 		Scan(&isBookmarkExist).Error
 	result := MenuPayloads.InformationSelectResponses{
-		InformationHeader:          EntitiesInfo.InformationHeader,
-		InformationDateCreated:     EntitiesInfo.InformationDateCreated,
-		InformationCreatedByUserId: EntitiesInfo.InformationCreatedByUserId,
-		InformationId:              id,
-		IsBookmark:                 isBookmarkExist,
-		InformationBodyContent:     SelectPayload,
+		InformationHeader:            EntitiesInfo.InformationHeader,
+		InformationDateCreated:       EntitiesInfo.InformationDateCreated,
+		InformationCreatedByUserId:   EntitiesInfo.InformationCreatedByUserId,
+		InformationId:                id,
+		IsBookmark:                   isBookmarkExist,
+		InformationBodyContent:       SelectPayload,
+		InformationHeaderPathContent: EntitiesInfo.InformationHeaderPathContent,
 		//InformationTypeId:          EntitiesInfo.InformationTypeId,
 	}
 	return result, nil

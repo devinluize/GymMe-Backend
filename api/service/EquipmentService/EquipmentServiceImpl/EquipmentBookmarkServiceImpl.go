@@ -7,17 +7,19 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/Equipment"
 	"GymMe-Backend/api/service/EquipmentService"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 )
 
 type EquipmentBookmarkServiceImpl struct {
 	repository menuRepository.EquipmentBookmarkRepository
 	db         *gorm.DB
+	cld        *cloudinary.Cloudinary
 }
 
 func (e *EquipmentBookmarkServiceImpl) GetEquipmentBookmarkByUserId(userId int) ([]Equipment.GetBookmarkEquipmentResponse, *responses.ErrorResponses) {
 	trans := e.db.Begin()
-	res, err := e.repository.GetEquipmentBookmarkByUserId(trans, userId)
+	res, err := e.repository.GetEquipmentBookmarkByUserId(trans, userId, e.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -45,7 +47,7 @@ func (e *EquipmentBookmarkServiceImpl) RemoveEquipmentBookmark(userId, equipment
 	return res, nil
 }
 
-func NewEquipmentBookmarkServiceImpl(repository menuRepository.EquipmentBookmarkRepository, db *gorm.DB) EquipmentService.EquipmentBookmarkService {
+func NewEquipmentBookmarkServiceImpl(repository menuRepository.EquipmentBookmarkRepository, db *gorm.DB, cld *cloudinary.Cloudinary) EquipmentService.EquipmentBookmarkService {
 	return &EquipmentBookmarkServiceImpl{repository: repository, db: db}
 
 }

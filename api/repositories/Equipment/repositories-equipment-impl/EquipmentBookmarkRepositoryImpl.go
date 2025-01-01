@@ -6,6 +6,8 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/Equipment"
 	"errors"
+	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -66,7 +68,7 @@ func (e *EquipmentBookmarkRepositoryImpl) RemoveEquipmentBookmark(db *gorm.DB, u
 	}
 	return true, nil
 }
-func (e *EquipmentBookmarkRepositoryImpl) GetEquipmentBookmarkByUserId(db *gorm.DB, userId int) ([]Equipment.GetBookmarkEquipmentResponse, *responses.ErrorResponses) {
+func (e *EquipmentBookmarkRepositoryImpl) GetEquipmentBookmarkByUserId(db *gorm.DB, userId int, cld *cloudinary.Cloudinary) ([]Equipment.GetBookmarkEquipmentResponse, *responses.ErrorResponses) {
 	var response []Equipment.GetBookmarkEquipmentResponse
 	var equipmentBookmark []entities.EquipmentBookmark
 	err := db.Model(&entities.EquipmentBookmark{}).
@@ -114,6 +116,14 @@ func (e *EquipmentBookmarkRepositoryImpl) GetEquipmentBookmarkByUserId(db *gorm.
 				}
 			}
 		}
+		urls, _ := cld.Image(equipmentMaster.EquipmentPhotoPath)
+		//res.SortOf = url
+		equipmentMaster.EquipmentPhotoPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+			urls.AssetType,       // e.g., "image"
+			urls.DeliveryType,    // e.g., "upload"
+			urls.PublicID+".jpg", // Add appropriate file extension
+		)
 		resp := Equipment.GetBookmarkEquipmentResponse{
 			UserId:              bookmark.UserId,
 			EquipmentName:       equipmentMaster.EquipmentName,

@@ -14,10 +14,11 @@ type InformationInsertPayloads struct {
 	//InformationTypeId            int                     `json:"information_type_id"`
 }
 type InformationSelectResponses struct {
-	InformationHeader          string    `json:"information_header"`
-	InformationDateCreated     time.Time `gorm:"column:information_date_created" json:"information_date_created"`
-	InformationCreatedByUserId int       `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
-	InformationId              int       `gorm:"column:information_id;not null;primaryKey" json:"information_id"`
+	InformationHeader            string    `json:"information_header"`
+	InformationDateCreated       time.Time `gorm:"column:information_date_created" json:"information_date_created"`
+	InformationCreatedByUserId   int       `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
+	InformationId                int       `gorm:"column:information_id;not null;primaryKey" json:"information_id"`
+	InformationHeaderPathContent string    `gorm:"column:information_header_path_content" json:"information_header_image_path"`
 
 	InformationBodyContent []InformationBodyDetail `json:"information_body_content"`
 	IsBookmark             bool                    `json:"is_bookmark"`
