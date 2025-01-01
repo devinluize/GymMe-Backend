@@ -48,6 +48,6 @@ func (e *EquipmentBookmarkServiceImpl) RemoveEquipmentBookmark(userId, equipment
 }
 
 func NewEquipmentBookmarkServiceImpl(repository menuRepository.EquipmentBookmarkRepository, db *gorm.DB, cld *cloudinary.Cloudinary) EquipmentService.EquipmentBookmarkService {
-	return &EquipmentBookmarkServiceImpl{repository: repository, db: db}
+	return &EquipmentBookmarkServiceImpl{repository: repository, db: db, cld: cld}
 
 }
