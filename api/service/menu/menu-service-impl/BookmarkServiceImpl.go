@@ -19,7 +19,7 @@ type BookmarkServiceImpl struct {
 
 func NewBookmarkServiceImpl(db *gorm.DB, repo menuRepository.BookmarkRepository, cld *cloudinary.Cloudinary) menu.BookmarkService {
 
-	return &BookmarkServiceImpl{db: db, repo: repo}
+	return &BookmarkServiceImpl{db: db, repo: repo, cld: cld}
 }
 func (s *BookmarkServiceImpl) AddBookmark(userId int, menuId int) (entities.Bookmark, *responses.ErrorResponses) {
 	trans := s.db.Begin()
