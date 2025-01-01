@@ -162,15 +162,16 @@ func (i *InformationMenu) GetInformationById(db *gorm.DB, id int, userId int, cl
 	}
 	SelectPayload := []MenuPayloads.InformationBodyDetail{}
 	for _, detail := range ResDetail {
-		urls, _ := cld.Image(detail.InformationImageContentPath)
-		//res.SortOf = url
-		detail.InformationImageContentPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
-			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
-			urls.AssetType,       // e.g., "image"
-			urls.DeliveryType,    // e.g., "upload"
-			urls.PublicID+".jpg", // Add appropriate file extension
-		)
-		
+		if detail.InformationImageContentPath != "" {
+			urls, _ := cld.Image(detail.InformationImageContentPath)
+			//res.SortOf = url
+			detail.InformationImageContentPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+				"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+				urls.AssetType,       // e.g., "image"
+				urls.DeliveryType,    // e.g., "upload"
+				urls.PublicID+".jpg", // Add appropriate file extension
+			)
+		}
 		SelectPayloadData := MenuPayloads.InformationBodyDetail{
 			InformationBodyParagraph:    detail.InformationBodyParagraph,
 			InformationImageContentPath: detail.InformationImageContentPath,
