@@ -30,23 +30,24 @@ type InsertEquipmentCourseDataPayload struct {
 }
 
 type GetCourseByIdResponse struct {
-	EquipmentCourseDataId   int                              `gorm:"column:equipment_mapping_data_id;primaryKey" json:"equipment_mapping_data_id"`
-	EquipmentCourseDataName string                           `gorm:"column:equipment_mapping_data_name" json:"equipment_mapping_data_entity_name"`
-	EquipmentMasterId       int                              `gorm:"column:equipment_master_id" json:"equipment_master_id"`
-	EquipmentMasterName     string                           `json:"equipment_master_name"`
-	VideoTutorialVideoPath  string                           `gorm:"column:video_tutorial_video_path" json:"video_tutorial_video_path"`
-	EquipmentDifficultyId   int                              `gorm:"column:equipment_difficulty_id" json:"equipment_difficulty_id"`
-	EquipmentDifficultyName string                           `json:"equipment_difficulty_name"`
-	EquipmentTypeId         int                              `gorm:"column:equipment_type_id" json:"equipment_type_id"`
-	EquipmentTypeName       string                           `json:"equipment_type_name"`
-	ForceTypeId             int                              `gorm:"column:force_type_id" json:"force_type_id"`
-	ForceTypeName           string                           `json:"force_type_name"`
-	MuscleGroupId           int                              `gorm:"column:muscle_group_id" json:"muscle_group_id"`
-	MuscleGroupName         string                           `json:"muscle_group_name"`
-	EquipmentProfileId      int                              `json:"equipment_profile_id"`
-	EquipmentProfileName    string                           `json:"equipment_profile_name"`
-	EquipmentDetail         []entities.EquipmentDetailEntity `json:"equipment_detail"`
-	IsBookmark              bool                             `json:"is_bookmark"`
+	EquipmentCourseDataId    int                              `gorm:"column:equipment_mapping_data_id;primaryKey" json:"equipment_mapping_data_id"`
+	EquipmentCourseDataName  string                           `gorm:"column:equipment_mapping_data_name" json:"equipment_mapping_data_entity_name"`
+	EquipmentMasterId        int                              `gorm:"column:equipment_master_id" json:"equipment_master_id"`
+	EquipmentMasterName      string                           `json:"equipment_master_name"`
+	VideoTutorialVideoPath   string                           `gorm:"column:video_tutorial_video_path" json:"video_tutorial_video_path"`
+	EquipmentDifficultyId    int                              `gorm:"column:equipment_difficulty_id" json:"equipment_difficulty_id"`
+	EquipmentDifficultyName  string                           `json:"equipment_difficulty_name"`
+	EquipmentTypeId          int                              `gorm:"column:equipment_type_id" json:"equipment_type_id"`
+	EquipmentTypeName        string                           `json:"equipment_type_name"`
+	ForceTypeId              int                              `gorm:"column:force_type_id" json:"force_type_id"`
+	ForceTypeName            string                           `json:"force_type_name"`
+	MuscleGroupId            int                              `gorm:"column:muscle_group_id" json:"muscle_group_id"`
+	MuscleGroupName          string                           `json:"muscle_group_name"`
+	EquipmentProfileId       int                              `json:"equipment_profile_id"`
+	EquipmentProfileName     string                           `json:"equipment_profile_name"`
+	EquipmentDetail          []entities.EquipmentDetailEntity `json:"equipment_detail"`
+	IsBookmark               bool                             `json:"is_bookmark"`
+	EquipmentMusclePhotoPath string                           `gorm:"equipment_muscle_photo_path" json:"equipment_muscle_photo_path"`
 }
 type AiLensPayload struct {
 	//CloudinaryPublicId string `json:"cloudinary_public_id"`

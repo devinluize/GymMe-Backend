@@ -6,6 +6,8 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/Equipment"
 	"errors"
+	"fmt"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 	"net/http"
 	"time"
@@ -115,7 +117,7 @@ func (e *EquipmentCourseRepositoryImpl) InsertEquipmentCourse(db *gorm.DB, paylo
 	}
 	return entitiesCourseData, nil
 }
-func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
+func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId int, cld *cloudinary.Cloudinary) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
 	courseEntities := entities.EquipmentCourseDataEntity{}
 	response := Equipment.GetCourseByIdResponse{}
 	err := db.Model(&courseEntities).Where(entities.EquipmentCourseDataEntity{EquipmentCourseDataId: courseId}).First(&courseEntities).Error
@@ -126,6 +128,37 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 			StatusCode: http.StatusInternalServerError,
 		}
 	}
+	urls, errImage := cld.Image(courseEntities.EquipmentMusclePhotoPath)
+	if errImage != nil {
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "error getting image with public id",
+		}
+	}
+	//res.SortOf = url
+	courseEntities.EquipmentMusclePhotoPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+		urls.AssetType,       // e.g., "image"
+		urls.DeliveryType,    // e.g., "upload"
+		urls.PublicID+".jpg", // Add appropriate file extension
+	)
+	urlsVideo, errVideo := cld.Video(courseEntities.VideoTutorialVideoPath)
+	if errVideo != nil {
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "error getting video with public id",
+		}
+	}
+	//res.SortOf = url
+	courseEntities.VideoTutorialVideoPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		"dlrd9z1mk",               // Replace with your Cloudinary cloud name
+		urlsVideo.AssetType,       // e.g., "image"
+		urlsVideo.DeliveryType,    // e.g., "upload"
+		urlsVideo.PublicID+".mp4", // Add appropriate file extension
+	)
+
 	var courseDetailEntities []entities.EquipmentDetailEntity
 	err = db.Model(&entities.EquipmentDetailEntity{}).
 		Where(entities.EquipmentDetailEntity{EquipmentCourseDataId: courseId}).
@@ -137,6 +170,7 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 			Message:    err.Error(),
 		}
 	}
+
 	//get equipmentMasterName
 	equipmentMaster := entities.EquipmentMasterEntities{}
 	err = db.Model(&equipmentMaster).Where(entities.EquipmentMasterEntities{EquipmentId: courseEntities.EquipmentMasterId}).
@@ -279,7 +313,7 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 	return response, nil
 
 }
-func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
+func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int, cld *cloudinary.Cloudinary) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
 	//get entities with equipment key
 	var EquipmentResponse []entities.EquipmentMasterEntities
 
@@ -306,6 +340,24 @@ func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, Equipm
 			Message:    "failed to get equipment by key",
 		}
 	}
+	for i, masterEntities := range EquipmentResponse {
+		urls, errImage := cld.Image(masterEntities.EquipmentPhotoPath)
+		if errImage != nil {
+			return EquipmentResponse, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+				Message:    "error getting image with public id",
+			}
+		}
+		//res.SortOf = url
+		EquipmentResponse[i].EquipmentPhotoPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+			urls.AssetType,       // e.g., "image"
+			urls.DeliveryType,    // e.g., "upload"
+			urls.PublicID+".jpg", // Add appropriate file extension
+		)
+	}
+
 	return EquipmentResponse, nil
 }
 func (e *EquipmentCourseRepositoryImpl) GetEquipmentSearchHistoryByKey(db *gorm.DB, userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses) {

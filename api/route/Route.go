@@ -101,7 +101,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 
 	//equipment course
 	EquipmentCourseRepository := repositoriesEquipmentImpl.NewEquipmentCourseRepositoryImpl()
-	EquipmentCourseService := EquipmentServiceImpl.NewEquipmentCourseServiceImpl(db, EquipmentCourseRepository)
+	EquipmentCourseService := EquipmentServiceImpl.NewEquipmentCourseServiceImpl(db, EquipmentCourseRepository, cld)
 	EquipmentCourseController := EquipmentController.NewEquipmentCourseControllerImpl(EquipmentCourseService)
 
 	//equipment bookmark
