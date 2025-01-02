@@ -12,7 +12,9 @@ import (
 )
 
 func Migrate() {
-	configenv.InitEnvConfigs(false, "")
+	//configenv.InitEnvConfigs(false, "")
+	configenv.InitEnvConfigs()
+
 	logEntry := "Auto Migrating to database"
 	//dsn := "Server=localhost\\MSSQLSERVER01;Database=GymMe;Trusted_Connection=True;"
 	//dsn := fmt.Sprintf("sqlserver://34.101.163.215:%d?database=%s&connection+timeout=30&encrypt=disable&trustServerCertificate=false&app name=SqlClient",
@@ -72,42 +74,42 @@ func Migrate() {
 
 	//end off drop all table
 	err = db.AutoMigrate(
-		//&entities.Users{},
-		//&entities.UserDetail{},
-		//&entities.Users{},
-		//&entities.PaymentMethod{},
-		//&entities.InformationType{},
-		//&entities.InformationEntities{},
-		//&entities.BookmarkType{},
-		//&entities.Bookmark{},
-		//&entities.InformationBodyEntities{},
-		//&entities.WeightHistoryEntities{},
-		//&entities.CalendarEntity{},
-		//&entities.WeightHistoryEntities{},
-		//&entities.TimerEntity{},
-		////-----
-		//&entities.TimerQueueEntity{},
-		////equipment
-		//&entities2.EquipmentDetailEntity{},
-		//&entities2.EquipmentDetailEntity{},
-		//&entities2.EquipmentDifficultyEntities{},
-		//
-		////$entities2.EquipmentMasterEntities{}
-		//&entities2.EquipmentMasterEntities{},
-		//&entities2.EquipmentTypeEntity{},
-		//&entities2.ForceTypeEntities{},
-		//&entities2.MuscleGroupEntities{},
-		//&entities2.EquipmentProfileEntity{},
-		//
-		//&entities2.EquipmentDetailEntity{},
+	//&entities.Users{},
+	//&entities.UserDetail{},
+	//&entities.Users{},
+	//&entities.PaymentMethod{},
+	//&entities.InformationType{},
+	//&entities.InformationEntities{},
+	//&entities.BookmarkType{},
+	//&entities.Bookmark{},
+	//&entities.InformationBodyEntities{},
+	//&entities.WeightHistoryEntities{},
+	//&entities.CalendarEntity{},
+	//&entities.WeightHistoryEntities{},
+	//&entities.TimerEntity{},
+	////-----
+	//&entities.TimerQueueEntity{},
+	////equipment
+	//&entities2.EquipmentDetailEntity{},
+	//&entities2.EquipmentDetailEntity{},
+	//&entities2.EquipmentDifficultyEntities{},
+	//
+	////$entities2.EquipmentMasterEntities{}
+	//&entities2.EquipmentMasterEntities{},
+	//&entities2.EquipmentTypeEntity{},
+	//&entities2.ForceTypeEntities{},
+	//&entities2.MuscleGroupEntities{},
+	//&entities2.EquipmentProfileEntity{},
+	//
+	//&entities2.EquipmentDetailEntity{},
 
-		//------
-		//&entities2.EquipmentCourseDataEntity{},
-		//
-		//&entities.EquipmentCourseDataEntity{},
-		//&entities2.EquipmentBookmark{},
-		//&entities2.SearchHistoryEntities{},
-		//&entities.EquipmentSearchHistoryEntities{},
+	//------
+	//&entities2.EquipmentCourseDataEntity{},
+	//
+	//&entities.EquipmentCourseDataEntity{},
+	//&entities2.EquipmentBookmark{},
+	//&entities2.SearchHistoryEntities{},
+	//&entities.EquipmentSearchHistoryEntities{},
 	)
 
 	//&entities.EquipmentTypeEntity{},
