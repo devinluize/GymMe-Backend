@@ -52,6 +52,7 @@ func (controller *AuthControllerImpl) Register(writer http.ResponseWriter, reque
 		helper.WriteToResponseBody(writer, loginReq)
 		return
 	}
+
 	expTime := time.Now().Add(time.Hour * 1000)
 
 	claims := configenv.JWTClaim{

@@ -35,8 +35,9 @@ func main() {
 	if len(args) > 1 {
 		env = args[1]
 	}
-	configenv.InitEnvConfigs(false, env)
-
+	//configenv.InitEnvConfigs(false, env)
+	configenv.InitEnvConfigs()
+	fmt.Println(configenv.EnvConfigs)
 	if env == "migrate" {
 		fmt.Println("dasdsa")
 		migration.Migrate()
