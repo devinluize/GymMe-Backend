@@ -39,7 +39,7 @@ func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gor
 	equipmentMasterEntities := entities.EquipmentMasterEntities{}
 	err = db.Model(&equipmentMasterEntities).
 		Where(entities.EquipmentMasterEntities{EquipmentId: equipmentId}).
-		First(&response).Error
+		Scan(&equipmentMasterEntities).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return response, &responses.ErrorResponses{
@@ -63,6 +63,9 @@ func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gor
 			EquipmentMappingName: mappingEntity.EquipmentCourseDataName,
 		}
 		response.EquipmentMappingData = append(response.EquipmentMappingData, detail)
+		response.EquipmentName = equipmentMasterEntities.EquipmentName
+		response.EquipmentPhotoPath = equipmentMasterEntities.EquipmentPhotoPath
+		response.EquipmentId = equipmentMasterEntities.EquipmentId
 	}
 	return response, nil
 }

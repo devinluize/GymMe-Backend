@@ -6,7 +6,6 @@ import (
 	"GymMe-Backend/api/payloads/Equipment"
 	"GymMe-Backend/api/payloads/responses"
 	"GymMe-Backend/api/service/EquipmentService"
-	"bytes"
 	"encoding/json"
 	"errors"
 	"github.com/go-chi/chi/v5"
@@ -99,28 +98,28 @@ func (e *EquipmentCourseControllerImpl) SearchEquipmentByKey(writer http.Respons
 func (e *EquipmentCourseControllerImpl) AiLensEquipmentSearch(writer http.ResponseWriter, request *http.Request) {
 	queryvalue := request.URL.Query()
 	publicId := queryvalue.Get("cloudinary_public_id")
-	var equipmentMaster Equipment.AiLensPayload
-	err := helper.ReadFromRequestBody(request, &equipmentMaster)
-	if err != nil {
-		helper.ReturnError(writer, err)
-		return
-	}
+	//var equipmentMaster Equipment.AiLensPayload
+	//err := helper.ReadFromRequestBody(request, &equipmentMaster)
+	//if err != nil {
+	//	helper.ReturnError(writer, err)
+	//	return
+	//}
 	//hit endpoint python
 	// Convert equipmentMaster to JSON
 	//equipmentMaster.UserId = 3
 	//equipmentMaster.ImageUrl = "THIS IS IMAGE URL FROM GOLANG"
-	jsonData, errMarshal := json.Marshal(equipmentMaster)
-	if errMarshal != nil {
-		helper.ReturnError(writer, &responses.ErrorResponses{
-			StatusCode: http.StatusInternalServerError,
-			Err:        errMarshal,
-			Message:    "failed to marshal equipmentMaster to JSON",
-		})
-		return
-	}
+	//jsonData, errMarshal := json.Marshal(equipmentMaster)
+	//if errMarshal != nil {
+	//	helper.ReturnError(writer, &responses.ErrorResponses{
+	//		StatusCode: http.StatusInternalServerError,
+	//		Err:        errMarshal,
+	//		Message:    "failed to marshal equipmentMaster to JSON",
+	//	})
+	//	return
+	//}
 	encodedPath := url.QueryEscape(publicId)
 	pythonEndpoint := configenv.EnvConfigs.AiBackendHost + "api/ailens?cloudinary_path=" + encodedPath
-	req, errRequest := http.NewRequest("POST", pythonEndpoint, bytes.NewBuffer(jsonData))
+	req, errRequest := http.NewRequest("POST", pythonEndpoint, nil)
 	if errRequest != nil {
 		helper.ReturnError(writer, &responses.ErrorResponses{
 			StatusCode: http.StatusInternalServerError,
