@@ -7,18 +7,21 @@ import (
 	"GymMe-Backend/api/payloads/responses"
 	menuRepository "GymMe-Backend/api/repositories/Equipment"
 	"GymMe-Backend/api/service/EquipmentService"
+	"github.com/cloudinary/cloudinary-go/v2"
 	"gorm.io/gorm"
 )
 
 type EquipmentCourseServiceImpl struct {
 	repository menuRepository.EquipmentCourseRepository
 	db         *gorm.DB
+	cld        *cloudinary.Cloudinary
 }
 
-func NewEquipmentCourseServiceImpl(db *gorm.DB, repository menuRepository.EquipmentCourseRepository) EquipmentService.EquipmentCourseService {
+func NewEquipmentCourseServiceImpl(db *gorm.DB, repository menuRepository.EquipmentCourseRepository, cld *cloudinary.Cloudinary) EquipmentService.EquipmentCourseService {
 	return &EquipmentCourseServiceImpl{
 		db:         db,
 		repository: repository,
+		cld:        cld,
 	}
 }
 func (s *EquipmentCourseServiceImpl) GetAllEquipmentCourseByEquipment(equipmentId int) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses) {
@@ -41,7 +44,7 @@ func (s *EquipmentCourseServiceImpl) InsertEquipmentCourse(payload Equipment.Ins
 }
 func (s *EquipmentCourseServiceImpl) GetEquipmentCourse(courseId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repository.GetEquipmentCourse(trans, courseId)
+	res, err := s.repository.GetEquipmentCourse(trans, courseId, s.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -50,7 +53,7 @@ func (s *EquipmentCourseServiceImpl) GetEquipmentCourse(courseId int) (Equipment
 }
 func (s *EquipmentCourseServiceImpl) SearchEquipmentByKey(EquipmentKey string, userId int) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repository.SearchEquipmentByKey(trans, EquipmentKey, userId)
+	res, err := s.repository.SearchEquipmentByKey(trans, EquipmentKey, userId, s.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
