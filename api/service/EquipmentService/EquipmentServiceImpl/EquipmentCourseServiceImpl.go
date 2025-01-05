@@ -26,7 +26,7 @@ func NewEquipmentCourseServiceImpl(db *gorm.DB, repository menuRepository.Equipm
 }
 func (s *EquipmentCourseServiceImpl) GetAllEquipmentCourseByEquipment(equipmentId int) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repository.GetAllEquipmentCourseByEquipment(trans, equipmentId)
+	res, err := s.repository.GetAllEquipmentCourseByEquipment(trans, equipmentId, s.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
