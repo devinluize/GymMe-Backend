@@ -20,7 +20,7 @@ func NewEquipmentCourseRepositoryImpl() menuRepository.EquipmentCourseRepository
 	return &EquipmentCourseRepositoryImpl{}
 
 }
-func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gorm.DB, equipmentId int) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses) {
+func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gorm.DB, equipmentId int, cld *cloudinary.Cloudinary) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses) {
 	var mappingEntities []entities.EquipmentCourseDataEntity
 	var response Equipment.GetAllCourseEquipmentResponse
 	err := db.Model(&entities.EquipmentCourseDataEntity{}).
@@ -64,9 +64,24 @@ func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gor
 		}
 		response.EquipmentMappingData = append(response.EquipmentMappingData, detail)
 		response.EquipmentName = equipmentMasterEntities.EquipmentName
-		response.EquipmentPhotoPath = equipmentMasterEntities.EquipmentPhotoPath
 		response.EquipmentId = equipmentMasterEntities.EquipmentId
 	}
+	urls, errImage := cld.Image(equipmentMasterEntities.EquipmentPhotoPath)
+	if errImage != nil {
+		return response, &responses.ErrorResponses{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+			Message:    "error getting image with public id",
+		}
+	}
+	//res.SortOf = url
+	response.EquipmentPhotoPath = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		"dlrd9z1mk",          // Replace with your Cloudinary cloud name
+		urls.AssetType,       // e.g., "image"
+		urls.DeliveryType,    // e.g., "upload"
+		urls.PublicID+".jpg", // Add appropriate file extension
+	)
+
 	return response, nil
 }
 func (e *EquipmentCourseRepositoryImpl) InsertEquipmentCourse(db *gorm.DB, payload Equipment.InsertEquipmentCourseDataPayload) (entities.EquipmentCourseDataEntity, *responses.ErrorResponses) {
