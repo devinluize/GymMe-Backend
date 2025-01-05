@@ -1,6 +1,6 @@
 package entities
 
-const EquipmentCourseDataEntityTableName = "mtr_equipment_mapping_data"
+const EquipmentCourseDataEntityTableName = "mtr_equipment_course_data"
 
 type EquipmentCourseDataEntity struct {
 	EquipmentCourseDataId    int    `gorm:"column:equipment_mapping_data_id;primaryKey" json:"equipment_mapping_data_id"`
