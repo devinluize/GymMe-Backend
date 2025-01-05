@@ -334,21 +334,71 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 func (e *EquipmentCourseRepositoryImpl) SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int, cld *cloudinary.Cloudinary) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses) {
 	//get entities with equipment key
 	var EquipmentResponse []entities.EquipmentMasterEntities
+	if EquipmentKey != "" {
 
-	loggingEntity := entities.EquipmentSearchHistoryEntities{
-		UserId:     userId,
-		SearchKey:  EquipmentKey,
-		DateSearch: time.Now(),
-	}
-	err := db.Create(&loggingEntity).Error
-	if err != nil {
-		return EquipmentResponse, &responses.ErrorResponses{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-			Message:    err.Error(),
+		historyLogging := entities.EquipmentSearchHistoryEntities{
+			UserId:     userId,
+			SearchKey:  EquipmentKey,
+			DateSearch: time.Now(),
+		}
+
+		// Insert the new history record
+		err := db.Create(&historyLogging).Error
+		if err != nil {
+			return EquipmentResponse, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+				Message:    "failed to log search history",
+			}
+		}
+
+		// Check the total count of search history records for the user
+		//historyCount := 0
+		var historyCount int64
+		errCount := db.Model(&entities.EquipmentSearchHistoryEntities{}).
+			Where("user_id = ?", userId).
+			Count(&historyCount).Error
+		if errCount != nil {
+			return EquipmentResponse, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        errCount,
+				Message:    "failed to check search history count",
+			}
+		}
+
+		if historyCount > 10 {
+			var excessCount int
+			excessCount = int(historyCount) - 10
+			// Delete oldest records if the count exceeds the limit
+			var recordsToDelete []entities.EquipmentSearchHistoryEntities
+			errSelect := db.Where("user_id = ?", userId).
+				Order("date_search ASC").
+				Limit(excessCount).
+				Find(&recordsToDelete).Error
+			if errSelect != nil {
+				return EquipmentResponse, &responses.ErrorResponses{
+					StatusCode: http.StatusInternalServerError,
+					Err:        errSelect,
+					Message:    "failed to fetch old search history records",
+				}
+			}
+
+			// Step 2: Delete the fetched records
+			if len(recordsToDelete) > 0 {
+				errDelete := db.Delete(&recordsToDelete).Error
+				if errDelete != nil {
+					return EquipmentResponse, &responses.ErrorResponses{
+						StatusCode: http.StatusInternalServerError,
+						Err:        errDelete,
+						Message:    "failed to clean up old search history records",
+					}
+				}
+			}
 		}
 	}
-	err = db.Model(&entities.EquipmentMasterEntities{}).
+
+	/////////
+	err := db.Model(&entities.EquipmentMasterEntities{}).
 		Where("equipment_id <> 0 AND equipment_name LIKE ? ", "%"+EquipmentKey+"%").
 		Scan(&EquipmentResponse).Error
 	if err != nil {
