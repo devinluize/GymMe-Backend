@@ -223,18 +223,84 @@ func (i *InformationMenu) GetAllInformationWithPagination(db *gorm.DB, paginatio
 func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int, cloudinary *cloudinary.Cloudinary) (helper.Pagination, *responses.ErrorResponses) {
 	//create history logging
 	//ctx := context.Background()
-	historyLogging := entities.SearchHistoryEntities{
-		UserId:     userId,
-		SearchKey:  Key,
-		DateSearch: time.Now(),
-	}
-	err := db.Create(&historyLogging).Error
-	if err != nil {
-		return paginationResponses, &responses.ErrorResponses{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-			Message:    err.Error(),
+	if Key != "" {
+
+		historyLogging := entities.SearchHistoryEntities{
+			UserId:     userId,
+			SearchKey:  Key,
+			DateSearch: time.Now(),
 		}
+
+		// Insert the new history record
+		err := db.Create(&historyLogging).Error
+		if err != nil {
+			return paginationResponses, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+				Message:    "failed to log search history",
+			}
+		}
+
+		// Check the total count of search history records for the user
+		//historyCount := 0
+		var historyCount int64
+		errCount := db.Model(&entities.SearchHistoryEntities{}).
+			Where("user_id = ?", userId).
+			Count(&historyCount).Error
+		if errCount != nil {
+			return paginationResponses, &responses.ErrorResponses{
+				StatusCode: http.StatusInternalServerError,
+				Err:        errCount,
+				Message:    "failed to check search history count",
+			}
+		}
+
+		if historyCount > 10 {
+			var excessCount int
+			excessCount = int(historyCount) - 10
+			// Delete oldest records if the count exceeds the limit
+			var recordsToDelete []entities.SearchHistoryEntities
+			errSelect := db.Where("user_id = ?", userId).
+				Order("date_search ASC").
+				Limit(excessCount).
+				Find(&recordsToDelete).Error
+			if errSelect != nil {
+				return paginationResponses, &responses.ErrorResponses{
+					StatusCode: http.StatusInternalServerError,
+					Err:        errSelect,
+					Message:    "failed to fetch old search history records",
+				}
+			}
+
+			// Step 2: Delete the fetched records
+			if len(recordsToDelete) > 0 {
+				errDelete := db.Delete(&recordsToDelete).Error
+				if errDelete != nil {
+					return paginationResponses, &responses.ErrorResponses{
+						StatusCode: http.StatusInternalServerError,
+						Err:        errDelete,
+						Message:    "failed to clean up old search history records",
+					}
+				}
+			}
+		}
+
+		//	// Calculate how many records need to be deleted
+
+		//	fmt.Println("excess : ")
+		//	fmt.Println(excessCount)
+		//	// Delete the oldest records
+		//	errDelete := db.Where("user_id = ?", userId).
+		//		Order("date_search ASC"). // Assuming `date_search` is used to track record age
+		//		Limit(excessCount).
+		//		Delete(&entities.SearchHistoryEntities{}).Error
+		//	if errDelete != nil {
+		//		return paginationResponses, &responses.ErrorResponses{
+		//			StatusCode: http.StatusInternalServerError,
+		//			Err:        errDelete,
+		//			Message:    "failed to clean up old search history records",
+		//		}
+		//	}
 	}
 
 	var Entities []entities.InformationEntities
@@ -243,7 +309,7 @@ func (i *InformationMenu) GetAllInformationWithFilter(db *gorm.DB, paginationRes
 	joinTable := db.Model(&entities.InformationEntities{}).Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%")
 	//err := db.Model(&entities.InformationEntities{}).Scopes(database.Paginate(&Entities, &paginationResponses, me)).Order("information_id").Where("information_id <> 0").Scan(&Entities).Error
 	//cara 2 langsung assign ke database nanti pilih aja apakah perlu buat join table atau ga kalau misalkan selectan itu merupakan hasil join table pake yang atas
-	err = joinTable.Scopes(helper.Paginate(&Entities, &paginationResponses, joinTable)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
+	err := joinTable.Scopes(helper.Paginate(&Entities, &paginationResponses, joinTable)).Order("information_id").Where("information_id <> 0 AND information_header LIKE ? ", "%"+Key+"%").Scan(&Entities).Error
 	if err != nil {
 		return paginationResponses, &responses.ErrorResponses{}
 	}
