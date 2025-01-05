@@ -47,7 +47,9 @@ func main() {
 	//configenv.InitEnvConfigs(false, env)
 	db := configenv.InitDB()
 	cld := configenv.InitCloudinary()
-	//ds := configenv.EnvConfigs.Hostname
+
+	ds := configenv.EnvConfigs.Hostname
+	fmt.Println(ds)
 	route.StartRouting(db, cld)
 }
 func handleServerError(err error) {
