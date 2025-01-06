@@ -91,7 +91,7 @@ func (controller *CalendarControllerImpl) UpdateCalendar(writer http.ResponseWri
 
 	var UpdateCalendar MenuPayloads.CalendarUpdatePayload
 	helper.ReadFromRequestBody(request, &UpdateCalendar)
-	calendarId := chi.URLParam(request, "calendar_id")
+	calendarId := chi.URLParam(request, "event_id")
 	calendarIdInt, errConvert := strconv.Atoi(calendarId)
 	if errConvert != nil {
 		helper.ReturnError(writer, &responses.ErrorResponses{
@@ -123,7 +123,7 @@ func (controller *CalendarControllerImpl) UpdateCalendar(writer http.ResponseWri
 //	@Success		200		{object}	 responses.StandarAPIResponses
 //	@Router			/api/calendar/delete/{calendar_id} [delete]
 func (controller *CalendarControllerImpl) DeleteCalendarById(writer http.ResponseWriter, request *http.Request) {
-	calendarId := chi.URLParam(request, "calendar_id")
+	calendarId := chi.URLParam(request, "event_id")
 
 	InformationIds, err := strconv.Atoi(calendarId)
 	if err != nil {
