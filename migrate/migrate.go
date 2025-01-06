@@ -2,7 +2,6 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
-	"GymMe-Backend/api/entities"
 	"fmt"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -78,10 +77,10 @@ func Migrate() {
 		//&entities.Users{},
 		//&entities.PaymentMethod{},
 		//&entities.ArticleType{},
-		&entities.ArticleEntities{},
+		//&entities.ArticleEntities{},
 		//&entities.BookmarkType{},
-		&entities.Bookmark{},
-		&entities.ArticleBodyEntities{},
+		//&entities.Bookmark{},
+		//&entities.ArticleBodyEntities{},
 		//&entities.WeightHistoryEntities{},
 		//&entities.CalendarEntity{},
 		//&entities.WeightHistoryEntities{},
