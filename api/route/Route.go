@@ -72,9 +72,9 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 	authService := auth2.NewAuthServiceImpl(db, authRepository)
 	authController := auth3.NewAuthController(authService)
 
-	InformationRepository := MenuImplRepositories.NewInformationMenu()
-	InformationService := menuserviceimpl.NewInformationServiceImpl(InformationRepository, db, cld)
-	InformationController := menucontroller.NewInformatioControllerImpl(InformationService)
+	ArticleRepository := MenuImplRepositories.NewArticleMenu()
+	ArticleService := menuserviceimpl.NewArticleServiceImpl(ArticleRepository, db, cld)
+	ArticleController := menucontroller.NewInformatioControllerImpl(ArticleService)
 
 	ProfileRepository := MenuImplRepositories.NewProfileMenuRepositoryImpl()
 	ProfileService := menuserviceimpl.NewProfileServiceImpl(db, ProfileRepository)
@@ -111,7 +111,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 
 	//
 	AuthRouter := AuthRouter(authController)
-	InformationRouter := InformationRouter(InformationController)
+	ArticleRouter := ArticleRouter(ArticleController)
 	ProfileRouter := ProfileRouter(ProfileController)
 	WeightRouter := WeightRouter(WeightController)
 	CalendarRouter := CalendarRouter(CalendarController)
@@ -123,7 +123,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 	////////////////////////////////////////////
 
 	router.Mount("/user", AuthRouter)
-	router.Mount("/information", InformationRouter)
+	router.Mount("/article", ArticleRouter)
 	router.Mount("/profile", ProfileRouter)
 	router.Mount("/weight", WeightRouter)
 	router.Mount("/event", CalendarRouter)

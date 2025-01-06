@@ -51,8 +51,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "information_id",
-                        "name": "information_id",
+                        "description": "article_id",
+                        "name": "article_id",
                         "in": "query",
                         "required": true
                     }
@@ -129,8 +129,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "information_id",
-                        "name": "information_id",
+                        "description": "article_id",
+                        "name": "article_id",
                         "in": "query",
                         "required": true
                     }
@@ -181,7 +181,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/bookmark/{user_id}/{information_type_id}": {
+        "/api/bookmark/{user_id}/{article_type_id}": {
             "get": {
                 "security": [
                     {
@@ -209,7 +209,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "information_type_id",
+                        "description": "article_type_id",
                         "name": "user_id",
                         "in": "path",
                         "required": true
@@ -221,7 +221,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/MenuPayloads.InformationSelectResponses"
+                                "$ref": "#/definitions/MenuPayloads.ArticleSelectResponses"
                             }
                         }
                     }
@@ -414,14 +414,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/information": {
+        "/api/article": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get All Information By Pagination",
+                "description": "Get All Article By Pagination",
                 "consumes": [
                     "application/json"
                 ],
@@ -429,9 +429,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Get All Information By Pagination",
+                "summary": "Get All Article By Pagination",
                 "parameters": [
                     {
                         "type": "string",
@@ -466,7 +466,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entities.InformationEntities"
+                                "$ref": "#/definitions/entities.ArticleEntities"
                             }
                         }
                     },
@@ -514,7 +514,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create New Information",
+                "description": "Create New Article",
                 "consumes": [
                     "application/json"
                 ],
@@ -522,9 +522,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Create New Information",
+                "summary": "Create New Article",
                 "parameters": [
                     {
                         "description": "Insert Request",
@@ -532,7 +532,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/MenuPayloads.InformationInsertPayloads"
+                            "$ref": "#/definitions/MenuPayloads.ArticleInsertPayloads"
                         }
                     }
                 ],
@@ -587,7 +587,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Update Information",
+                "description": "Update Article",
                 "consumes": [
                     "application/json"
                 ],
@@ -595,9 +595,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Update Information",
+                "summary": "Update Article",
                 "parameters": [
                     {
                         "description": "Update Request",
@@ -605,7 +605,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/MenuPayloads.InformationUpdatePayloads"
+                            "$ref": "#/definitions/MenuPayloads.ArticleUpdatePayloads"
                         }
                     }
                 ],
@@ -619,14 +619,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/information/by-id/{information_id}": {
+        "/api/article/by-id/{article_id}": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get Information By Information",
+                "description": "Get Article By Article",
                 "consumes": [
                     "application/json"
                 ],
@@ -634,14 +634,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Get Information By Information",
+                "summary": "Get Article By Article",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "information_id",
-                        "name": "information_id",
+                        "description": "article_id",
+                        "name": "article_id",
                         "in": "path",
                         "required": true
                     }
@@ -650,7 +650,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.InformationEntities"
+                            "$ref": "#/definitions/entities.ArticleEntities"
                         }
                     },
                     "400": {
@@ -692,14 +692,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/information/delete/{information_id}": {
+        "/api/article/delete/{article_id}": {
             "delete": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete Information",
+                "description": "Delete Article",
                 "consumes": [
                     "application/json"
                 ],
@@ -707,14 +707,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Delete Information",
+                "summary": "Delete Article",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "information_id",
-                        "name": "information_id",
+                        "description": "article_id",
+                        "name": "article_id",
                         "in": "path",
                         "required": true
                     }
@@ -729,14 +729,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/information/search": {
+        "/api/article/search": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get All Information By Pagination With Filter",
+                "description": "Get All Article By Pagination With Filter",
                 "consumes": [
                     "application/json"
                 ],
@@ -744,9 +744,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Information"
+                    "Article"
                 ],
-                "summary": "Get All Information By Pagination With Filter",
+                "summary": "Get All Article By Pagination With Filter",
                 "parameters": [
                     {
                         "type": "string",
@@ -787,7 +787,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entities.InformationEntities"
+                                "$ref": "#/definitions/entities.ArticleEntities"
                             }
                         }
                     },
@@ -1287,85 +1287,85 @@ const docTemplate = `{
                 }
             }
         },
-        "MenuPayloads.InformationBodyDetail": {
+        "MenuPayloads.ArticleBodyDetail": {
             "type": "object",
             "properties": {
-                "information_body_paragraph": {
+                "article_body_paragraph": {
                     "type": "string"
                 },
-                "information_image_content_path": {
+                "article_image_content_path": {
                     "type": "string"
                 }
             }
         },
-        "MenuPayloads.InformationInsertPayloads": {
+        "MenuPayloads.ArticleInsertPayloads": {
             "type": "object",
             "properties": {
-                "information_body_paragraph": {
+                "article_body_paragraph": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/MenuPayloads.InformationBodyDetail"
+                        "$ref": "#/definitions/MenuPayloads.ArticleBodyDetail"
                     }
                 },
-                "information_header": {
+                "article_header": {
                     "type": "string"
                 },
-                "information_id": {
+                "article_id": {
                     "type": "integer"
                 },
-                "information_image_content_path_1": {
+                "article_image_content_path_1": {
                     "type": "string"
                 },
-                "information_image_content_path_2": {
+                "article_image_content_path_2": {
                     "type": "string"
                 },
-                "information_image_content_path_3": {
+                "article_image_content_path_3": {
                     "type": "string"
                 },
-                "information_image_content_path_4": {
+                "article_image_content_path_4": {
                     "type": "string"
                 },
-                "information_image_content_path_5": {
+                "article_image_content_path_5": {
                     "type": "string"
                 },
-                "information_type_id": {
+                "article_type_id": {
                     "type": "integer"
                 }
             }
         },
-        "MenuPayloads.InformationSelectResponses": {
+        "MenuPayloads.ArticleSelectResponses": {
             "type": "object",
             "properties": {
-                "information_body_content": {
+                "article_body_content": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/MenuPayloads.InformationBodyDetail"
+                        "$ref": "#/definitions/MenuPayloads.ArticleBodyDetail"
                     }
                 },
-                "information_created_by_user_id": {
+                "article_created_by_user_id": {
                     "type": "integer"
                 },
-                "information_date_created": {
+                "article_date_created": {
                     "type": "string"
                 },
-                "information_header": {
+                "article_header": {
                     "type": "string"
                 },
-                "information_type_id": {
+                "article_type_id": {
                     "type": "integer"
                 }
             }
         },
-        "MenuPayloads.InformationUpdatePayloads": {
+        "MenuPayloads.ArticleUpdatePayloads": {
             "type": "object",
             "properties": {
-                "information_body_content": {
+                "article_body_content": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/MenuPayloads.InformationBodyDetail"
+                        "$ref": "#/definitions/MenuPayloads.ArticleBodyDetail"
                     }
                 },
-                "information_id": {
+                "article_id": {
                     "type": "integer"
                 }
             }
@@ -1422,10 +1422,10 @@ const docTemplate = `{
                 "bookmark_type_id": {
                     "type": "integer"
                 },
-                "information": {
-                    "$ref": "#/definitions/entities.InformationEntities"
+                "article": {
+                    "$ref": "#/definitions/entities.ArticleEntities"
                 },
-                "information_id": {
+                "article_id": {
                     "type": "integer"
                 },
                 "user": {
@@ -1447,59 +1447,59 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.InformationBodyEntities": {
+        "entities.ArticleBodyEntities": {
             "type": "object",
             "properties": {
-                "information_body_id": {
+                "article_body_id": {
                     "type": "integer"
                 },
-                "information_body_paragraph": {
+                "article_body_paragraph": {
                     "type": "string"
                 },
-                "information_id": {
+                "article_id": {
                     "type": "integer"
                 },
-                "information_image_content_path": {
+                "article_image_content_path": {
                     "type": "string"
                 }
             }
         },
-        "entities.InformationEntities": {
+        "entities.ArticleEntities": {
             "type": "object",
             "properties": {
-                "informationType": {
-                    "$ref": "#/definitions/entities.InformationType"
+                "articleType": {
+                    "$ref": "#/definitions/entities.ArticleType"
                 },
-                "information_body": {
+                "article_body": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entities.InformationBodyEntities"
+                        "$ref": "#/definitions/entities.ArticleBodyEntities"
                     }
                 },
-                "information_created_by_user_id": {
+                "article_created_by_user_id": {
                     "type": "integer"
                 },
-                "information_date_created": {
+                "article_date_created": {
                     "type": "string"
                 },
-                "information_header": {
+                "article_header": {
                     "type": "string"
                 },
-                "information_id": {
+                "article_id": {
                     "type": "integer"
                 },
-                "information_type_id": {
+                "article_type_id": {
                     "type": "integer"
                 }
             }
         },
-        "entities.InformationType": {
+        "entities.ArticleType": {
             "type": "object",
             "properties": {
-                "information_type_id": {
+                "article_type_id": {
                     "type": "integer"
                 },
-                "information_type_name": {
+                "article_type_name": {
                     "type": "string"
                 }
             }

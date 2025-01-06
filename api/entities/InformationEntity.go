@@ -2,17 +2,17 @@ package entities
 
 import "time"
 
-type InformationEntities struct {
-	InformationId                int                       `gorm:"column:information_id;not null;primaryKey" json:"information_id"`
-	InformationHeader            string                    `gorm:"column:information_header" json:"information_header"`
-	InformationHeaderPathContent string                    `gorm:"column:information_header_path_content" json:"information_header_path_content"`
-	InformationDateCreated       time.Time                 `gorm:"column:information_date_created" json:"information_date_created"`
-	InformationCreatedByUserId   int                       `gorm:"column:information_created_by_user_id" json:"information_created_by_user_id"`
-	InformationBody              []InformationBodyEntities `gorm:"foreignKey:InformationId;references:InformationId" json:"information_body"`
-	//InformationTypeId            int                       `gorm:"column:information_type_id" json:"information_type_id"`
-	//InformationType              InformationType
+type ArticleEntities struct {
+	ArticleId                int                   `gorm:"column:article_id;not null;primaryKey" json:"article_id"`
+	ArticleHeader            string                `gorm:"column:article_header" json:"article_header"`
+	ArticleHeaderPathContent string                `gorm:"column:article_header_path_content" json:"article_header_path_content"`
+	ArticleDateCreated       time.Time             `gorm:"column:article_date_created" json:"article_date_created"`
+	ArticleCreatedByUserId   int                   `gorm:"column:article_created_by_user_id" json:"article_created_by_user_id"`
+	ArticleBody              []ArticleBodyEntities `gorm:"foreignKey:ArticleId;references:ArticleId" json:"article_body"`
+	//ArticleTypeId            int                       `gorm:"column:article_type_id" json:"article_type_id"`
+	//ArticleType              ArticleType
 }
 
-func (*InformationEntities) TableName() string {
-	return "mtr_information"
+func (*ArticleEntities) TableName() string {
+	return "mtr_article"
 }

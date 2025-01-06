@@ -43,9 +43,9 @@ func TestMain(m *testing.M) {
 
 func TestInsertBookmark(t *testing.T) {
 	userId := 1
-	InformationId := 3
+	ArticleId := 3
 
-	res, err := service.AddBookmark(userId, InformationId)
+	res, err := service.AddBookmark(userId, ArticleId)
 	if err != nil {
 		t.Errorf("Failed On: %v", err)
 	}
@@ -55,7 +55,7 @@ func TestInsertBookmark(t *testing.T) {
 }
 
 func TestRemoveBookmark(t *testing.T) {
-	_, err := service.RemoveBookmark(bookmarkTest.UserId, bookmarkTest.InformationId)
+	_, err := service.RemoveBookmark(bookmarkTest.UserId, bookmarkTest.ArticleId)
 	if err != nil {
 		t.Errorf("Failed to remove bookmark: %v", err)
 	}

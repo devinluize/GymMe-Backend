@@ -9,12 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type InformationMenu interface {
-	InsertInformation(tx *gorm.DB, payloads MenuPayloads.InformationInsertPayloads) (entities.InformationEntities, *responses.ErrorResponses)
-	DeleteInformationById(db *gorm.DB, id int) (bool, *responses.ErrorResponses)
-	UpdateInformation(tx *gorm.DB, payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses)
-	GetAllInformationWithPagination(db *gorm.DB, paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
-	GetInformationById(db *gorm.DB, id int, userId int, cld *cloudinary.Cloudinary) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses)
-	GetAllInformationWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int, cloudinary *cloudinary.Cloudinary) (helper.Pagination, *responses.ErrorResponses)
-	GetInformationHistory(db *gorm.DB, userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses)
+type ArticleMenu interface {
+	InsertArticle(tx *gorm.DB, payloads MenuPayloads.ArticleInsertPayloads) (entities.ArticleEntities, *responses.ErrorResponses)
+	DeleteArticleById(db *gorm.DB, id int) (bool, *responses.ErrorResponses)
+	UpdateArticle(tx *gorm.DB, payloads MenuPayloads.ArticleUpdatePayloads) (entities.ArticleEntities, *responses.ErrorResponses)
+	GetAllArticleWithPagination(db *gorm.DB, paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses)
+	GetArticleById(db *gorm.DB, id int, userId int, cld *cloudinary.Cloudinary) (MenuPayloads.ArticleSelectResponses, *responses.ErrorResponses)
+	GetAllArticleWithFilter(db *gorm.DB, paginationResponses helper.Pagination, Key string, userId int, cloudinary *cloudinary.Cloudinary) (helper.Pagination, *responses.ErrorResponses)
+	GetArticleHistory(db *gorm.DB, userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses)
 }

@@ -64,7 +64,7 @@ func (controller *CalendarControllerImpl) InsertCalendar(writer http.ResponseWri
 func (controller *CalendarControllerImpl) GetCalendarByUserId(writer http.ResponseWriter, request *http.Request) {
 	//calendarId := chi.URLParam(request, "user_id")
 	User := helper.GetRequestCredentialFromHeaderToken(request)
-	//InformationIds, err := strconv.Atoi(calendarId)
+	//ArticleIds, err := strconv.Atoi(calendarId)
 	//if err != nil {
 	//	return
 	//}
@@ -125,11 +125,11 @@ func (controller *CalendarControllerImpl) UpdateCalendar(writer http.ResponseWri
 func (controller *CalendarControllerImpl) DeleteCalendarById(writer http.ResponseWriter, request *http.Request) {
 	calendarId := chi.URLParam(request, "event_id")
 
-	InformationIds, err := strconv.Atoi(calendarId)
+	ArticleIds, err := strconv.Atoi(calendarId)
 	if err != nil {
 		return
 	}
-	res, errs := controller.CalendarService.DeleteCalendarById(InformationIds)
+	res, errs := controller.CalendarService.DeleteCalendarById(ArticleIds)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return

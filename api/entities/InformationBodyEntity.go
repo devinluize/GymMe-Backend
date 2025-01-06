@@ -1,12 +1,12 @@
 package entities
 
-type InformationBodyEntities struct {
-	InformationBodyId           int    `gorm:"column:information_body_id;primaryKey;not null" json:"information_body_id"`
-	InformationId               int    `gorm:"column:information_id" json:"information_id"`
-	InformationBodyParagraph    string `gorm:"column:information_body_paragraph" json:"information_body_paragraph"`
-	InformationImageContentPath string `gorm:"column:information_image_content_path" json:"information_image_content_path"`
+type ArticleBodyEntities struct {
+	ArticleBodyId           int    `gorm:"column:article_body_id;primaryKey;not null" json:"article_body_id"`
+	ArticleId               int    `gorm:"column:article_id" json:"article_id"`
+	ArticleBodyParagraph    string `gorm:"column:article_body_paragraph" json:"article_body_paragraph"`
+	ArticleImageContentPath string `gorm:"column:article_image_content_path" json:"article_image_content_path"`
 }
 
-func (*InformationBodyEntities) TableName() string {
-	return "mtr_information_detail_body"
+func (*ArticleBodyEntities) TableName() string {
+	return "mtr_article_detail_body"
 }
