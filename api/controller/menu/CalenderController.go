@@ -138,7 +138,7 @@ func (controller *CalendarControllerImpl) DeleteCalendarById(writer http.Respons
 }
 func (controller *CalendarControllerImpl) GetCalendarByDate(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
-	date := queryValues.Get("calendar_date")
+	date := queryValues.Get("event_date")
 	user := helper.GetRequestCredentialFromHeaderToken(request)
 	res, err := controller.CalendarService.GetCalendarByDate(date, user.UserId)
 	if err != nil {
