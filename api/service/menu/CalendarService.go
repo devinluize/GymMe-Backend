@@ -7,9 +7,9 @@ import (
 )
 
 type CalendarService interface {
-	InsertCalendar(payloads MenuPayloads.CalendarInsertPayload) (entities.CalendarEntity, *responses.ErrorResponses)
+	InsertCalendar(payloads MenuPayloads.CalendarInsertPayload) (entities.EventEntity, *responses.ErrorResponses)
 	GetCalendarByUserId(userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses)
-	UpdateCalendar(payloads MenuPayloads.CalendarUpdatePayload) (entities.CalendarEntity, *responses.ErrorResponses)
-	DeleteCalendarById(calendarId int) (entities.CalendarEntity, *responses.ErrorResponses)
+	UpdateCalendar(payloads MenuPayloads.CalendarUpdatePayload) (entities.EventEntity, *responses.ErrorResponses)
+	DeleteCalendarById(calendarId int) (entities.EventEntity, *responses.ErrorResponses)
 	GetCalendarByDate(date string, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses)
 }

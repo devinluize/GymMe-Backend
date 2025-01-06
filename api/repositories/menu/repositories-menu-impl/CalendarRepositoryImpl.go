@@ -13,16 +13,16 @@ import (
 type CalendarRepositoryImpl struct {
 }
 
-func NewCalendarRepositoryImpl() menuRepository.CalendarRepository {
+func NewEventRepositoryImpl() menuRepository.EventRepository {
 	return &CalendarRepositoryImpl{}
 }
-func (repo *CalendarRepositoryImpl) InsertCalendar(db *gorm.DB, payloads MenuPayloads.CalendarInsertPayload) (entities.CalendarEntity, *responses.ErrorResponses) {
-	CalendarEntities := entities.CalendarEntity{
-		CalendarName:     payloads.CalendarName,
-		CalendarDate:     payloads.CalendarDate,
-		UserId:           payloads.UserId,
-		CalendarTimeFrom: payloads.CalendarTimeFrom,
-		CalendarTimeTo:   payloads.CalendarTimeTo,
+func (repo *CalendarRepositoryImpl) InsertEvent(db *gorm.DB, payloads MenuPayloads.CalendarInsertPayload) (entities.EventEntity, *responses.ErrorResponses) {
+	CalendarEntities := entities.EventEntity{
+		EventName:     payloads.EventName,
+		EventDate:     payloads.EventDate,
+		UserId:        payloads.UserId,
+		EventTimeFrom: payloads.EventTimeFrom,
+		EventTimeTo:   payloads.EventTimeTo,
 	}
 	err := db.Create(&CalendarEntities).Error
 	if err != nil {
@@ -35,10 +35,10 @@ func (repo *CalendarRepositoryImpl) InsertCalendar(db *gorm.DB, payloads MenuPay
 	}
 	return CalendarEntities, nil
 }
-func (repo *CalendarRepositoryImpl) GetCalendarByUserId(db *gorm.DB, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
-	CalendarEntities := entities.CalendarEntity{}
+func (repo *CalendarRepositoryImpl) GetEventByUserId(db *gorm.DB, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
+	CalendarEntities := entities.EventEntity{}
 	var ResponseGetById []MenuPayloads.CalendarGetByIdResponse
-	err := db.Model(&CalendarEntities).Where(entities.CalendarEntity{UserId: userId}).Scan(&ResponseGetById).Error
+	err := db.Model(&CalendarEntities).Where(entities.EventEntity{UserId: userId}).Scan(&ResponseGetById).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ResponseGetById, &responses.ErrorResponses{}
@@ -52,9 +52,9 @@ func (repo *CalendarRepositoryImpl) GetCalendarByUserId(db *gorm.DB, userId int)
 	}
 	return ResponseGetById, nil
 }
-func (repo *CalendarRepositoryImpl) UpdateCalendar(db *gorm.DB, payloads MenuPayloads.CalendarUpdatePayload) (entities.CalendarEntity, *responses.ErrorResponses) {
-	CalendarEntities := entities.CalendarEntity{}
-	err := db.Model(&CalendarEntities).Where(entities.CalendarEntity{CalendarId: payloads.CalendarId}).
+func (repo *CalendarRepositoryImpl) UpdateEvent(db *gorm.DB, payloads MenuPayloads.CalendarUpdatePayload) (entities.EventEntity, *responses.ErrorResponses) {
+	CalendarEntities := entities.EventEntity{}
+	err := db.Model(&CalendarEntities).Where(entities.EventEntity{EventId: payloads.EventId}).
 		First(&CalendarEntities).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -72,9 +72,9 @@ func (repo *CalendarRepositoryImpl) UpdateCalendar(db *gorm.DB, payloads MenuPay
 			Err:        err,
 		}
 	}
-	CalendarEntities.CalendarTimeTo = payloads.CalendarTimeTo
-	CalendarEntities.CalendarTimeFrom = payloads.CalendarTimeFrom
-	CalendarEntities.CalendarName = payloads.CalendarName
+	CalendarEntities.EventTimeTo = payloads.EventTimeTo
+	CalendarEntities.EventTimeFrom = payloads.EventTimeFrom
+	CalendarEntities.EventName = payloads.EventName
 	err = db.Save(&CalendarEntities).Error
 	if err != nil {
 		return CalendarEntities, &responses.ErrorResponses{
@@ -86,10 +86,10 @@ func (repo *CalendarRepositoryImpl) UpdateCalendar(db *gorm.DB, payloads MenuPay
 	}
 	return CalendarEntities, nil
 }
-func (repo *CalendarRepositoryImpl) DeleteCalendarById(db *gorm.DB, calendarId int) (entities.CalendarEntity, *responses.ErrorResponses) {
-	var CalendarEntities entities.CalendarEntity
+func (repo *CalendarRepositoryImpl) DeleteEventById(db *gorm.DB, calendarId int) (entities.EventEntity, *responses.ErrorResponses) {
+	var CalendarEntities entities.EventEntity
 	//get cek first if there is the data
-	err := db.Model(&CalendarEntities).Where(entities.CalendarEntity{CalendarId: calendarId}).First(&CalendarEntities).Error
+	err := db.Model(&CalendarEntities).Where(entities.EventEntity{EventId: calendarId}).First(&CalendarEntities).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return CalendarEntities, &responses.ErrorResponses{
@@ -117,13 +117,13 @@ func (repo *CalendarRepositoryImpl) DeleteCalendarById(db *gorm.DB, calendarId i
 	}
 	return CalendarEntities, nil
 }
-func (repo *CalendarRepositoryImpl) GetCalendarByDate(db *gorm.DB, date string, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
-	calendarEntities := entities.CalendarEntity{}
+func (repo *CalendarRepositoryImpl) GetEventById(db *gorm.DB, date string, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
+	calendarEntities := entities.EventEntity{}
 	var calendarResponse []MenuPayloads.CalendarGetByIdResponse
 	err := db.Model(&calendarEntities).
-		Where("CONVERT(DATE, calendar_date) = ?", date).
-		Where(entities.CalendarEntity{UserId: userId}).
-		Order("calendar_time_from ASC").
+		Where("CONVERT(DATE, event_date) = ?", date).
+		Where(entities.EventEntity{UserId: userId}).
+		Order("event_time_from ASC").
 		Scan(&calendarResponse).Error
 	if err != nil {
 		return calendarResponse, &responses.ErrorResponses{

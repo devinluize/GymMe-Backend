@@ -11,16 +11,16 @@ import (
 )
 
 type CalendarServiceImpl struct {
-	repository menuRepository.CalendarRepository
+	repository menuRepository.EventRepository
 	db         *gorm.DB
 }
 
-func NewCalendarServiceImpl(repository menuRepository.CalendarRepository, db *gorm.DB) menu.CalendarService {
+func NewCalendarServiceImpl(repository menuRepository.EventRepository, db *gorm.DB) menu.CalendarService {
 	return &CalendarServiceImpl{repository: repository, db: db}
 }
-func (service *CalendarServiceImpl) InsertCalendar(payloads MenuPayloads.CalendarInsertPayload) (entities.CalendarEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) InsertCalendar(payloads MenuPayloads.CalendarInsertPayload) (entities.EventEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.InsertCalendar(trans, payloads)
+	res, err := service.repository.InsertEvent(trans, payloads)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -30,7 +30,7 @@ func (service *CalendarServiceImpl) InsertCalendar(payloads MenuPayloads.Calenda
 
 func (service *CalendarServiceImpl) GetCalendarByUserId(userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.GetCalendarByUserId(trans, userId)
+	res, err := service.repository.GetEventByUserId(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -38,9 +38,9 @@ func (service *CalendarServiceImpl) GetCalendarByUserId(userId int) ([]MenuPaylo
 	return res, nil
 }
 
-func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.CalendarUpdatePayload) (entities.CalendarEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.CalendarUpdatePayload) (entities.EventEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.UpdateCalendar(trans, payloads)
+	res, err := service.repository.UpdateEvent(trans, payloads)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -48,9 +48,9 @@ func (service *CalendarServiceImpl) UpdateCalendar(payloads MenuPayloads.Calenda
 	return res, nil
 }
 
-func (service *CalendarServiceImpl) DeleteCalendarById(calendarId int) (entities.CalendarEntity, *responses.ErrorResponses) {
+func (service *CalendarServiceImpl) DeleteCalendarById(calendarId int) (entities.EventEntity, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.DeleteCalendarById(trans, calendarId)
+	res, err := service.repository.DeleteEventById(trans, calendarId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -59,7 +59,7 @@ func (service *CalendarServiceImpl) DeleteCalendarById(calendarId int) (entities
 }
 func (service *CalendarServiceImpl) GetCalendarByDate(date string, userId int) ([]MenuPayloads.CalendarGetByIdResponse, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repository.GetCalendarByDate(trans, date, userId)
+	res, err := service.repository.GetEventById(trans, date, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

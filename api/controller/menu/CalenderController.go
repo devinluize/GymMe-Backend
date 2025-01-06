@@ -101,7 +101,7 @@ func (controller *CalendarControllerImpl) UpdateCalendar(writer http.ResponseWri
 		})
 	}
 	user := helper.GetRequestCredentialFromHeaderToken(request)
-	UpdateCalendar.CalendarId = calendarIdInt
+	UpdateCalendar.EventId = calendarIdInt
 	UpdateCalendar.UserId = user.UserId
 	res, err := controller.CalendarService.UpdateCalendar(UpdateCalendar)
 	if err != nil {
