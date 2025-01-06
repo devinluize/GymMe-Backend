@@ -85,7 +85,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 	WeightController := menucontroller.NewWeightHistoryController(WeightService)
 
 	//calendar
-	CalendarRepository := MenuImplRepositories.NewCalendarRepositoryImpl()
+	CalendarRepository := MenuImplRepositories.NewEventRepositoryImpl()
 	CalendarService := menuserviceimpl.NewCalendarServiceImpl(CalendarRepository, db)
 	CalendarController := menucontroller.NewCalendarController(CalendarService)
 
@@ -126,7 +126,7 @@ func versionedRouterV1(db *gorm.DB, cld *cloudinary.Cloudinary) chi.Router {
 	router.Mount("/information", InformationRouter)
 	router.Mount("/profile", ProfileRouter)
 	router.Mount("/weight", WeightRouter)
-	router.Mount("/calendar", CalendarRouter)
+	router.Mount("/event", CalendarRouter)
 	router.Mount("/timer", TimerRouter)
 	router.Mount("/bookmark", BookmarkRouter)
 	router.Mount("/equipment/course", EquipmentCourseRouter)
