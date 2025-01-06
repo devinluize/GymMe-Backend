@@ -26,7 +26,7 @@ func AuthRouter(controller auth.AuthController) chi.Router {
 
 	return r
 }
-func InformationRouter(controller menucontroller.InformationController) chi.Router {
+func ArticleRouter(controller menucontroller.ArticleController) chi.Router {
 	r := chi.NewRouter()
 	//r.Use(cors.Handler(cors.Options{
 	//	AllowedOrigins:   []string{"*"},
@@ -39,13 +39,13 @@ func InformationRouter(controller menucontroller.InformationController) chi.Rout
 	r.Use(middleware.RouterMiddleware)
 	//router.With(middlewares.RouterMiddleware).Post("/", Finishnotecontroller.FinishReceivingNotesRequestMaster)
 	//r.Use(middleware.RouterMiddleware)
-	r.Post("/", controller.InsertInformation)
-	r.Delete("/delete/{information_id}", controller.DeleteInformationById)
-	r.Patch("/", controller.UpdateInformation)
-	r.Get("/by-id/{information_id}", controller.GeById)
+	r.Post("/", controller.InsertArticle)
+	r.Delete("/delete/{article_id}", controller.DeleteArticleById)
+	r.Patch("/", controller.UpdateArticle)
+	r.Get("/by-id/{article_id}", controller.GeById)
 	r.Get("/", controller.GetAllByPagination)
-	r.Get("/search", controller.GetAllInformationByFilter)
-	r.Get("/history", controller.GetInformationHistory)
+	r.Get("/search", controller.GetAllArticleByFilter)
+	r.Get("/history", controller.GetArticleHistory)
 	return r
 }
 
@@ -95,8 +95,8 @@ func BookmarkRoute(controller menucontroller.BookmarkController) chi.Router {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
-	router.Post("/{information_id}", controller.AddBookmark)
-	router.Delete("/{information_id}", controller.RemoveBookmark)
+	router.Post("/{article_id}", controller.AddBookmark)
+	router.Delete("/{article_id}", controller.RemoveBookmark)
 	router.Get("/", controller.GetBookmarks)
 	return router
 }

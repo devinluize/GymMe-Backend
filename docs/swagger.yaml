@@ -27,58 +27,58 @@ definitions:
       user_id:
         type: integer
     type: object
-  MenuPayloads.InformationBodyDetail:
+  MenuPayloads.ArticleBodyDetail:
     properties:
-      information_body_paragraph:
+      article_body_paragraph:
         type: string
-      information_image_content_path:
+      article_image_content_path:
         type: string
     type: object
-  MenuPayloads.InformationInsertPayloads:
+  MenuPayloads.ArticleInsertPayloads:
     properties:
-      information_body_paragraph:
+      article_body_paragraph:
         items:
-          $ref: '#/definitions/MenuPayloads.InformationBodyDetail'
+          $ref: '#/definitions/MenuPayloads.ArticleBodyDetail'
         type: array
-      information_header:
+      article_header:
         type: string
-      information_id:
+      article_id:
         type: integer
-      information_image_content_path_1:
+      article_image_content_path_1:
         type: string
-      information_image_content_path_2:
+      article_image_content_path_2:
         type: string
-      information_image_content_path_3:
+      article_image_content_path_3:
         type: string
-      information_image_content_path_4:
+      article_image_content_path_4:
         type: string
-      information_image_content_path_5:
+      article_image_content_path_5:
         type: string
-      information_type_id:
+      article_type_id:
         type: integer
     type: object
-  MenuPayloads.InformationSelectResponses:
+  MenuPayloads.ArticleSelectResponses:
     properties:
-      information_body_content:
+      article_body_content:
         items:
-          $ref: '#/definitions/MenuPayloads.InformationBodyDetail'
+          $ref: '#/definitions/MenuPayloads.ArticleBodyDetail'
         type: array
-      information_created_by_user_id:
+      article_created_by_user_id:
         type: integer
-      information_date_created:
+      article_date_created:
         type: string
-      information_header:
+      article_header:
         type: string
-      information_type_id:
+      article_type_id:
         type: integer
     type: object
-  MenuPayloads.InformationUpdatePayloads:
+  MenuPayloads.ArticleUpdatePayloads:
     properties:
-      information_body_content:
+      article_body_content:
         items:
-          $ref: '#/definitions/MenuPayloads.InformationBodyDetail'
+          $ref: '#/definitions/MenuPayloads.ArticleBodyDetail'
         type: array
-      information_id:
+      article_id:
         type: integer
     type: object
   MenuPayloads.ProfilePayloadRequest:
@@ -115,9 +115,9 @@ definitions:
         type: integer
       bookmarkType:
         $ref: '#/definitions/entities.BookmarkType'
-      information:
-        $ref: '#/definitions/entities.InformationEntities'
-      information_id:
+      article:
+        $ref: '#/definitions/entities.ArticleEntities'
+      article_id:
         type: integer
       user:
         $ref: '#/definitions/entities.Users'
@@ -131,41 +131,41 @@ definitions:
       bookmark_type_name:
         type: string
     type: object
-  entities.InformationBodyEntities:
+  entities.ArticleBodyEntities:
     properties:
-      information_body_id:
+      article_body_id:
         type: integer
-      information_body_paragraph:
+      article_body_paragraph:
         type: string
-      information_id:
+      article_id:
         type: integer
-      information_image_content_path:
+      article_image_content_path:
         type: string
     type: object
-  entities.InformationEntities:
+  entities.ArticleEntities:
     properties:
-      information_body:
+      article_body:
         items:
-          $ref: '#/definitions/entities.InformationBodyEntities'
+          $ref: '#/definitions/entities.ArticleBodyEntities'
         type: array
-      information_created_by_user_id:
+      article_created_by_user_id:
         type: integer
-      information_date_created:
+      article_date_created:
         type: string
-      information_header:
+      article_header:
         type: string
-      information_id:
+      article_id:
         type: integer
-      information_type_id:
+      article_type_id:
         type: integer
-      informationType:
-        $ref: '#/definitions/entities.InformationType'
+      articleType:
+        $ref: '#/definitions/entities.ArticleType'
     type: object
-  entities.InformationType:
+  entities.ArticleType:
     properties:
-      information_type_id:
+      article_type_id:
         type: integer
-      information_type_name:
+      article_type_name:
         type: string
     type: object
   entities.UserDetail:
@@ -279,9 +279,9 @@ paths:
         name: user_id
         required: true
         type: integer
-      - description: information_id
+      - description: article_id
         in: query
-        name: information_id
+        name: article_id
         required: true
         type: integer
       produces:
@@ -330,9 +330,9 @@ paths:
         name: user_id
         required: true
         type: integer
-      - description: information_id
+      - description: article_id
         in: query
-        name: information_id
+        name: article_id
         required: true
         type: integer
       produces:
@@ -371,7 +371,7 @@ paths:
       summary: Add New BookMark
       tags:
       - Bookmark
-  /api/bookmark/{user_id}/{information_type_id}:
+  /api/bookmark/{user_id}/{article_type_id}:
     get:
       consumes:
       - application/json
@@ -382,7 +382,7 @@ paths:
         name: user_id
         required: true
         type: integer
-      - description: information_type_id
+      - description: article_type_id
         in: path
         name: user_id
         required: true
@@ -394,7 +394,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/MenuPayloads.InformationSelectResponses'
+              $ref: '#/definitions/MenuPayloads.ArticleSelectResponses'
             type: array
       security:
       - BearerAuth: []
@@ -518,11 +518,11 @@ paths:
       summary: Delete Calendar by Id
       tags:
       - Calendar
-  /api/information:
+  /api/article:
     get:
       consumes:
       - application/json
-      description: Get All Information By Pagination
+      description: Get All Article By Pagination
       parameters:
       - description: sort_by
         in: query
@@ -549,7 +549,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.InformationEntities'
+              $ref: '#/definitions/entities.ArticleEntities'
             type: array
         "400":
           description: Bad Request
@@ -577,20 +577,20 @@ paths:
             $ref: '#/definitions/responses.ErrorResponses'
       security:
       - BearerAuth: []
-      summary: Get All Information By Pagination
+      summary: Get All Article By Pagination
       tags:
-      - Information
+      - Article
     patch:
       consumes:
       - application/json
-      description: Update Information
+      description: Update Article
       parameters:
       - description: Update Request
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/MenuPayloads.InformationUpdatePayloads'
+          $ref: '#/definitions/MenuPayloads.ArticleUpdatePayloads'
       produces:
       - application/json
       responses:
@@ -600,20 +600,20 @@ paths:
             $ref: '#/definitions/responses.ErrorResponses'
       security:
       - BearerAuth: []
-      summary: Update Information
+      summary: Update Article
       tags:
-      - Information
+      - Article
     post:
       consumes:
       - application/json
-      description: Create New Information
+      description: Create New Article
       parameters:
       - description: Insert Request
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/MenuPayloads.InformationInsertPayloads'
+          $ref: '#/definitions/MenuPayloads.ArticleInsertPayloads'
       produces:
       - application/json
       responses:
@@ -647,18 +647,18 @@ paths:
             $ref: '#/definitions/responses.ErrorResponses'
       security:
       - BearerAuth: []
-      summary: Create New Information
+      summary: Create New Article
       tags:
-      - Information
-  /api/information/by-id/{information_id}:
+      - Article
+  /api/article/by-id/{article_id}:
     get:
       consumes:
       - application/json
-      description: Get Information By Information
+      description: Get Article By Article
       parameters:
-      - description: information_id
+      - description: article_id
         in: path
-        name: information_id
+        name: article_id
         required: true
         type: integer
       produces:
@@ -667,7 +667,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.InformationEntities'
+            $ref: '#/definitions/entities.ArticleEntities'
         "400":
           description: Bad Request
           schema:
@@ -694,18 +694,18 @@ paths:
             $ref: '#/definitions/responses.ErrorResponses'
       security:
       - BearerAuth: []
-      summary: Get Information By Information
+      summary: Get Article By Article
       tags:
-      - Information
-  /api/information/delete/{information_id}:
+      - Article
+  /api/article/delete/{article_id}:
     delete:
       consumes:
       - application/json
-      description: Delete Information
+      description: Delete Article
       parameters:
-      - description: information_id
+      - description: article_id
         in: path
-        name: information_id
+        name: article_id
         required: true
         type: integer
       produces:
@@ -717,14 +717,14 @@ paths:
             $ref: '#/definitions/responses.StandarAPIResponses'
       security:
       - BearerAuth: []
-      summary: Delete Information
+      summary: Delete Article
       tags:
-      - Information
-  /api/information/search:
+      - Article
+  /api/article/search:
     get:
       consumes:
       - application/json
-      description: Get All Information By Pagination With Filter
+      description: Get All Article By Pagination With Filter
       parameters:
       - description: key_filter
         in: query
@@ -755,7 +755,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.InformationEntities'
+              $ref: '#/definitions/entities.ArticleEntities'
             type: array
         "400":
           description: Bad Request
@@ -783,9 +783,9 @@ paths:
             $ref: '#/definitions/responses.ErrorResponses'
       security:
       - BearerAuth: []
-      summary: Get All Information By Pagination With Filter
+      summary: Get All Article By Pagination With Filter
       tags:
-      - Information
+      - Article
   /api/profile:
     patch:
       consumes:

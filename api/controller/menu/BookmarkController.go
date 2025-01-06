@@ -32,15 +32,15 @@ func NewBookmarkController(service menu.BookmarkService) BookmarkController {
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id					query		int		true	"user_id"
-//	@Param			information_id			query		int		true	"information_id"
+//	@Param			article_id			query		int		true	"article_id"
 //	@Success		200									{object}	entities.Bookmark
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/bookmark/{information_id} [post]
+//	@Router			/api/bookmark/{article_id} [post]
 func (controller *bookmarkControllerImpl) AddBookmark(writer http.ResponseWriter, request *http.Request) {
 	//userId := request.Context().Value("user_id").(int)
 	User := helper.GetRequestCredentialFromHeaderToken(request)
-	informationId, _ := strconv.Atoi(chi.URLParam(request, "information_id"))
-	res, err := controller.service.AddBookmark(User.UserId, informationId)
+	articleId, _ := strconv.Atoi(chi.URLParam(request, "article_id"))
+	res, err := controller.service.AddBookmark(User.UserId, articleId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -57,18 +57,18 @@ func (controller *bookmarkControllerImpl) AddBookmark(writer http.ResponseWriter
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id					query		int		true	"user_id"
-//	@Param			information_id			query		int		true	"information_id"
+//	@Param			article_id			query		int		true	"article_id"
 //	@Success		200									{object}	entities.Bookmark
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/bookmark/{information_id} [delete]
+//	@Router			/api/bookmark/{article_id} [delete]
 func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWriter, request *http.Request) {
 	//queryValues := request.URL.Query()
 	//userId, _ := request.Context().Value("user_id").(int)
 	User := helper.GetRequestCredentialFromHeaderToken(request)
 
 	//userId, _ := strconv.Atoi(userIds) //strconv.Atoi(Params["user_id"])
-	informationId, _ := strconv.Atoi(chi.URLParam(request, "information_id"))
-	res, err := controller.service.RemoveBookmark(User.UserId, informationId)
+	articleId, _ := strconv.Atoi(chi.URLParam(request, "article_id"))
+	res, err := controller.service.RemoveBookmark(User.UserId, articleId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -85,15 +85,15 @@ func (controller *bookmarkControllerImpl) RemoveBookmark(writer http.ResponseWri
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id	path int	true	"user_id"
-//	@Param			user_id	path int	true	"information_type_id"
-//	@Success		200		{object}	 []MenuPayloads.InformationSelectResponses
-//	@Router			/api/bookmark/{information_type_id} [get]
+//	@Param			user_id	path int	true	"article_type_id"
+//	@Success		200		{object}	 []MenuPayloads.ArticleSelectResponses
+//	@Router			/api/bookmark/{article_type_id} [get]
 func (controller *bookmarkControllerImpl) GetBookmarks(writer http.ResponseWriter, request *http.Request) {
 	//queryValues := request.URL.Query()
 	//calendarId := chi.URLParam(request, "calendar_id")
-	//informationTypeId := chi.URLParam(request, "information_type_id")
+	//articleTypeId := chi.URLParam(request, "article_type_id")
 	User := helper.GetRequestCredentialFromHeaderToken(request)
-	//informationId, _ := strconv.Atoi(informationTypeId)
+	//articleId, _ := strconv.Atoi(articleTypeId)
 	res, err := controller.service.GetBookmarks(User.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)

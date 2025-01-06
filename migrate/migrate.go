@@ -3,12 +3,13 @@ package migrate
 import (
 	configenv "GymMe-Backend/api/config"
 	"fmt"
+	"log"
+	"time"
+
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
-	"time"
 )
 
 func Migrate() {
@@ -78,11 +79,11 @@ func Migrate() {
 	//&entities.UserDetail{},
 	//&entities.Users{},
 	//&entities.PaymentMethod{},
-	//&entities.InformationType{},
-	//&entities.InformationEntities{},
+	//&entities.ArticleType{},
+	//&entities.ArticleEntities{},
 	//&entities.BookmarkType{},
 	//&entities.Bookmark{},
-	//&entities.InformationBodyEntities{},
+	//&entities.ArticleBodyEntities{},
 	//&entities.WeightHistoryEntities{},
 	//&entities.CalendarEntity{},
 	//&entities.WeightHistoryEntities{},

@@ -21,12 +21,12 @@ func NewBookmarkRepositoryImpl() menuRepository.BookmarkRepository {
 func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, menuId int) (entities.Bookmark, *responses.ErrorResponses) {
 	BookmarkEntities := entities.Bookmark{
 		//BookmarkTypeId: 1,
-		InformationId: menuId,
-		UserId:        userId,
+		ArticleId: menuId,
+		UserId:    userId,
 	}
 	//validate bookmark and user id cant be same
 	isExist := 0
-	errExist := db.Model(&BookmarkEntities).Where(entities.Bookmark{InformationId: menuId, UserId: userId}).
+	errExist := db.Model(&BookmarkEntities).Where(entities.Bookmark{ArticleId: menuId, UserId: userId}).
 		Select("1").Scan(&isExist).Error
 	if errExist != nil {
 		return BookmarkEntities, &responses.ErrorResponses{
@@ -58,8 +58,8 @@ func (repository *BookmarkRepositoryImpl) AddBookmark(db *gorm.DB, userId int, m
 }
 
 func (repository *BookmarkRepositoryImpl) RemoveBookmark(db *gorm.DB, userId int, menuId int) (bool, *responses.ErrorResponses) {
-	//err := db.Where(entities.Bookmark{InformationId: menuId, UserId: userId}).Delete(&entities.Bookmark{}).Error
-	err := db.Delete(&entities.Bookmark{}, entities.Bookmark{InformationId: menuId, UserId: userId}).Error
+	//err := db.Where(entities.Bookmark{ArticleId: menuId, UserId: userId}).Delete(&entities.Bookmark{}).Error
+	err := db.Delete(&entities.Bookmark{}, entities.Bookmark{ArticleId: menuId, UserId: userId}).Error
 	if err != nil {
 		return false, &responses.ErrorResponses{
 			StatusCode: http.StatusBadRequest,
@@ -73,13 +73,13 @@ func (repository *BookmarkRepositoryImpl) GetBookmarks(db *gorm.DB, userId int, 
 	var InfoResponses []MenuPayloads.GetAllBookmarkResponse
 
 	err := db.Table("mtr_bookmark A").
-		Joins("INNER JOIN mtr_information B ON A.information_id = B.information_id").
+		Joins("INNER JOIN mtr_article B ON A.article_id = B.article_id").
 		Where("A.user_id = ?", userId).
 		Select("B.*,A.*").Scan(&InfoResponses).Error
 	for i, v := range InfoResponses {
-		urls, _ := cld.Image(v.InformationHeaderPathContent)
+		urls, _ := cld.Image(v.ArticleHeaderPathContent)
 		//res.SortOf = url
-		InfoResponses[i].InformationHeaderPathContent = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
+		InfoResponses[i].ArticleHeaderPathContent = fmt.Sprintf("https://res.cloudinary.com/%s/%s/%s/%s",
 			"dlrd9z1mk",          // Replace with your Cloudinary cloud name
 			urls.AssetType,       // e.g., "image"
 			urls.DeliveryType,    // e.g., "upload"

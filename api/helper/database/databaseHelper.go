@@ -11,7 +11,7 @@ import (
 func DropAllDatabase(db *gorm.DB) error {
 	// Get the list of all tables
 	var tableNames []string
-	db.Raw("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
+	db.Raw("SELECT table_name FROM article_schema.tables WHERE table_type = 'BASE TABLE'").Scan(&tableNames)
 
 	// Drop each table
 	for _, tableName := range tableNames {

@@ -1,10 +1,10 @@
 package entities
 
-type InformationType struct {
-	InformationTypeId   int    `gorm:"column:information_type_id;primaryKey;not null" json:"information_type_id"`
-	InformationTypeName string `gorm:"information_type_name" json:"information_type_name"`
+type ArticleType struct {
+	ArticleTypeId   int    `gorm:"column:article_type_id;primaryKey;not null" json:"article_type_id"`
+	ArticleTypeName string `gorm:"article_type_name" json:"article_type_name"`
 }
 
-func (*InformationType) TableName() string {
-	return "mtr_information_type"
+func (*ArticleType) TableName() string {
+	return "mtr_article_type"
 }

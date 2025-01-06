@@ -11,18 +11,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type InformationServiceImpl struct {
-	repo menuRepository.InformationMenu
+type ArticleServiceImpl struct {
+	repo menuRepository.ArticleMenu
 	db   *gorm.DB
 	cld  *cloudinary.Cloudinary
 }
 
-func NewInformationServiceImpl(repo menuRepository.InformationMenu, db *gorm.DB, cld *cloudinary.Cloudinary) menu.InformationService {
-	return &InformationServiceImpl{repo: repo, db: db, cld: cld}
+func NewArticleServiceImpl(repo menuRepository.ArticleMenu, db *gorm.DB, cld *cloudinary.Cloudinary) menu.ArticleService {
+	return &ArticleServiceImpl{repo: repo, db: db, cld: cld}
 }
-func (service *InformationServiceImpl) InsertInformation(payloads MenuPayloads.InformationInsertPayloads) (entities.InformationEntities, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) InsertArticle(payloads MenuPayloads.ArticleInsertPayloads) (entities.ArticleEntities, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.InsertInformation(trans, payloads)
+	res, err := service.repo.InsertArticle(trans, payloads)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -30,9 +30,9 @@ func (service *InformationServiceImpl) InsertInformation(payloads MenuPayloads.I
 	return res, nil
 }
 
-func (service *InformationServiceImpl) DeleteInformationById(id int) (bool, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) DeleteArticleById(id int) (bool, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.DeleteInformationById(trans, id)
+	res, err := service.repo.DeleteArticleById(trans, id)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -40,9 +40,9 @@ func (service *InformationServiceImpl) DeleteInformationById(id int) (bool, *res
 	return res, nil
 }
 
-func (service *InformationServiceImpl) UpdateInformation(payloads MenuPayloads.InformationUpdatePayloads) (entities.InformationEntities, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) UpdateArticle(payloads MenuPayloads.ArticleUpdatePayloads) (entities.ArticleEntities, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.UpdateInformation(trans, payloads)
+	res, err := service.repo.UpdateArticle(trans, payloads)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
@@ -50,37 +50,37 @@ func (service *InformationServiceImpl) UpdateInformation(payloads MenuPayloads.I
 	return res, nil
 }
 
-func (service *InformationServiceImpl) GetInformationById(id int, userId int) (MenuPayloads.InformationSelectResponses, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) GetArticleById(id int, userId int) (MenuPayloads.ArticleSelectResponses, *responses.ErrorResponses) {
 	trans := service.db.Begin()
 
-	res, err := service.repo.GetInformationById(trans, id, userId, service.cld)
+	res, err := service.repo.GetArticleById(trans, id, userId, service.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
 	}
 	return res, nil
 }
-func (service *InformationServiceImpl) GetAllInformationWithPagination(paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) GetAllArticleWithPagination(paginationResponses helper.Pagination) (helper.Pagination, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetAllInformationWithPagination(trans, paginationResponses)
+	res, err := service.repo.GetAllArticleWithPagination(trans, paginationResponses)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
 	}
 	return res, nil
 }
-func (service *InformationServiceImpl) GetAllInformationWithFilter(paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) GetAllArticleWithFilter(paginationResponses helper.Pagination, Key string, userId int) (helper.Pagination, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetAllInformationWithFilter(trans, paginationResponses, Key, userId, service.cld)
+	res, err := service.repo.GetAllArticleWithFilter(trans, paginationResponses, Key, userId, service.cld)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
 	}
 	return res, nil
 }
-func (service *InformationServiceImpl) GetInformationHistory(userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses) {
+func (service *ArticleServiceImpl) GetArticleHistory(userId int) ([]entities.SearchHistoryEntities, *responses.ErrorResponses) {
 	trans := service.db.Begin()
-	res, err := service.repo.GetInformationHistory(trans, userId)
+	res, err := service.repo.GetArticleHistory(trans, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err

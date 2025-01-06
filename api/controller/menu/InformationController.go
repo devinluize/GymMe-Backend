@@ -14,41 +14,41 @@ import (
 	"strconv"
 )
 
-type InformationController interface {
-	InsertInformation(writer http.ResponseWriter, request *http.Request)
-	DeleteInformationById(writer http.ResponseWriter, request *http.Request)
-	UpdateInformation(writer http.ResponseWriter, request *http.Request)
+type ArticleController interface {
+	InsertArticle(writer http.ResponseWriter, request *http.Request)
+	DeleteArticleById(writer http.ResponseWriter, request *http.Request)
+	UpdateArticle(writer http.ResponseWriter, request *http.Request)
 	GeById(writer http.ResponseWriter, request *http.Request)
 	GetAllByPagination(writer http.ResponseWriter, request *http.Request)
-	GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request)
-	GetInformationHistory(writer http.ResponseWriter, request *http.Request)
+	GetAllArticleByFilter(writer http.ResponseWriter, request *http.Request)
+	GetArticleHistory(writer http.ResponseWriter, request *http.Request)
 }
 
-type InformationControllerImpl struct {
-	InformationService menu.InformationService
+type ArticleControllerImpl struct {
+	ArticleService menu.ArticleService
 }
 
-func NewInformatioControllerImpl(InformationService menu.InformationService) InformationController {
-	return &InformationControllerImpl{InformationService: InformationService}
+func NewInformatioControllerImpl(ArticleService menu.ArticleService) ArticleController {
+	return &ArticleControllerImpl{ArticleService: ArticleService}
 }
 
-// InsertInformation List Via Header
+// InsertArticle List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Create New Information
-//	@Description	Create New Information
-//	@Tags			Information
+//	@Summary		Create New Article
+//	@Description	Create New Article
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		MenuPayloads.InformationInsertPayloads	true	"Insert Request"
+//	@Param			request	body		MenuPayloads.ArticleInsertPayloads	true	"Insert Request"
 //	@Success		200		{object}	responses.StandarAPIResponses
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/information [post]
-func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter, request *http.Request) {
-	var InformationPayloads MenuPayloads.InformationInsertPayloads
-	helper.ReadFromRequestBody(request, &InformationPayloads)
+//	@Router			/api/article [post]
+func (i *ArticleControllerImpl) InsertArticle(writer http.ResponseWriter, request *http.Request) {
+	var ArticlePayloads MenuPayloads.ArticleInsertPayloads
+	helper.ReadFromRequestBody(request, &ArticlePayloads)
 
-	res, err := i.InformationService.InsertInformation(InformationPayloads)
+	res, err := i.ArticleService.InsertArticle(ArticlePayloads)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -57,24 +57,24 @@ func (i *InformationControllerImpl) InsertInformation(writer http.ResponseWriter
 	helper.HandleSuccess(writer, res, "Insert Successfull", http.StatusCreated)
 }
 
-// DeleteInformationById List Via Header
+// DeleteArticleById List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Delete Information
-//	@Description	Delete Information
-//	@Tags			Information
+//	@Summary		Delete Article
+//	@Description	Delete Article
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			information_id	path int	true	"information_id"
+//	@Param			article_id	path int	true	"article_id"
 //	@Success		200		{object}	 responses.StandarAPIResponses
-//	@Router			/api/information/delete/{information_id} [delete]
-func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWriter, request *http.Request) {
-	InformationId := chi.URLParam(request, "information_id")
-	InformationIds, err := strconv.Atoi(InformationId)
+//	@Router			/api/article/delete/{article_id} [delete]
+func (i *ArticleControllerImpl) DeleteArticleById(writer http.ResponseWriter, request *http.Request) {
+	ArticleId := chi.URLParam(request, "article_id")
+	ArticleIds, err := strconv.Atoi(ArticleId)
 	if err != nil {
 		return
 	}
-	res, errs := i.InformationService.DeleteInformationById(InformationIds)
+	res, errs := i.ArticleService.DeleteArticleById(ArticleIds)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
@@ -83,22 +83,22 @@ func (i *InformationControllerImpl) DeleteInformationById(writer http.ResponseWr
 	helper.HandleSuccess(writer, res, "Delete Successfull", http.StatusOK)
 }
 
-// UpdateInformation List Via Header
+// UpdateArticle List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Update Information
-//	@Description	Update Information
-//	@Tags			Information
+//	@Summary		Update Article
+//	@Description	Update Article
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		MenuPayloads.InformationUpdatePayloads	true	"Update Request"
+//	@Param			request	body		MenuPayloads.ArticleUpdatePayloads	true	"Update Request"
 //	@Success		200		{object}	 responses.ErrorResponses
-//	@Router			/api/information [patch]
-func (i *InformationControllerImpl) UpdateInformation(writer http.ResponseWriter, request *http.Request) {
-	var InformationPayloads MenuPayloads.InformationUpdatePayloads
-	helper.ReadFromRequestBody(request, &InformationPayloads)
+//	@Router			/api/article [patch]
+func (i *ArticleControllerImpl) UpdateArticle(writer http.ResponseWriter, request *http.Request) {
+	var ArticlePayloads MenuPayloads.ArticleUpdatePayloads
+	helper.ReadFromRequestBody(request, &ArticlePayloads)
 
-	res, err := i.InformationService.UpdateInformation(InformationPayloads)
+	res, err := i.ArticleService.UpdateArticle(ArticlePayloads)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -109,23 +109,23 @@ func (i *InformationControllerImpl) UpdateInformation(writer http.ResponseWriter
 // GeById List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Get Information By Information
-//	@Description	Get Information By Information
-//	@Tags			Information
+//	@Summary		Get Article By Article
+//	@Description	Get Article By Article
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
-//	@Param			information_id	path int			true		"information_id"
-//	@Success		200									{object}	entities.InformationEntities
+//	@Param			article_id	path int			true		"article_id"
+//	@Success		200									{object}	entities.ArticleEntities
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/information/by-id/{information_id} [get]
-func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *http.Request) {
-	InformationId := chi.URLParam(request, "information_id")
-	InformationIds, err := strconv.Atoi(InformationId)
+//	@Router			/api/article/by-id/{article_id} [get]
+func (i *ArticleControllerImpl) GeById(writer http.ResponseWriter, request *http.Request) {
+	ArticleId := chi.URLParam(request, "article_id")
+	ArticleIds, err := strconv.Atoi(ArticleId)
 	if err != nil {
 		return
 	}
 	user := helper.GetRequestCredentialFromHeaderToken(request)
-	res, errs := i.InformationService.GetInformationById(InformationIds, user.UserId)
+	res, errs := i.ArticleService.GetArticleById(ArticleIds, user.UserId)
 	if errs != nil {
 		helper.ReturnError(writer, errs)
 		return
@@ -137,19 +137,19 @@ func (i *InformationControllerImpl) GeById(writer http.ResponseWriter, request *
 // GetAllByPagination List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Get All Information By Pagination
-//	@Description	Get All Information By Pagination
-//	@Tags			Information
+//	@Summary		Get All Article By Pagination
+//	@Description	Get All Article By Pagination
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
 //	@Param			sort_by								query		string	false	"sort_by"
 //	@Param			sort_of								query		string	false	"sort_of"
 //	@Param			page								query		string	true	"page"
 //	@Param			limit								query		string	true	"limit"
-//	@Success		200									{object}	[]entities.InformationEntities
+//	@Success		200									{object}	[]entities.ArticleEntities
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/information [get]
-func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWriter, request *http.Request) {
+//	@Router			/api/article [get]
+func (i *ArticleControllerImpl) GetAllByPagination(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
 
 	pagination := helper.Pagination{
@@ -158,7 +158,7 @@ func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWrite
 		SortOf: queryValues.Get("sort_of"),
 		SortBy: queryValues.Get("sort_by"),
 	}
-	res, err := i.InformationService.GetAllInformationWithPagination(pagination)
+	res, err := i.ArticleService.GetAllArticleWithPagination(pagination)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -166,12 +166,12 @@ func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWrite
 	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
 }
 
-// GetAllInformationByFilter List Via Header
+// GetAllArticleByFilter List Via Header
 //
 //	@Security		BearerAuth
-//	@Summary		Get All Information By Pagination With Filter
-//	@Description	Get All Information By Pagination With Filter
-//	@Tags			Information
+//	@Summary		Get All Article By Pagination With Filter
+//	@Description	Get All Article By Pagination With Filter
+//	@Tags			Article
 //	@Accept			json
 //	@Produce		json
 //	@Param			key_filter							query		string	false	"key_filter"
@@ -179,10 +179,10 @@ func (i *InformationControllerImpl) GetAllByPagination(writer http.ResponseWrite
 //	@Param			sort_of								query		string	false	"sort_of"
 //	@Param			page								query		string	true	"page"
 //	@Param			limit								query		string	true	"limit"
-//	@Success		200									{object}	[]entities.InformationEntities
+//	@Success		200									{object}	[]entities.ArticleEntities
 //	@Failure		500,400,401,404,403,422				{object}	responses.ErrorResponses
-//	@Router			/api/information/search [get]
-func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.ResponseWriter, request *http.Request) {
+//	@Router			/api/article/search [get]
+func (i *ArticleControllerImpl) GetAllArticleByFilter(writer http.ResponseWriter, request *http.Request) {
 	queryValues := request.URL.Query()
 	pagination := helper.Pagination{
 		Limit:  helper.NewGetQueryInt(queryValues, "limit"),
@@ -192,7 +192,7 @@ func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.Respon
 	}
 	user := helper.GetRequestCredentialFromHeaderToken(request)
 	Key := queryValues.Get("key_filter")
-	res, err := i.InformationService.GetAllInformationWithFilter(pagination, Key, user.UserId)
+	res, err := i.ArticleService.GetAllArticleWithFilter(pagination, Key, user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
@@ -241,10 +241,10 @@ func (i *InformationControllerImpl) GetAllInformationByFilter(writer http.Respon
 
 	helper.HandleSuccess(writer, res, "Get Successfully", http.StatusOK)
 }
-func (i *InformationControllerImpl) GetInformationHistory(writer http.ResponseWriter, request *http.Request) {
+func (i *ArticleControllerImpl) GetArticleHistory(writer http.ResponseWriter, request *http.Request) {
 	user := helper.GetRequestCredentialFromHeaderToken(request)
 
-	res, err := i.InformationService.GetInformationHistory(user.UserId)
+	res, err := i.ArticleService.GetArticleHistory(user.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return
