@@ -65,8 +65,8 @@ func (a *AuthRepoImpl) Register(requestData payloads.RegisterPayloads, DB *gorm.
 		UserHeight:             requestData.UserHeight,
 		UserGender:             requestData.UserGender,
 		UserProfileDescription: "",
-		UserProfileImage:       "",
-		UserPhoneNumber:        requestData.UserPhoneNumber,
+		//UserProfileImage:       "",
+		UserPhoneNumber: requestData.UserPhoneNumber,
 	}
 	errs := DB.Create(&detailEntities).Scan(&detailEntities).Error
 	if errs != nil {

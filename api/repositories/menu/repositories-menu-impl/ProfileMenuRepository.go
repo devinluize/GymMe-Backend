@@ -74,9 +74,9 @@ func (p *ProfileMenuRepositoryImpl) UpdateProfileMenu(db *gorm.DB, Request MenuP
 	if Request.UserProfileDescription != "" {
 		Entities.UserProfileDescription = Request.UserProfileDescription
 	}
-	if Request.UserProfileImage != "" {
-		Entities.UserProfileImage = Request.UserProfileImage
-	}
+	//if Request.UserProfileImage != "" {
+	//	Entities.UserProfileImage = Request.UserProfileImage
+	//}
 	if Request.UserPhoneNumber != "" {
 		Entities.UserPhoneNumber = Request.UserPhoneNumber
 	}
@@ -116,8 +116,8 @@ func (p *ProfileMenuRepositoryImpl) CreateProfileMenu(db *gorm.DB, Request MenuP
 		UserHeight:             Request.UserHeight,
 		UserGender:             Request.UserGender,
 		UserProfileDescription: Request.UserProfileDescription,
-		UserProfileImage:       Request.UserProfileImage,
-		UserPhoneNumber:        Request.UserPhoneNumber,
+		//UserProfileImage:       Request.UserProfileImage,
+		UserPhoneNumber: Request.UserPhoneNumber,
 	}
 	err := db.Create(&Entities).Error
 	if err != nil {
