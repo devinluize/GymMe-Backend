@@ -23,37 +23,45 @@ func NewEquipmentCourseRepositoryImpl() menuRepository.EquipmentCourseRepository
 func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gorm.DB, equipmentId int, cld *cloudinary.Cloudinary) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses) {
 	var mappingEntities []entities.EquipmentCourseDataEntity
 	var response Equipment.GetAllCourseEquipmentResponse
-	err := db.Model(&entities.EquipmentCourseDataEntity{}).
-		Where(entities.EquipmentCourseDataEntity{EquipmentMasterId: equipmentId}).
-		Scan(&mappingEntities).Error
-	if err != nil {
-		return response, &responses.ErrorResponses{
-			Message:    err.Error(),
-			Err:        err,
-			StatusCode: http.StatusInternalServerError,
+	if equipmentId != 0 {
+		err := db.Model(&entities.EquipmentCourseDataEntity{}).
+			Where(entities.EquipmentCourseDataEntity{EquipmentMasterId: equipmentId}).
+			Scan(&mappingEntities).Error
+		if err != nil {
+			return response, &responses.ErrorResponses{
+				Message:    err.Error(),
+				Err:        err,
+				StatusCode: http.StatusInternalServerError,
+			}
 		}
+	} else {
+		return response, nil
 	}
 	//respons := Equipment.GetAllCourseEquipmentResponse{}
 
 	//get item name first
 	equipmentMasterEntities := entities.EquipmentMasterEntities{}
-	err = db.Model(&equipmentMasterEntities).
-		Where(entities.EquipmentMasterEntities{EquipmentId: equipmentId}).
-		Scan(&equipmentMasterEntities).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+	if equipmentId != 0 {
+
+		err := db.Model(&equipmentMasterEntities).
+			Where(entities.EquipmentMasterEntities{EquipmentId: equipmentId}).
+			Scan(&equipmentMasterEntities).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return response, &responses.ErrorResponses{
+					StatusCode: http.StatusNotFound,
+					Err:        err,
+					Message:    "failed to get item",
+				}
+			}
 			return response, &responses.ErrorResponses{
-				StatusCode: http.StatusNotFound,
+				StatusCode: http.StatusInternalServerError,
 				Err:        err,
-				Message:    "failed to get item",
+				Message:    "failed to get item name please check input",
 			}
 		}
-		return response, &responses.ErrorResponses{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-			Message:    "failed to get item name please check input",
-		}
 	}
+
 	//response.EquipmentName = equipmentMasterEntities.EquipmentName
 	//response.EquipmentId = equipmentMasterEntities.EquipmentId
 	//response.EquipmentPhotoPath =
@@ -70,7 +78,7 @@ func (e *EquipmentCourseRepositoryImpl) GetAllEquipmentCourseByEquipment(db *gor
 	if errImage != nil {
 		return response, &responses.ErrorResponses{
 			StatusCode: http.StatusInternalServerError,
-			Err:        err,
+			Err:        errImage,
 			Message:    "error getting image with public id",
 		}
 	}

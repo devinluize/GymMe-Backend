@@ -2,6 +2,7 @@ package migrate
 
 import (
 	configenv "GymMe-Backend/api/config"
+	entities "GymMe-Backend/api/entities/Equipment"
 	"fmt"
 	"log"
 	"time"
@@ -75,42 +76,42 @@ func Migrate() {
 
 	//end off drop all table
 	err = db.AutoMigrate(
-	//&entities.Users{},
-	//&entities.UserDetail{},
-	//&entities.Users{},
-	//&entities.PaymentMethod{},
-	//&entities.ArticleType{},
-	//&entities.ArticleEntities{},
-	//&entities.BookmarkType{},
-	//&entities.Bookmark{},
-	//&entities.ArticleBodyEntities{},
-	//&entities.WeightHistoryEntities{},
-	//&entities.CalendarEntity{},
-	//&entities.WeightHistoryEntities{},
-	//&entities.TimerEntity{},
-	////-----
-	//&entities.TimerQueueEntity{},
-	////equipment
-	//&entities2.EquipmentDetailEntity{},
-	//&entities2.EquipmentDetailEntity{},
-	//&entities2.EquipmentDifficultyEntities{},
-	//
-	////$entities2.EquipmentMasterEntities{}
-	//&entities2.EquipmentMasterEntities{},
-	//&entities2.EquipmentTypeEntity{},
-	//&entities2.ForceTypeEntities{},
-	//&entities2.MuscleGroupEntities{},
-	//&entities2.EquipmentProfileEntity{},
-	//
-	//&entities2.EquipmentDetailEntity{},
+		//&entities.Users{},
+		//&entities.UserDetail{},
+		//&entities.Users{},
+		//&entities.PaymentMethod{},
+		//&entities.ArticleType{},
+		//&entities.ArticleEntities{},
+		//&entities.BookmarkType{},
+		//&entities.Bookmark{},
+		//&entities.ArticleBodyEntities{},
+		//&entities.WeightHistoryEntities{},
+		//&entities.CalendarEntity{},
+		//&entities.WeightHistoryEntities{},
+		//&entities.TimerEntity{},
+		////-----
+		//&entities.TimerQueueEntity{},
+		////equipment
+		//&entities2.EquipmentDetailEntity{},
+		//&entities2.EquipmentDetailEntity{},
+		&entities.EquipmentDifficultyEntities{},
+		//
+		////$entities2.EquipmentMasterEntities{}
+		//&entities2.EquipmentMasterEntities{},
+		&entities.EquipmentTypeEntity{},
+		&entities.ForceTypeEntities{},
+		&entities.MuscleGroupEntities{},
+		//&entities2.EquipmentProfileEntity{},
+		//
+		//&entities.EquipmentDetailEntity{},
 
-	//------
-	//&entities2.EquipmentCourseDataEntity{},
-	//
-	//&entities.EquipmentCourseDataEntity{},
-	//&entities2.EquipmentBookmark{},
-	//&entities2.SearchHistoryEntities{},
-	//&entities.EquipmentSearchHistoryEntities{},
+		//------
+		&entities.EquipmentCourseDataEntity{},
+		//
+		//&entities.EquipmentCourseDataEntity{},
+		//&entities2.EquipmentBookmark{},
+		//&entities2.SearchHistoryEntities{},
+		//&entities.EquipmentSearchHistoryEntities{},
 	)
 
 	//&entities.EquipmentTypeEntity{},
