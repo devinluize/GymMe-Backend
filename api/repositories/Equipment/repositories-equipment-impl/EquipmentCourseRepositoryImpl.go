@@ -143,7 +143,7 @@ func (e *EquipmentCourseRepositoryImpl) InsertEquipmentCourse(db *gorm.DB, paylo
 	}
 	return entitiesCourseData, nil
 }
-func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId int, cld *cloudinary.Cloudinary) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
+func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId int, cld *cloudinary.Cloudinary, userId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
 	courseEntities := entities.EquipmentCourseDataEntity{}
 	response := Equipment.GetCourseByIdResponse{}
 	err := db.Model(&courseEntities).Where(entities.EquipmentCourseDataEntity{EquipmentCourseDataId: courseId}).First(&courseEntities).Error
@@ -308,7 +308,10 @@ func (e *EquipmentCourseRepositoryImpl) GetEquipmentCourse(db *gorm.DB, courseId
 	//cek if bookmark
 	var isBookmark = false
 	err = db.Model(&entities.EquipmentBookmark{}).
-		Where(entities.EquipmentBookmark{EquipmentCourseId: courseId}).
+		Where(entities.EquipmentBookmark{EquipmentCourseId: courseId,
+			UserId: userId,
+			//UserId:
+		}).
 		Select("1").Scan(&isBookmark).Error
 	if err != nil {
 		return response, &responses.ErrorResponses{
