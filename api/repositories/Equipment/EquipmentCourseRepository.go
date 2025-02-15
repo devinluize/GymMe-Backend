@@ -11,7 +11,7 @@ import (
 type EquipmentCourseRepository interface {
 	GetAllEquipmentCourseByEquipment(db *gorm.DB, equipmentId int, cld *cloudinary.Cloudinary) (Equipment.GetAllCourseEquipmentResponse, *responses.ErrorResponses)
 	InsertEquipmentCourse(db *gorm.DB, payload Equipment.InsertEquipmentCourseDataPayload) (entities.EquipmentCourseDataEntity, *responses.ErrorResponses)
-	GetEquipmentCourse(db *gorm.DB, courseId int, cld *cloudinary.Cloudinary) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses)
+	GetEquipmentCourse(db *gorm.DB, courseId int, cld *cloudinary.Cloudinary, userId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses)
 	SearchEquipmentByKey(db *gorm.DB, EquipmentKey string, userId int, cld *cloudinary.Cloudinary) ([]entities.EquipmentMasterEntities, *responses.ErrorResponses)
 	GetEquipmentSearchHistoryByKey(db *gorm.DB, userId int) ([]entities.EquipmentSearchHistoryEntities, *responses.ErrorResponses)
 	DeleteEquipmentSearchHistoryById(db *gorm.DB, equipmentSearchHistoryId int) (bool, *responses.ErrorResponses)

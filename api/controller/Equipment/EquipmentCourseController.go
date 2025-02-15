@@ -71,7 +71,8 @@ func (e *EquipmentCourseControllerImpl) GetEquipmentCourse(writer http.ResponseW
 			Message:    errConvert.Error(),
 		})
 	}
-	res, err := e.service.GetEquipmentCourse(ids)
+	userData := helper.GetRequestCredentialFromHeaderToken(request)
+	res, err := e.service.GetEquipmentCourse(ids, userData.UserId)
 	if err != nil {
 		helper.ReturnError(writer, err)
 		return

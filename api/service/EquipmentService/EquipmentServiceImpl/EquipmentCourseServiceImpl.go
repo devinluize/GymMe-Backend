@@ -42,9 +42,9 @@ func (s *EquipmentCourseServiceImpl) InsertEquipmentCourse(payload Equipment.Ins
 	}
 	return res, nil
 }
-func (s *EquipmentCourseServiceImpl) GetEquipmentCourse(courseId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
+func (s *EquipmentCourseServiceImpl) GetEquipmentCourse(courseId int, userId int) (Equipment.GetCourseByIdResponse, *responses.ErrorResponses) {
 	trans := s.db.Begin()
-	res, err := s.repository.GetEquipmentCourse(trans, courseId, s.cld)
+	res, err := s.repository.GetEquipmentCourse(trans, courseId, s.cld, userId)
 	defer helper.CommitOrRollback(trans)
 	if err != nil {
 		return res, err
